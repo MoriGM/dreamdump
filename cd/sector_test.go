@@ -15,7 +15,7 @@ func TestGetSubcodeLocationLBA0000(t *testing.T) {
 		0x02, 0x00, 0x28, 0x32, 0x00, 0x00, 0x00, 0x80,
 	}
 
-	assert.Equal(t, sector.GetSubcodeLocationLBA(), int32(0x000000))
+	assert.Equal(t, sector.GetSubcodeLBA(), int32(0x000000))
 }
 
 func TestGetSubcodeLocationLBAFFFF(t *testing.T) {
@@ -25,5 +25,25 @@ func TestGetSubcodeLocationLBAFFFF(t *testing.T) {
 		0x35, 0x60, 0x49, 0x38, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	assert.Equal(t, sector.GetSubcodeLocationLBA(), int32(0xFFFF))
+	assert.Equal(t, sector.GetSubcodeLBA(), int32(0xFFFF))
+}
+
+func TestGetSubcodeTrack(t *testing.T) {
+	sector := cd.Sector{}
+	sector.Sub = [16]uint8{
+		0x41, 0x01, 0x01, 0x14, 0x33, 0x60, 0x00, 0x14,
+		0x35, 0x60, 0x49, 0x38, 0x00, 0x00, 0x00, 0x00,
+	}
+
+	assert.Equal(t, sector.GetSubcodeTrack(), uint8(1))
+}
+
+func TestGetSubcodeIndex(t *testing.T) {
+	sector := cd.Sector{}
+	sector.Sub = [16]uint8{
+		0x41, 0x01, 0x01, 0x14, 0x33, 0x60, 0x00, 0x14,
+		0x35, 0x60, 0x49, 0x38, 0x00, 0x00, 0x00, 0x00,
+	}
+
+	assert.Equal(t, sector.GetSubcodeIndex(), uint8(1))
 }
