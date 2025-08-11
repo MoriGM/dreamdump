@@ -6,13 +6,17 @@ import (
 	"dreamdump/sgio"
 )
 
-func ReadSector(option option.Option, sector int) (*Sector, error) {
+func ReadSector(option option.Option, sector int) (Sector, error) {
 	sg_io_hdr, senseBuf, block := scsi.CommandReadCd(option.Drive, sector)
 	err := sgio.CheckSense(&sg_io_hdr, &senseBuf)
 	if err != nil {
-		return nil, err
+		return Sector{}, err
 	}
 
+	return ConvertRawToSector(option, block), nil
+}
+
+func ConvertRawToSector(option option.Option, block []uint8) Sector {
 	sectorContent := Sector{
 		Data: [scsi.SECTOR_DATA_SIZE]uint8(block[0:scsi.SECTOR_DATA_SIZE]),
 		C2:   [scsi.SECTOR_C2_SIZE]uint8{},
@@ -37,5 +41,5 @@ func ReadSector(option option.Option, sector int) (*Sector, error) {
 		sectorContent.Sub = [scsi.SECTOR_SUB_SIZE]uint8(block[scsi.SECTOR_DATA_C2_SIZE:scsi.SECTOR_DATA_C2_SUB_SIZE])
 	}
 
-	return &sectorContent, nil
+	return sectorContent
 }

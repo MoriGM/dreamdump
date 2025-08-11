@@ -7,6 +7,7 @@
 *.dll
 *.so
 *.dylib
+*.bin
 dreamdump
 
 # Test binary, built with `go test -c`
