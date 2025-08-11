@@ -15,3 +15,19 @@ type Sector struct {
 	C2   [scsi.SECTOR_C2_SIZE]uint8
 	Sub  [scsi.SECTOR_SUB_SIZE]uint8
 }
+
+const (
+	TRACK_TYPE_DATA  = 0x04
+	TRACK_TYPE_AUDIO = 0x01
+)
+
+type Track struct {
+	Type   uint8
+	LBA    int32
+	Indexs []Index
+}
+
+type Index struct {
+	Number int8
+	LBA    int32
+}

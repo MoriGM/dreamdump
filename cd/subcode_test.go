@@ -8,42 +8,52 @@ import (
 	"gotest.tools/v3/assert"
 )
 
-func TestGetSubcodeLocationLBA0000(t *testing.T) {
+func TestSubcodeLocationLBA0000(t *testing.T) {
 	sector := cd.Sector{}
 	sector.Sub = [16]uint8{
 		0x41, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x02, 0x00, 0x28, 0x32, 0x00, 0x00, 0x00, 0x80,
 	}
 
-	assert.Equal(t, sector.GetSubcodeLBA(), int32(0x000000))
+	assert.Equal(t, sector.SubcodeLBA(), int32(0x000000))
 }
 
-func TestGetSubcodeLocationLBAFFFF(t *testing.T) {
+func TestSubcodeLocationLBAFFFF(t *testing.T) {
 	sector := cd.Sector{}
 	sector.Sub = [16]uint8{
 		0x41, 0x01, 0x01, 0x14, 0x33, 0x60, 0x00, 0x14,
 		0x35, 0x60, 0x49, 0x38, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	assert.Equal(t, sector.GetSubcodeLBA(), int32(0xFFFF))
+	assert.Equal(t, sector.SubcodeLBA(), int32(0xFFFF))
 }
 
-func TestGetSubcodeTrack(t *testing.T) {
+func TestSubcodeTrackNumber(t *testing.T) {
 	sector := cd.Sector{}
 	sector.Sub = [16]uint8{
 		0x41, 0x01, 0x01, 0x14, 0x33, 0x60, 0x00, 0x14,
 		0x35, 0x60, 0x49, 0x38, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	assert.Equal(t, sector.GetSubcodeTrack(), uint8(1))
+	assert.Equal(t, sector.SubcodeTrackNumber(), uint8(1))
 }
 
-func TestGetSubcodeIndex(t *testing.T) {
+func TestSubcodeIndexNumber(t *testing.T) {
 	sector := cd.Sector{}
 	sector.Sub = [16]uint8{
 		0x41, 0x01, 0x01, 0x14, 0x33, 0x60, 0x00, 0x14,
 		0x35, 0x60, 0x49, 0x38, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	assert.Equal(t, sector.GetSubcodeIndex(), uint8(1))
+	assert.Equal(t, sector.SubcodeIndexNumber(), uint8(1))
+}
+
+func TestSubcodeTrackType(t *testing.T) {
+	sector := cd.Sector{}
+	sector.Sub = [16]uint8{
+		0x41, 0x01, 0x01, 0x14, 0x33, 0x60, 0x00, 0x14,
+		0x35, 0x60, 0x49, 0x38, 0x00, 0x00, 0x00, 0x00,
+	}
+
+	assert.Equal(t, sector.SubcodeTrackType(), cd.TRACK_TYPE_DATA)
 }
