@@ -20,7 +20,7 @@ func (sec Sector) SubcodeIndexNumber() uint8 {
 	return bcd.ToUint8(sec.Sub[2])
 }
 
-func (sec Sector) SubcodeTrackType() int {
+func (sec Sector) SubcodeTrackType() uint8 {
 	if (sec.Sub[0] & 0b01000000) == 0 {
 		return TRACK_TYPE_AUDIO
 	}

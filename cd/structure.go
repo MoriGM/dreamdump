@@ -17,14 +17,14 @@ type Sector struct {
 }
 
 const (
-	TRACK_TYPE_DATA  = 0x04
-	TRACK_TYPE_AUDIO = 0x01
+	TRACK_TYPE_DATA  uint8 = 0x04
+	TRACK_TYPE_AUDIO uint8 = 0x01
 )
 
 type Track struct {
 	Type   uint8
 	LBA    int32
-	Indexs []Index
+	Indexs map[uint8]Index
 }
 
 type Index struct {
