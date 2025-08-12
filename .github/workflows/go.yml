@@ -9,20 +9,53 @@ on:
   pull_request:
     branches: [ "main" ]
 
-jobs:
+env:
+  build_type: Release
+  release_name: build_${{github.run_number}}
 
-  build:
+jobs:
+  format:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
         go-version: '1.21'
-
-    - name: Build
-      run: go build -v ./...
-
+    - name: Install gofumpt
+      run: go install mvdan.cc/gofumpt@latest
+    - name: Check formating
+      run: gofumpt -w ./
+  
+  test:
+    needs: format
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
     - name: Test
       run: go test -v ./...
+      
+  build:
+    needs: test
+    strategy:
+      matrix:
+        os: [ubuntu-24.04,]
+        platform: [32, 64]
+    runs-on: ${{matrix.os}}
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+    - name: Build
+      run: go build -v ./...
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{env.release_name}}_${{matrix.os}}_${{matrix.platform}}
+        path: dreamdump
