@@ -57,5 +57,5 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{env.release_name}}_${{matrix.os}}_${{matrix.platform}}
-        path: dreamdump
+        name: dreamdump-${{env.release_name}}_${{matrix.os}}_${{matrix.platform}}
+        path: ./dreamdump
