@@ -1,7 +1,7 @@
 package cd
 
 import (
-	bcd "github.com/johnsonjh/gobcd"
+	"dreamdump/bcd"
 )
 
 func (sec Sector) SubcodeLBA() int32 {
