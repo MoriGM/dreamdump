@@ -28,6 +28,5 @@ type Track struct {
 }
 
 type Index struct {
-	Number int8
-	LBA    int32
+	LBA int32
 }
