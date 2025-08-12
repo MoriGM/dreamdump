@@ -1,9 +1,15 @@
 package cd
 
-import bcd "github.com/johnsonjh/gobcd"
+import (
+	bcd "github.com/johnsonjh/gobcd"
+)
 
 func (sec Sector) SubcodeLBA() int32 {
-	return (int32(bcd.ToUint8(sec.Sub[3])) * MSF_MINUTE) + (int32(bcd.ToUint8(sec.Sub[4])) * MSF_SECOND) + (int32(bcd.ToUint8(sec.Sub[5])))
+	return sec.SubcodeAbsolutLBA() - (MSF_SECOND * 2)
+}
+
+func (sec Sector) SubcodeAbsolutLBA() int32 {
+	return (int32(bcd.ToUint8(sec.Sub[7])) * MSF_MINUTE) + (int32(bcd.ToUint8(sec.Sub[8])) * MSF_SECOND) + (int32(bcd.ToUint8(sec.Sub[9])))
 }
 
 func (sec Sector) SubcodeTrackNumber() uint8 {
