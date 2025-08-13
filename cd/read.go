@@ -6,7 +6,7 @@ import (
 	"dreamdump/sgio"
 )
 
-func ReadSector(option option.Option, sector int) (Sector, error) {
+func ReadSector(option option.Option, sector int32) (Sector, error) {
 	sg_io_hdr, senseBuf, block := scsi.CommandReadCd(option.Drive, sector)
 	err := sgio.CheckSense(&sg_io_hdr, &senseBuf)
 	if err != nil {

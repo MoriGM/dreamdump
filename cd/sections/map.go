@@ -1,12 +1,15 @@
 package sections
 
-import "dreamdump/cd"
+import (
+	"dreamdump/cd"
+	"dreamdump/option"
+)
 
 const (
-	DC_START    = 44990
-	DC_END      = 549151
-	DC_INTERVAL = 10289
-	DC_CUTOFF   = 446261
+	DC_START          = 44990
+	DC_END            = 549151
+	DC_INTERVAL       = 10289
+	DC_DEFAULT_CUTOFF = 446261
 )
 
 type Section struct {
@@ -16,10 +19,10 @@ type Section struct {
 	Sectors     []cd.Sector
 }
 
-func GetSectionMap() []Section {
-	count := (446261 - DC_START) / DC_INTERVAL
+func GetSectionMap(option option.Option) []Section {
+	count := (option.CutOff - DC_START) / DC_INTERVAL
 	var sections []Section
-	for i := 0; i < count; i++ {
+	for i := 0; i < int(count); i++ {
 		sections = append(sections, Section{
 			StartSector: uint32(DC_START + (i * DC_INTERVAL)),
 			EndSector:   uint32(DC_START + ((i + 1) * DC_INTERVAL)),
