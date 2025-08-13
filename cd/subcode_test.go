@@ -48,7 +48,7 @@ func TestSubcodeIndexNumber(t *testing.T) {
 	assert.Equal(t, sector.SubcodeIndexNumber(), uint8(1))
 }
 
-func TestSubcodeTrackType(t *testing.T) {
+func TestSubcodeTrackTypeData(t *testing.T) {
 	sector := cd.Sector{}
 	sector.Sub = [16]uint8{
 		0x41, 0x01, 0x01, 0x14, 0x33, 0x60, 0x00, 0x14,
@@ -56,4 +56,14 @@ func TestSubcodeTrackType(t *testing.T) {
 	}
 
 	assert.Equal(t, sector.SubcodeTrackType(), cd.TRACK_TYPE_DATA)
+}
+
+func TestSubcodeTrackTypeAudio(t *testing.T) {
+	sector := cd.Sector{}
+	sector.Sub = [16]uint8{
+		0x01, 0x01, 0x01, 0x14, 0x33, 0x60, 0x00, 0x14,
+		0x35, 0x60, 0x49, 0x38, 0x00, 0x00, 0x00, 0x00,
+	}
+
+	assert.Equal(t, sector.SubcodeTrackType(), cd.TRACK_TYPE_AUDIO)
 }
