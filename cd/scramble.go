@@ -23,13 +23,9 @@ func (sec *Sector) Descramble() bool {
 		return false
 	}
 
-	descrambledData := make([]uint8, scsi.SECTOR_DATA_SIZE)
-	copy(descrambledData, sec.Data[0:scsi.SECTOR_SYNC_SIZE])
-
 	for i := scsi.SECTOR_SYNC_SIZE; i < scsi.SECTOR_DATA_SIZE; i++ {
-		descrambledData[i] = sec.Data[i] ^ DescrambleTable[i]
+		sec.Data[i] ^= DescrambleTable[i]
 	}
 
-	sec.Data = [2352]uint8(descrambledData)
 	return true
 }
