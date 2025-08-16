@@ -2,9 +2,10 @@ package bigendian_test
 
 import (
 	"bytes"
-	bigendian "dreamdump/encoding/big_endian"
 	"encoding/binary"
 	"testing"
+
+	bigendian "dreamdump/encoding/big_endian"
 
 	"gotest.tools/v3/assert"
 )
