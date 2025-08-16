@@ -5,7 +5,6 @@ import (
 
 	"dreamdump/cd"
 	"dreamdump/option"
-	"dreamdump/scsi"
 
 	"gotest.tools/v3/assert"
 )
@@ -182,9 +181,9 @@ func TestConvertRawToSector_DATA_C2_SUB(t *testing.T) {
 	}
 
 	option := option.Option{
-		SectorOrder: scsi.DATA_C2_SUB,
+		SectorOrder: option.DATA_C2_SUB,
 	}
-	sector := cd.ConvertRawToSector(option, block)
+	sector := cd.ConvertRawToSector(&option, block)
 
 	assert.Equal(t, sector.SubcodeTrackType(), cd.TRACK_TYPE_DATA)
 	assert.Equal(t, sector.SubcodeTrackNumber(), uint8(1))
@@ -364,9 +363,9 @@ func TestConvertRawToSector_DATA_SUB(t *testing.T) {
 	}
 
 	option := option.Option{
-		SectorOrder: scsi.DATA_SUB_C2,
+		SectorOrder: option.DATA_SUB_C2,
 	}
-	sector := cd.ConvertRawToSector(option, block)
+	sector := cd.ConvertRawToSector(&option, block)
 
 	assert.Equal(t, sector.SubcodeTrackType(), cd.TRACK_TYPE_DATA)
 	assert.Equal(t, sector.SubcodeTrackNumber(), uint8(5))

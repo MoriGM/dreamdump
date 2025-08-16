@@ -17,7 +17,7 @@ type Training struct {
 	LBA       []int32
 }
 
-func Train(option *option.Option, direction int) (Training, error) {
+func Train(opt *option.Option, direction int) (Training, error) {
 	training := Training{
 		Direction: direction,
 	}
@@ -25,7 +25,7 @@ func Train(option *option.Option, direction int) (Training, error) {
 	return training, nil
 }
 
-func (training *Training) Play(option *option.Option, untilLBA int32) {
+func (training *Training) Play(opt *option.Option, untilLBA int32) {
 	for _, lba := range training.LBA {
 		if training.Direction == TRAIN_DIRECTION_START && lba > untilLBA {
 			break
@@ -33,6 +33,6 @@ func (training *Training) Play(option *option.Option, untilLBA int32) {
 		if training.Direction == TRAIN_DIRECTION_END && lba < untilLBA {
 			break
 		}
-		cd.ReadSector(*option, lba)
+		cd.ReadSector(opt, lba)
 	}
 }

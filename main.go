@@ -7,7 +7,6 @@ import (
 	"dreamdump/cd/sections"
 	"dreamdump/log"
 	"dreamdump/option"
-	"dreamdump/scsi"
 	"dreamdump/sgio"
 )
 
@@ -15,7 +14,7 @@ func readDisc(option option.Option) {
 	for _, section := range sections.GetSectionMap(option) {
 		log.WriteLineNew("{} {}", section.StartSector, section.EndSector)
 	}
-	sector, _ := cd.ReadSector(option, 0)
+	sector, _ := cd.ReadSector(&option, 0)
 	log.WriteCleanLine(sector)
 }
 
@@ -25,7 +24,7 @@ func setupOptions() option.Option {
 	}
 
 	option := option.Option{
-		SectorOrder: scsi.DATA_C2_SUB,
+		SectorOrder: option.DATA_C2_SUB,
 		Device:      os.Args[1],
 		CutOff:      sections.DC_DEFAULT_CUTOFF,
 	}
