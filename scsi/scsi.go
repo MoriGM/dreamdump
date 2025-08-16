@@ -2,8 +2,7 @@ package scsi
 
 import (
 	"bytes"
-	"encoding/gob"
-	"fmt"
+	"encoding/binary"
 	"os"
 
 	"dreamdump/sgio"
@@ -11,8 +10,7 @@ import (
 
 func Read(dvdDriveDeviceFile *os.File, cmd interface{}, size uint16) (sgio.SgIoHdr, []byte, []byte) {
 	var cmdBlk bytes.Buffer
-	cmdBlkEncoder := gob.NewEncoder(&cmdBlk)
-	cmdBlkEncoder.Encode(cmd)
+	binary.Write(&cmdBlk, binary.LittleEndian, cmd)
 
 	block := make([]byte, size)
 	senseBuf := make([]byte, sgio.SENSE_BUF_LEN)
@@ -27,8 +25,6 @@ func Read(dvdDriveDeviceFile *os.File, cmd interface{}, size uint16) (sgio.SgIoH
 		Dxferp:         &block[0],
 		Timeout:        sgio.TIMEOUT_20_SECS,
 	}
-	fmt.Println(sg_io_hdr)
-	os.Exit(1)
 
 	sgio.SgioSyscall(dvdDriveDeviceFile, &sg_io_hdr)
 

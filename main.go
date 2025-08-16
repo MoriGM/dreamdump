@@ -7,6 +7,7 @@ import (
 	"dreamdump/cd/sections"
 	"dreamdump/log"
 	"dreamdump/option"
+	"dreamdump/scsi/commands"
 	"dreamdump/sgio"
 )
 
@@ -32,6 +33,7 @@ func setupOptions() option.Option {
 	dvdDriveDeviceFile, err := sgio.OpenScsiDevice(option.Device)
 	if err != nil {
 		log.WriteLineNew("This drive is unkown")
+		os.Exit(1)
 	}
 	option.Drive = dvdDriveDeviceFile
 
@@ -41,5 +43,6 @@ func setupOptions() option.Option {
 func main() {
 	option := setupOptions()
 
-	readDisc(option)
+	// readDisc(option)
+	commands.ReadCd(&option, 0x12345678)
 }

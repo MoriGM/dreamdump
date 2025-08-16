@@ -1,9 +1,8 @@
 package bcd_test
 
 import (
+	"dreamdump/encoding/bcd"
 	"testing"
-
-	"dreamdump/bcd"
 
 	"gotest.tools/v3/assert"
 )

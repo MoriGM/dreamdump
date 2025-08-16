@@ -1,6 +1,7 @@
 package commands
 
 import (
+	bigendian "dreamdump/encoding/big_endian"
 	"dreamdump/option"
 	"dreamdump/scsi"
 	"dreamdump/scsi/cbd"
@@ -13,8 +14,8 @@ func ReadCd(opt *option.Option, lba int32) (sgio.SgIoHdr, []byte, []byte) {
 	readCdCommand := cbd.ReadCD{
 		OperationCode:      scsi.MMC_READ_CD,
 		ExpectedSectorType: cbd.ReadCD_SECTOR_TYPE_CDDA,
-		LBA:                lba,
-		TransferLength:     1,
+		LBA:                bigendian.Int32(lba),
+		TransferLength:     bigendian.Uint32(1),
 		FlagBits:           cbd.ReadCD_ALL,
 		Subchannel:         cbd.ReadCD_SUBCODE_NO,
 	}

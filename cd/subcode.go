@@ -1,7 +1,7 @@
 package cd
 
 import (
-	"dreamdump/bcd"
+	"dreamdump/encoding/bcd"
 )
 
 func (sec Sector) SubcodeLBA() int32 {
