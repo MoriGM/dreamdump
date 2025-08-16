@@ -7,7 +7,6 @@ import (
 	"dreamdump/cd/sections"
 	"dreamdump/log"
 	"dreamdump/option"
-	"dreamdump/scsi/commands"
 	"dreamdump/sgio"
 )
 
@@ -43,6 +42,5 @@ func setupOptions() option.Option {
 func main() {
 	option := setupOptions()
 
-	// readDisc(option)
-	commands.ReadCd(&option, 0x12345678)
+	readDisc(option)
 }
