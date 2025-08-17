@@ -2,6 +2,7 @@ package sgio
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"os"
 	"syscall"
@@ -130,7 +131,7 @@ func CheckSense(i *SgIoHdr, s *[]byte) error {
 				return err
 			}
 		}
-		return fmt.Errorf(b.String())
+		return errors.New(b.String())
 	}
 	return nil
 }
@@ -154,7 +155,7 @@ func OpenScsiDevice(fname string) (*os.File, error) {
 	}
 	var version uint32
 	if (ioctl(f.Fd(), SG_GET_VERSION_NUM, uintptr(unsafe.Pointer(&version))) != nil) || (version < 30000) {
-		return nil, fmt.Errorf("device does not appear to be an sg device")
+		return nil, errors.New("device does not appear to be an sg device")
 	}
 	return f, nil
 }
