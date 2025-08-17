@@ -16,7 +16,10 @@ type Test struct {
 
 func TestInt32(t *testing.T) {
 	var buf bytes.Buffer
-	binary.Write(&buf, binary.BigEndian, bigendian.Int32(0x77AA5511))
+	err := binary.Write(&buf, binary.BigEndian, bigendian.Int32(0x77AA5511))
+	if err != nil {
+		t.Error(err)
+	}
 	assert.Equal(t, buf.Len(), 4)
 	assert.Equal(t, buf.Bytes()[3], byte(0x77))
 	assert.Equal(t, buf.Bytes()[2], byte(0xAA))
@@ -26,7 +29,10 @@ func TestInt32(t *testing.T) {
 
 func TestUint32(t *testing.T) {
 	var buf bytes.Buffer
-	binary.Write(&buf, binary.BigEndian, bigendian.Uint32(0x77AA5511))
+	err := binary.Write(&buf, binary.BigEndian, bigendian.Uint32(0x77AA5511))
+	if err != nil {
+		t.Error(err)
+	}
 	assert.Equal(t, buf.Len(), 4)
 	assert.Equal(t, buf.Bytes()[3], byte(0x77))
 	assert.Equal(t, buf.Bytes()[2], byte(0xAA))
