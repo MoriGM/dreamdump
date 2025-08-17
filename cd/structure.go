@@ -10,10 +10,16 @@ const (
 	MSF_MINUTE = MSF_SECOND * 60
 )
 
+type (
+	CdSectorData       [scsi.SECTOR_DATA_SIZE]uint8
+	CdSectorC2         [scsi.SECTOR_C2_SIZE]uint8
+	CdSectorSubchannel [scsi.SECTOR_SUB_SIZE]uint8
+)
+
 type Sector struct {
-	Data [scsi.SECTOR_DATA_SIZE]uint8
-	C2   [scsi.SECTOR_C2_SIZE]uint8
-	Sub  [scsi.SECTOR_SUB_SIZE]uint8
+	Data CdSectorData
+	C2   CdSectorC2
+	Sub  CdSectorSubchannel
 }
 
 const (

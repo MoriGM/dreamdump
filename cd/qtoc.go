@@ -11,31 +11,31 @@ func (qtoc *QToc) AddSector(sector Sector) {
 		qtoc.Tracks = make(map[uint8]Track)
 	}
 
-	if track, ok := qtoc.Tracks[sector.SubcodeTrackNumber()]; ok {
-		if index, ok := track.Indexs[sector.SubcodeIndexNumber()]; ok {
-			index.LBA = min(sector.SubcodeLBA(), index.LBA)
-			track.Indexs[sector.SubcodeIndexNumber()] = index
+	if track, ok := qtoc.Tracks[sector.Sub.TrackNumber()]; ok {
+		if index, ok := track.Indexs[sector.Sub.IndexNumber()]; ok {
+			index.LBA = min(sector.Sub.LBA(), index.LBA)
+			track.Indexs[sector.Sub.IndexNumber()] = index
 		} else {
-			track.Indexs[sector.SubcodeIndexNumber()] = Index{
-				LBA: sector.SubcodeLBA(),
+			track.Indexs[sector.Sub.IndexNumber()] = Index{
+				LBA: sector.Sub.LBA(),
 			}
 		}
 
-		if sector.SubcodeIndexNumber() == 1 {
-			track.LBA = min(sector.SubcodeLBA(), track.LBA)
+		if sector.Sub.IndexNumber() == 1 {
+			track.LBA = min(sector.Sub.LBA(), track.LBA)
 		}
 
-		qtoc.Tracks[sector.SubcodeTrackNumber()] = track
+		qtoc.Tracks[sector.Sub.TrackNumber()] = track
 	} else {
-		lba := sector.SubcodeLBA()
-		if sector.SubcodeIndexNumber() == 0 {
+		lba := sector.Sub.LBA()
+		if sector.Sub.IndexNumber() == 0 {
 			lba = math.MaxInt32
 		}
-		qtoc.Tracks[sector.SubcodeTrackNumber()] = Track{
+		qtoc.Tracks[sector.Sub.TrackNumber()] = Track{
 			LBA:  lba,
-			Type: sector.SubcodeTrackType(),
-			Indexs: map[uint8]Index{sector.SubcodeIndexNumber(): {
-				LBA: sector.SubcodeLBA(),
+			Type: sector.Sub.TrackType(),
+			Indexs: map[uint8]Index{sector.Sub.IndexNumber(): {
+				LBA: sector.Sub.LBA(),
 			}},
 		}
 	}

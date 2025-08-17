@@ -15,7 +15,7 @@ func TestSubcodeLocationLBA0000(t *testing.T) {
 		0x02, 0x00, 0x28, 0x32, 0x00, 0x00, 0x00, 0x80,
 	}
 
-	assert.Equal(t, sector.SubcodeLBA(), int32(0x000000))
+	assert.Equal(t, sector.Sub.LBA(), int32(0x000000))
 }
 
 func TestSubcodeLocationLBAFFFF(t *testing.T) {
@@ -25,7 +25,7 @@ func TestSubcodeLocationLBAFFFF(t *testing.T) {
 		0x35, 0x60, 0x49, 0x38, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	assert.Equal(t, sector.SubcodeLBA(), int32(0xFFFF))
+	assert.Equal(t, sector.Sub.LBA(), int32(0xFFFF))
 }
 
 func TestSubcodeTrackNumber(t *testing.T) {
@@ -35,7 +35,7 @@ func TestSubcodeTrackNumber(t *testing.T) {
 		0x35, 0x60, 0x49, 0x38, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	assert.Equal(t, sector.SubcodeTrackNumber(), uint8(1))
+	assert.Equal(t, sector.Sub.TrackNumber(), uint8(1))
 }
 
 func TestSubcodeIndexNumber(t *testing.T) {
@@ -45,7 +45,7 @@ func TestSubcodeIndexNumber(t *testing.T) {
 		0x35, 0x60, 0x49, 0x38, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	assert.Equal(t, sector.SubcodeIndexNumber(), uint8(1))
+	assert.Equal(t, sector.Sub.IndexNumber(), uint8(1))
 }
 
 func TestSubcodeTrackTypeData(t *testing.T) {
@@ -55,7 +55,7 @@ func TestSubcodeTrackTypeData(t *testing.T) {
 		0x35, 0x60, 0x49, 0x38, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	assert.Equal(t, sector.SubcodeTrackType(), cd.TRACK_TYPE_DATA)
+	assert.Equal(t, sector.Sub.TrackType(), cd.TRACK_TYPE_DATA)
 }
 
 func TestSubcodeTrackTypeAudio(t *testing.T) {
@@ -65,5 +65,5 @@ func TestSubcodeTrackTypeAudio(t *testing.T) {
 		0x35, 0x60, 0x49, 0x38, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	assert.Equal(t, sector.SubcodeTrackType(), cd.TRACK_TYPE_AUDIO)
+	assert.Equal(t, sector.Sub.TrackType(), cd.TRACK_TYPE_AUDIO)
 }

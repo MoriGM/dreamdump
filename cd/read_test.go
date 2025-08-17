@@ -185,10 +185,10 @@ func TestConvertRawToSector_DATA_C2_SUB(t *testing.T) {
 	}
 	sector := cd.ConvertRawToSector(&option, block)
 
-	assert.Equal(t, sector.SubcodeTrackType(), cd.TRACK_TYPE_DATA)
-	assert.Equal(t, sector.SubcodeTrackNumber(), uint8(1))
-	assert.Equal(t, sector.SubcodeIndexNumber(), uint8(1))
-	assert.Equal(t, sector.SubcodeLBA(), int32(45000))
+	assert.Equal(t, sector.Sub.TrackType(), cd.TRACK_TYPE_DATA)
+	assert.Equal(t, sector.Sub.TrackNumber(), uint8(1))
+	assert.Equal(t, sector.Sub.IndexNumber(), uint8(1))
+	assert.Equal(t, sector.Sub.LBA(), int32(45000))
 }
 
 func TestConvertRawToSector_DATA_SUB(t *testing.T) {
@@ -367,8 +367,8 @@ func TestConvertRawToSector_DATA_SUB(t *testing.T) {
 	}
 	sector := cd.ConvertRawToSector(&option, block)
 
-	assert.Equal(t, sector.SubcodeTrackType(), cd.TRACK_TYPE_DATA)
-	assert.Equal(t, sector.SubcodeTrackNumber(), uint8(5))
-	assert.Equal(t, sector.SubcodeIndexNumber(), uint8(1))
-	assert.Equal(t, sector.SubcodeLBA(), int32(440000))
+	assert.Equal(t, sector.Sub.TrackType(), cd.TRACK_TYPE_DATA)
+	assert.Equal(t, sector.Sub.TrackNumber(), uint8(5))
+	assert.Equal(t, sector.Sub.IndexNumber(), uint8(1))
+	assert.Equal(t, sector.Sub.LBA(), int32(440000))
 }
