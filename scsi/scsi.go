@@ -10,7 +10,10 @@ import (
 
 func Read(dvdDriveDeviceFile *os.File, cmd interface{}, size uint16) (sgio.SgIoHdr, []byte, []byte) {
 	var cmdBlk bytes.Buffer
-	binary.Write(&cmdBlk, binary.LittleEndian, cmd)
+	err := binary.Write(&cmdBlk, binary.LittleEndian, cmd)
+	if err != nil {
+		panic(err)
+	}
 
 	block := make([]byte, size)
 	senseBuf := make([]byte, sgio.SENSE_BUF_LEN)
