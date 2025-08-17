@@ -29,7 +29,10 @@ func Read(dvdDriveDeviceFile *os.File, cmd interface{}, size uint16) (sgio.SgIoH
 		Timeout:        sgio.TIMEOUT_20_SECS,
 	}
 
-	sgio.SgioSyscall(dvdDriveDeviceFile, &sg_io_hdr)
+	err = sgio.SgioSyscall(dvdDriveDeviceFile, &sg_io_hdr)
+	if err != nil {
+		panic(err)
+	}
 
 	return sg_io_hdr, senseBuf, block
 }
