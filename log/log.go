@@ -2,28 +2,21 @@ package log
 
 import (
 	"fmt"
-	"log"
 )
 
 var clean_len = 0
 
 func cleanLine() {
-	log.Print("\r")
+	fmt.Print("\r")
 	for i := 0; i < clean_len+1; i++ {
-		log.Print(" ")
+		fmt.Print(" ")
 	}
-	log.Print("\r")
+	fmt.Print("\r")
 }
 
 func writeLine(a ...any) {
 	text := fmt.Sprint(a...)
-	log.Print(text)
-	clean_len = len(text)
-}
-
-func writeLineF(format string, a ...any) {
-	text := fmt.Sprintf(format, a...)
-	log.Print(text)
+	fmt.Print(text)
 	clean_len = len(text)
 }
 
@@ -32,8 +25,8 @@ func WriteCleanLine(a ...any) {
 	writeLine(a...)
 }
 
-func WriteLineNew(a ...any) {
+func WriteLN(a ...any) {
 	cleanLine()
-	log.Println(a...)
+	fmt.Println(a...)
 	clean_len = 0
 }
