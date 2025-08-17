@@ -1,15 +1,16 @@
 PKGNAME=dreamdump
 
-build:
-	go build .
+build: fmt test
+	go build -v ./...
+	go build -v .
 
-test:
-	go test ./...
+test: fmt
+	go test -v ./...
 
 fmt:
 	gofumpt -w .
 
-lint:
+lint: fmt
 	golangci-lint run ./...
 
 .PHONY: build test fmt lint
