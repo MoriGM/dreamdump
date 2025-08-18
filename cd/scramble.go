@@ -18,13 +18,13 @@ func init() {
 	}
 }
 
-func (sec *Sector) Descramble() bool {
-	if len(sec.Data) != scsi.SECTOR_DATA_SIZE {
+func (data *CdSectorData) Descramble() bool {
+	if len(data) != scsi.SECTOR_DATA_SIZE {
 		return false
 	}
 
 	for i := scsi.SECTOR_SYNC_SIZE; i < scsi.SECTOR_DATA_SIZE; i++ {
-		sec.Data[i] ^= DescrambleTable[i]
+		data[i] ^= DescrambleTable[i]
 	}
 
 	return true
