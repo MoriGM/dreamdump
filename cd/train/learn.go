@@ -42,7 +42,7 @@ func Train(opt *option.Option, direction int) (Training, error) {
 
 	_, err := cd.ReadSector(opt, int32(last_sector))
 	if err != nil {
-		log.WriteLN("Cannot read inital train sector")
+		log.WriteLn("Cannot read inital train sector")
 		os.Exit(2)
 	}
 	training.LBA = append(training.LBA, last_sector)
@@ -78,7 +78,7 @@ func (training *Training) Play(opt *option.Option, untilLBA int32) {
 		}
 		_, err := cd.ReadSector(opt, lba)
 		if err != nil {
-			log.WriteLN("Error while playing the trained list of lba's")
+			log.WriteLn("Error while playing the trained list of lba's")
 			os.Exit(3)
 		}
 	}

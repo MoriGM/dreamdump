@@ -10,7 +10,7 @@ import (
 
 func readDisc(option option.Option) {
 	for _, section := range sections.GetSectionMap(option) {
-		log.WriteLN("{} {}", section.StartSector, section.EndSector)
+		log.WriteLn("{} {}", section.StartSector, section.EndSector)
 	}
 	sector, _ := cd.ReadSector(&option, 0)
 	log.WriteCleanLine(sector)

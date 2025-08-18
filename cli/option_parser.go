@@ -49,7 +49,7 @@ func SetupOptions() option.Option {
 
 	dvdDriveDeviceFile, err := sgio.OpenScsiDevice(opt.Device)
 	if err != nil {
-		log.WriteLN("This drive is unkown")
+		log.WriteLn("This drive is unkown")
 		os.Exit(1)
 	}
 	opt.Drive = dvdDriveDeviceFile

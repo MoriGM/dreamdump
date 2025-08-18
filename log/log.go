@@ -25,7 +25,7 @@ func WriteCleanLine(a ...any) {
 	writeLine(a...)
 }
 
-func WriteLN(a ...any) {
+func WriteLn(a ...any) {
 	cleanLine()
 	fmt.Println(a...)
 	clean_len = 0
