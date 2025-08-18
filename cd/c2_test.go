@@ -4,13 +4,12 @@ import (
 	"testing"
 
 	"dreamdump/cd"
-	"dreamdump/scsi"
 
 	"gotest.tools/v3/assert"
 )
 
 func TestHasC2GoodSector(t *testing.T) {
-	c2 := [scsi.SECTOR_C2_SIZE]uint8{
+	c2 := cd.CdSectorC2{
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -54,11 +53,11 @@ func TestHasC2GoodSector(t *testing.T) {
 		C2: c2,
 	}
 
-	assert.Equal(t, sector.HasC2(), uint16(0))
+	assert.Equal(t, sector.C2.Amount(), uint16(0))
 }
 
 func TestHasC2BadSector(t *testing.T) {
-	c2 := [scsi.SECTOR_C2_SIZE]uint8{
+	c2 := cd.CdSectorC2{
 		0xFF, 0x11, 0x22, 0x03, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -102,5 +101,5 @@ func TestHasC2BadSector(t *testing.T) {
 		C2: c2,
 	}
 
-	assert.Equal(t, sector.HasC2(), uint16(28))
+	assert.Equal(t, sector.C2.Amount(), uint16(28))
 }

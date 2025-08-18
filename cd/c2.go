@@ -1,10 +1,10 @@
 package cd
 
-func (sec Sector) HasC2() uint16 {
+func (c2 *CdSectorC2) Amount() uint16 {
 	c2BitCount := uint16(0)
-	for _, c2 := range sec.C2 {
-		upperSample := c2 & 0xF0
-		lowerSample := c2 & 0x0F
+	for _, b := range c2 {
+		upperSample := b & 0xF0
+		lowerSample := b & 0x0F
 
 		if upperSample != 0 {
 			c2BitCount += 4
