@@ -31,6 +31,13 @@ func SetupOptions() option.Option {
 		opt.Device = *device
 	}
 
+	dvdDriveDeviceFile, err := sgio.OpenScsiDevice(opt.Device)
+	if err != nil {
+		log.WriteLn("This drive is unkown")
+		os.Exit(1)
+	}
+	opt.Drive = dvdDriveDeviceFile
+
 	sectorOrder := FindArgumentString("sector-order")
 	if sectorOrder != nil {
 		if *sectorOrder == "DATA_C2" {
@@ -46,13 +53,6 @@ func SetupOptions() option.Option {
 			opt.SectorOrder = option.DATA_SUB_C2
 		}
 	}
-
-	dvdDriveDeviceFile, err := sgio.OpenScsiDevice(opt.Device)
-	if err != nil {
-		log.WriteLn("This drive is unkown")
-		os.Exit(1)
-	}
-	opt.Drive = dvdDriveDeviceFile
 
 	return opt
 }
