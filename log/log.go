@@ -14,7 +14,7 @@ func cleanLine() {
 	fmt.Print("\r")
 }
 
-func writeLine(a ...any) {
+func WriteLine(a ...any) {
 	text := fmt.Sprint(a...)
 	fmt.Print(text)
 	clean_len = len(text)
@@ -22,7 +22,7 @@ func writeLine(a ...any) {
 
 func WriteCleanLine(a ...any) {
 	cleanLine()
-	writeLine(a...)
+	WriteLine(a...)
 }
 
 func WriteLn(a ...any) {

@@ -2,9 +2,14 @@ package main
 
 import (
 	"dreamdump/cli"
+	"dreamdump/log"
+	"os"
 )
 
 func main() {
 	option := cli.SetupOptions()
-	cli.ExecuteCommand(&option)
+	commandFound := cli.ExecuteCommand(&option)
+	if !commandFound {
+		log.WriteLn(os.Args[0] + "<disc> [--drive= --drive-sector-order=]")
+	}
 }

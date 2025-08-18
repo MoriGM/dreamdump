@@ -21,7 +21,7 @@ func init() {
 	})
 }
 
-func ExecuteCommand(opt *option.Option) error {
+func ExecuteCommand(opt *option.Option) bool {
 	if len(os.Args) < 2 {
 		log.WriteLn("Missing command argument")
 		os.Exit(4)
@@ -29,7 +29,8 @@ func ExecuteCommand(opt *option.Option) error {
 	for _, command := range commands {
 		if command.Name == os.Args[1] {
 			command.Function(opt)
+			return true
 		}
 	}
-	return nil
+	return false
 }
