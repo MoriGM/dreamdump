@@ -13,5 +13,6 @@ fmt:
 lint: fmt
 	golangci-lint run ./...
 	staticcheck
+	errcheck
 
 .PHONY: build test fmt lint
