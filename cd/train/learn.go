@@ -1,11 +1,12 @@
 package train
 
 import (
+	"os"
+
 	"dreamdump/cd"
 	"dreamdump/cd/sections"
 	"dreamdump/log"
 	"dreamdump/option"
-	"os"
 )
 
 const (

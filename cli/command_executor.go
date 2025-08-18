@@ -1,9 +1,10 @@
 package cli
 
 import (
+	"os"
+
 	"dreamdump/log"
 	"dreamdump/option"
-	"os"
 )
 
 type Command struct {
