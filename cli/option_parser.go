@@ -12,8 +12,8 @@ import (
 
 func FindArgumentString(name string) *string {
 	for _, arg := range os.Args {
-		if parts := strings.Split(arg, "="); parts[0] == name && len(parts) == 2 {
-			return &parts[0]
+		if parts := strings.Split(arg, "="); parts[0] == ("--"+name) && len(parts) == 2 {
+			return &parts[1]
 		}
 	}
 	return nil
@@ -26,12 +26,12 @@ func SetupOptions() option.Option {
 		CutOff:      sections.DC_DEFAULT_CUTOFF,
 	}
 
-	device := FindArgumentString("--drive")
+	device := FindArgumentString("drive")
 	if device != nil {
 		opt.Device = *device
 	}
 
-	sectorOrder := FindArgumentString("--sector-order")
+	sectorOrder := FindArgumentString("sector-order")
 	if sectorOrder != nil {
 		if *sectorOrder == "DATA_C2" {
 			opt.SectorOrder = option.DATA_C2
