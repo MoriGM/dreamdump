@@ -1,9 +1,10 @@
 package main
 
 import (
+	"os"
+
 	"dreamdump/cli"
 	"dreamdump/log"
-	"os"
 )
 
 func main() {
