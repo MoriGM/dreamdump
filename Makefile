@@ -1,13 +1,13 @@
 PKGNAME=dreamdump
 
-build: fmt test
+build: fmt
 	go build -v ./...
 	go build -v .
 
 test: fmt
 	go test -v ./...
 
-fmt:
+fmt: lint
 	gofumpt -w .
 
 lint: fmt
