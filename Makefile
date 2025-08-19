@@ -10,7 +10,7 @@ test: fmt
 fmt: lint
 	gofumpt -w .
 
-lint: fmt
+lint:
 	golangci-lint run ./...
 	staticcheck
 	errcheck
