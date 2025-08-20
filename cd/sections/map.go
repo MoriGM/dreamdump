@@ -19,8 +19,8 @@ type Section struct {
 	Sectors     []cd.Sector
 }
 
-func GetSectionMap(option option.Option) []Section {
-	count := (option.CutOff - DC_START) / DC_INTERVAL
+func GetSectionMap(opt *option.Option) []Section {
+	count := (opt.CutOff - DC_START) / DC_INTERVAL
 	var sections []Section
 	for i := 0; i < int(count); i++ {
 		sections = append(sections, Section{
