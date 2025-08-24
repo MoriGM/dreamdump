@@ -17,7 +17,6 @@ func ReadSections(opt *option.Option, sectionMap *[]Section) {
 			if section.Matched {
 				continue
 			}
-			fmt.Println(section.EndSector - section.StartSector)
 			section.Sectors = make([]cd.Sector, section.EndSector-section.StartSector)
 			err := ReadSection(opt, section)
 			if err != nil {
