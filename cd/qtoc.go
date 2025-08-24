@@ -35,6 +35,7 @@ func (qtoc *QToc) AddSector(sector *Sector) {
 
 		if sector.Sub.Qchannel.IndexNumber() == 1 {
 			track.LBA = min(sector.Sub.Qchannel.LBA(), track.LBA)
+			track.Type = sector.Sub.Qchannel.TrackType()
 		}
 
 		qtoc.Tracks[sector.Sub.Qchannel.TrackNumber()] = track
