@@ -17,10 +17,12 @@ func ReadSections(opt *option.Option, sectionMap *[]Section) {
 			if section.Matched {
 				continue
 			}
-			section.Sectors = []cd.Sector{}
+			fmt.Println(section.EndSector - section.StartSector)
+			section.Sectors = make([]cd.Sector, section.EndSector-section.StartSector)
 			err := ReadSection(opt, section)
 			if err != nil {
 				allMatching = false
+				section.Sectors = nil
 				log.WriteLn("Error while reading section " + strconv.Itoa(sectionNumber))
 				continue
 			}
@@ -32,6 +34,7 @@ func ReadSections(opt *option.Option, sectionMap *[]Section) {
 			}
 			allMatching = false
 			section.AddHash(hash)
+			section.Sectors = nil
 			if len(section.Hashes) > 1 {
 				log.WriteLn("Section " + strconv.Itoa(sectionNumber) + " not matching and read from " + strconv.FormatInt(int64(section.StartSector), 10) + " to " + strconv.FormatInt(int64(section.EndSector), 10))
 			} else {
@@ -46,7 +49,7 @@ func ReadSections(opt *option.Option, sectionMap *[]Section) {
 }
 
 func ReadSection(opt *option.Option, section *Section) error {
-	for i := section.StartSector; i <= section.EndSector; i++ {
+	for i := section.StartSector; i < section.EndSector; i++ {
 		sector, err := cd.ReadSector(opt, i)
 		if err != nil {
 			return err
@@ -54,7 +57,7 @@ func ReadSection(opt *option.Option, section *Section) error {
 		if sector.C2.Amount() > 0 {
 			return fmt.Errorf("error reading sector as it contained a c2 error")
 		}
-		section.Sectors = append(section.Sectors, sector)
+		section.Sectors[i-section.StartSector] = sector
 		log.WriteCleanLine("Sector read " + strconv.FormatInt(int64(i), 10))
 	}
 	return nil
