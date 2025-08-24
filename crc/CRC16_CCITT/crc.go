@@ -4,6 +4,7 @@ const (
 	POLYNOMIAL uint16 = 0x1021
 )
 
+// https://problemkaputt.de/psxspx-cdrom-subchannels.htm
 func Calculate(numbers []uint8) uint16 {
 	var lsb, msb uint8
 
