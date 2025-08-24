@@ -6,35 +6,42 @@ import (
 )
 
 const (
-	DC_START          = 44990
-	DC_END            = 549151
-	DC_INTERVAL       = 10289
-	DC_DEFAULT_CUTOFF = 446261
+	DC_START          int32 = 44990
+	DC_END            int32 = 549151
+	DC_INTERVAL       int32 = 10289
+	DC_DEFAULT_CUTOFF int32 = 446261
 )
 
 type Section struct {
-	StartSector uint32
-	EndSector   uint32
+	StartSector int32
+	EndSector   int32
 	Hashes      []string
 	Sectors     []cd.Sector
+	Matched     bool
 }
 
 func GetSectionMap(opt *option.Option) []Section {
-	count := (opt.CutOff - DC_START) / DC_INTERVAL
+	count := DC_START
 	var sections []Section
-	for i := 0; i < int(count); i++ {
+	for {
 		sections = append(sections, Section{
-			StartSector: uint32(DC_START + (i * DC_INTERVAL)),
-			EndSector:   uint32(DC_START + ((i + 1) * DC_INTERVAL)),
+			StartSector: count,
+			EndSector:   min(count+DC_INTERVAL, opt.CutOff),
 			Hashes:      []string{},
 			Sectors:     []cd.Sector{},
+			Matched:     false,
 		})
+		count += DC_INTERVAL
+		if count >= opt.CutOff {
+			break
+		}
 	}
 	sections = append(sections, Section{
-		StartSector: uint32(DC_START + (count * DC_INTERVAL)),
-		EndSector:   uint32(DC_END),
+		StartSector: opt.CutOff,
+		EndSector:   DC_END,
 		Hashes:      []string{},
 		Sectors:     []cd.Sector{},
+		Matched:     false,
 	})
 
 	return sections

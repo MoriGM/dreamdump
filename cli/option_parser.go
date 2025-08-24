@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"dreamdump/cd/sections"
+	"dreamdump/exit_codes"
 	"dreamdump/log"
 	"dreamdump/option"
 	"dreamdump/sgio"
@@ -34,7 +35,7 @@ func SetupOptions() option.Option {
 	dvdDriveDeviceFile, err := sgio.OpenScsiDevice(opt.Device)
 	if err != nil {
 		log.WriteLn("This drive is unkown")
-		os.Exit(1)
+		os.Exit(exit_codes.UNKOWN_DRIVE)
 	}
 	opt.Drive = dvdDriveDeviceFile
 
@@ -52,6 +53,11 @@ func SetupOptions() option.Option {
 		if *sectorOrder == "DATA_SUB_C2" {
 			opt.SectorOrder = option.DATA_SUB_C2
 		}
+	}
+
+	if opt.CutOff > sections.DC_END {
+		log.WriteLn("Cutoff can not be bigger than the Disc")
+		os.Exit(exit_codes.CUTOFF_TO_BIG)
 	}
 
 	return opt

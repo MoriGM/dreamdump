@@ -1,0 +1,9 @@
+package exit_codes
+
+const (
+	UNKOWN_DRIVE                 = 0x01
+	CANNONT_READ_INITAL_TRAIN    = 0x02
+	ERROR_PLAYING_TRAIN_PLAYBOOK = 0x03
+	MISSING_COMMAND_ARGUMENTS    = 0x04
+	CUTOFF_TO_BIG                = 0x05
+)

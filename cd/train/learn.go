@@ -5,6 +5,7 @@ import (
 
 	"dreamdump/cd"
 	"dreamdump/cd/sections"
+	"dreamdump/exit_codes"
 	"dreamdump/log"
 	"dreamdump/option"
 )
@@ -44,7 +45,7 @@ func Train(opt *option.Option, direction int) (Training, error) {
 	_, err := cd.ReadSector(opt, int32(last_sector))
 	if err != nil {
 		log.WriteLn("Cannot read inital train sector")
-		os.Exit(2)
+		os.Exit(exit_codes.CANNONT_READ_INITAL_TRAIN)
 	}
 	training.LBA = append(training.LBA, last_sector)
 
@@ -80,7 +81,7 @@ func (training *Training) Play(opt *option.Option, untilLBA int32) {
 		_, err := cd.ReadSector(opt, lba)
 		if err != nil {
 			log.WriteLn("Error while playing the trained list of lba's")
-			os.Exit(3)
+			os.Exit(exit_codes.ERROR_PLAYING_TRAIN_PLAYBOOK)
 		}
 	}
 }

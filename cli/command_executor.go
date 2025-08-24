@@ -3,6 +3,7 @@ package cli
 import (
 	"os"
 
+	"dreamdump/exit_codes"
 	"dreamdump/log"
 	"dreamdump/option"
 )
@@ -24,7 +25,7 @@ func init() {
 func ExecuteCommand(opt *option.Option) bool {
 	if len(os.Args) < 2 {
 		log.WriteLn("Missing command argument")
-		os.Exit(4)
+		os.Exit(exit_codes.MISSING_COMMAND_ARGUMENTS)
 	}
 	for _, command := range commands {
 		if command.Name == os.Args[1] {
