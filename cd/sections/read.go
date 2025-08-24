@@ -1,6 +1,7 @@
 package sections
 
 import (
+	"fmt"
 	"strconv"
 
 	"dreamdump/cd"
@@ -49,6 +50,9 @@ func ReadSection(opt *option.Option, section *Section) error {
 		sector, err := cd.ReadSector(opt, i)
 		if err != nil {
 			return err
+		}
+		if sector.C2.Amount() > 0 {
+			return fmt.Errorf("error reading sector as it contained a c2 error")
 		}
 		section.Sectors = append(section.Sectors, sector)
 		log.WriteCleanLine("Sector read " + strconv.FormatInt(int64(i), 10))
