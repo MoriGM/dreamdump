@@ -1,6 +1,6 @@
 PKGNAME=dreamdump
 
-build: fmt
+build: test
 	go build -v ./...
 	go build -v .
 

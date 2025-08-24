@@ -22,7 +22,7 @@ func FindArgumentString(name string) *string {
 
 func SetupOptions() option.Option {
 	opt := option.Option{
-		SectorOrder: option.DATA_C2_SUB,
+		SectorOrder: option.DATA_SUB_C2,
 		Device:      "/dev/sr0",
 		CutOff:      sections.DC_DEFAULT_CUTOFF,
 	}

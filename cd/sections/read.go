@@ -8,6 +8,42 @@ import (
 	"dreamdump/option"
 )
 
+func ReadSections(opt *option.Option, sectionMap *[]Section) {
+	for {
+		allMatching := true
+		for sectionNumber := range len(*sectionMap) {
+			section := &(*sectionMap)[sectionNumber]
+			if section.Matched {
+				continue
+			}
+			section.Sectors = []cd.Sector{}
+			err := ReadSection(opt, section)
+			if err != nil {
+				allMatching = false
+				log.WriteLn("Error while reading section " + strconv.Itoa(sectionNumber))
+				continue
+			}
+			hash := section.Hash()
+			if section.IsMatching(hash) {
+				section.Matched = true
+				log.WriteLn("Section hash is matching " + strconv.Itoa(sectionNumber) + " Hash:" + hash)
+				continue
+			}
+			allMatching = false
+			section.AddHash(hash)
+			if len(section.Hashes) > 1 {
+				log.WriteLn("Section " + strconv.Itoa(sectionNumber) + " not matching and read from " + strconv.FormatInt(int64(section.StartSector), 10) + " to " + strconv.FormatInt(int64(section.EndSector), 10))
+			} else {
+				log.WriteLn("Inital section " + strconv.Itoa(sectionNumber) + " read from " + strconv.FormatInt(int64(section.StartSector), 10) + " to " + strconv.FormatInt(int64(section.EndSector), 10))
+			}
+		}
+
+		if allMatching {
+			return
+		}
+	}
+}
+
 func ReadSection(opt *option.Option, section *Section) error {
 	for i := section.StartSector; i <= section.EndSector; i++ {
 		sector, err := cd.ReadSector(opt, i)
@@ -15,7 +51,7 @@ func ReadSection(opt *option.Option, section *Section) error {
 			return err
 		}
 		section.Sectors = append(section.Sectors, sector)
-		log.WriteLine("Sector read " + strconv.FormatInt(int64(i), 10))
+		log.WriteCleanLine("Sector read " + strconv.FormatInt(int64(i), 10))
 	}
 	return nil
 }

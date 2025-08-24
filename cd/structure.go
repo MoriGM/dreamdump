@@ -11,15 +11,20 @@ const (
 )
 
 type (
-	CdSectorData       [scsi.SECTOR_DATA_SIZE]uint8
-	CdSectorC2         [scsi.SECTOR_C2_SIZE]uint8
-	CdSectorSubchannel [scsi.SECTOR_SUB_SIZE]uint8
+	CdSectorData [scsi.SECTOR_DATA_SIZE]uint8
+	CdSectorC2   [scsi.SECTOR_C2_SIZE]uint8
+	QChannel     [12]uint8
 )
+
+type Subchannel struct {
+	Pchannel [12]uint8
+	Qchannel QChannel
+}
 
 type Sector struct {
 	Data CdSectorData
 	C2   CdSectorC2
-	Sub  CdSectorSubchannel
+	Sub  Subchannel
 }
 
 const (
@@ -30,7 +35,7 @@ const (
 type Track struct {
 	Type   uint8
 	LBA    int32
-	Indexs map[uint8]Index
+	Indexs map[uint8]*Index
 }
 
 type Index struct {

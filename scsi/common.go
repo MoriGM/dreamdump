@@ -3,7 +3,7 @@ package scsi
 const (
 	SECTOR_DATA_SIZE        = 2352
 	SECTOR_C2_SIZE          = 294
-	SECTOR_SUB_SIZE         = 16
+	SECTOR_SUB_SIZE         = 96
 	SECTOR_PAD_SIZE         = 2
 	SECTOR_SYNC_SIZE        = 12
 	SECTOR_DATA_C2_SIZE     = SECTOR_DATA_SIZE + SECTOR_C2_SIZE

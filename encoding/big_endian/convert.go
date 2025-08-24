@@ -13,3 +13,9 @@ func Uint32(num uint32) uint32 {
 	binary.NativeEndian.PutUint32(bytes[:], num)
 	return binary.BigEndian.Uint32(bytes[:])
 }
+
+func Uint16(num uint16) uint16 {
+	var bytes [2]byte
+	binary.NativeEndian.PutUint16(bytes[:], num)
+	return binary.BigEndian.Uint16(bytes[:])
+}

@@ -21,7 +21,7 @@ func ConvertRawToSector(opt *option.Option, block []uint8) Sector {
 	sectorContent := Sector{
 		Data: [scsi.SECTOR_DATA_SIZE]uint8(block[0:scsi.SECTOR_DATA_SIZE]),
 		C2:   [scsi.SECTOR_C2_SIZE]uint8{},
-		Sub:  [scsi.SECTOR_SUB_SIZE]uint8{},
+		Sub:  Subchannel{},
 	}
 
 	if opt.SectorOrder == option.DATA_C2 {
@@ -29,17 +29,17 @@ func ConvertRawToSector(opt *option.Option, block []uint8) Sector {
 	}
 
 	if opt.SectorOrder == option.DATA_SUB {
-		sectorContent.Sub = [scsi.SECTOR_SUB_SIZE]uint8(block[scsi.SECTOR_DATA_SIZE:scsi.SECTOR_DATA_SUB_SIZE])
+		sectorContent.Sub.Parse([scsi.SECTOR_SUB_SIZE]uint8(block[scsi.SECTOR_DATA_SIZE:scsi.SECTOR_DATA_SUB_SIZE]))
 	}
 
 	if opt.SectorOrder == option.DATA_SUB_C2 {
-		sectorContent.Sub = [scsi.SECTOR_SUB_SIZE]uint8(block[scsi.SECTOR_DATA_SIZE:scsi.SECTOR_DATA_SUB_SIZE])
+		sectorContent.Sub.Parse([scsi.SECTOR_SUB_SIZE]uint8(block[scsi.SECTOR_DATA_SIZE:scsi.SECTOR_DATA_SUB_SIZE]))
 		sectorContent.C2 = [scsi.SECTOR_C2_SIZE]uint8(block[scsi.SECTOR_DATA_SUB_SIZE:scsi.SECTOR_DATA_SUB_C2_SIZE])
 	}
 
 	if opt.SectorOrder == option.DATA_C2_SUB {
 		sectorContent.C2 = [scsi.SECTOR_C2_SIZE]uint8(block[scsi.SECTOR_DATA_SIZE:scsi.SECTOR_DATA_C2_SIZE])
-		sectorContent.Sub = [scsi.SECTOR_SUB_SIZE]uint8(block[scsi.SECTOR_DATA_C2_SIZE:scsi.SECTOR_DATA_C2_SUB_SIZE])
+		sectorContent.Sub.Parse([scsi.SECTOR_SUB_SIZE]uint8(block[scsi.SECTOR_DATA_C2_SIZE:scsi.SECTOR_DATA_C2_SUB_SIZE]))
 	}
 
 	return sectorContent

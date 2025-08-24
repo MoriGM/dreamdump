@@ -29,7 +29,8 @@ type ReadCD struct {
 	OperationCode      uint8
 	ExpectedSectorType uint8
 	LBA                int32
-	TransferLength     uint32
+	MSBTransferLength  uint8
+	TransferLength     uint16
 	FlagBits           uint8
 	Subchannel         uint8
 	Reserved           uint8
