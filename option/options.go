@@ -15,5 +15,6 @@ type Option struct {
 	Drive       *os.File
 	SectorOrder int
 	CutOff      int32
-	ReadOffset  int32
+	ReadOffset  int16
+	ImageName   string
 }

@@ -1,4 +1,4 @@
-package commands
+package scsi_commands
 
 import (
 	bigendian "dreamdump/encoding/big_endian"

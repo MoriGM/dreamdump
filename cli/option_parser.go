@@ -5,9 +5,11 @@ import (
 	"strings"
 
 	"dreamdump/cd/sections"
+	"dreamdump/drive"
 	"dreamdump/exit_codes"
 	"dreamdump/log"
 	"dreamdump/option"
+	"dreamdump/scsi/scsi_commands"
 	"dreamdump/sgio"
 )
 
@@ -25,6 +27,7 @@ func SetupOptions() option.Option {
 		SectorOrder: option.DATA_SUB_C2,
 		Device:      "/dev/sr0",
 		CutOff:      sections.DC_DEFAULT_CUTOFF,
+		ImageName:   "Game",
 	}
 
 	device := FindArgumentString("drive")
@@ -38,6 +41,17 @@ func SetupOptions() option.Option {
 		os.Exit(exit_codes.UNKOWN_DRIVE)
 	}
 	opt.Drive = dvdDriveDeviceFile
+	currentDrive := scsi_commands.Inquiry(&opt)
+	knownDrive := drive.IsKnownDrive(currentDrive)
+	if knownDrive != nil {
+		opt.SectorOrder = knownDrive.SectorOrder
+		opt.ReadOffset = knownDrive.ReadOffset
+	}
+
+	imageName := FindArgumentString("image-name")
+	if imageName != nil {
+		opt.ImageName = *imageName
+	}
 
 	sectorOrder := FindArgumentString("sector-order")
 	if sectorOrder != nil {

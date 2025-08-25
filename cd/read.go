@@ -3,12 +3,12 @@ package cd
 import (
 	"dreamdump/option"
 	"dreamdump/scsi"
-	"dreamdump/scsi/commands"
+	"dreamdump/scsi/scsi_commands"
 	"dreamdump/sgio"
 )
 
 func ReadSector(opt *option.Option, lba int32) (Sector, error) {
-	sg_io_hdr, senseBuf, block := commands.ReadCd(opt, lba)
+	sg_io_hdr, senseBuf, block := scsi_commands.ReadCd(opt, lba)
 	err := sgio.CheckSense(&sg_io_hdr, &senseBuf)
 	if err != nil {
 		return Sector{}, err
