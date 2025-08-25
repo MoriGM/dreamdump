@@ -28,7 +28,6 @@ func GetSectionMap(opt *option.Option) []Section {
 			StartSector: count,
 			EndSector:   min(count+DC_INTERVAL, opt.CutOff),
 			Hashes:      []string{},
-			Sectors:     []cd.Sector{},
 			Matched:     false,
 		})
 		count += DC_INTERVAL
@@ -40,7 +39,6 @@ func GetSectionMap(opt *option.Option) []Section {
 		StartSector: opt.CutOff,
 		EndSector:   DC_END,
 		Hashes:      []string{},
-		Sectors:     []cd.Sector{},
 		Matched:     false,
 	})
 
