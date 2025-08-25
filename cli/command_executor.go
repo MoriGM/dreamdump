@@ -24,7 +24,7 @@ func init() {
 
 func ExecuteCommand(opt *option.Option) bool {
 	if len(os.Args) < 2 {
-		log.WriteLn("Missing command argument")
+		log.Println("Missing command argument")
 		os.Exit(exit_codes.MISSING_COMMAND_ARGUMENTS)
 	}
 	for _, command := range commands {

@@ -34,7 +34,7 @@ func SetupOptions() option.Option {
 
 	dvdDriveDeviceFile, err := sgio.OpenScsiDevice(opt.Device)
 	if err != nil {
-		log.WriteLn("This drive is unkown")
+		log.Println("This drive is unkown")
 		os.Exit(exit_codes.UNKOWN_DRIVE)
 	}
 	opt.Drive = dvdDriveDeviceFile
@@ -56,7 +56,7 @@ func SetupOptions() option.Option {
 	}
 
 	if opt.CutOff > sections.DC_END {
-		log.WriteLn("Cutoff can not be bigger than the Disc")
+		log.Println("Cutoff can not be bigger than the Disc")
 		os.Exit(exit_codes.CUTOFF_TO_BIG)
 	}
 
