@@ -1,17 +1,33 @@
 package sections
 
-import "dreamdump/cd"
+import (
+	"dreamdump/cd"
+	"dreamdump/option"
+)
 
-func ExtractSectionsToSectors(sections *[]Section) []cd.Sector {
-	sectors := make([]cd.Sector, int(DC_END-DC_START)+1)
+func ExtractSectionsToSectors(opt *option.Option, sections *[]Section) *cd.Dense {
+	dense := make(cd.Dense, int(DC_END-DC_START)+1)
 
-	counter := 0
+	skip := (opt.ReadOffset * 4)
+	if skip < 0 {
+		panic("Drive read offset cannot be minus")
+	}
 	for sectionNumber := range len(*sections) {
 		for sectorNumber := range len((*sections)[sectionNumber].Sectors) {
-			sectors[counter] = (*sections)[sectionNumber].Sectors[sectorNumber]
-			counter++
+			copy(dense, (*sections)[sectionNumber].Sectors[sectorNumber].Data[skip:])
+			skip = 0
 		}
 	}
 
-	return sectors
+	return &dense
+}
+
+func ExtractSectionsToQtoc(sections *[]Section) *cd.QToc {
+	qtoc := new(cd.QToc)
+	for sectionNumber := range len(*sections) {
+		for sectorNumber := range len((*sections)[sectionNumber].Sectors) {
+			qtoc.AddSector(&(*sections)[sectionNumber].Sectors[sectorNumber].Sub.Qchannel)
+		}
+	}
+	return qtoc
 }

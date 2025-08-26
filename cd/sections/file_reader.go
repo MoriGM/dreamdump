@@ -10,16 +10,16 @@ import (
 )
 
 func (sect *Section) ReadSection(opt *option.Option) {
-	binFileName := sect.FileName(opt) + ".bin"
-	_, err := os.Stat(binFileName)
+	scramFileName := sect.FileName(opt) + ".scram"
+	_, err := os.Stat(scramFileName)
 	if errors.Is(err, os.ErrNotExist) {
 		return
 	}
-	binFile, err := os.OpenFile(binFileName, os.O_RDONLY, 0o644)
+	scramFile, err := os.OpenFile(scramFileName, os.O_RDONLY, 0o644)
 	if err != nil {
 		panic(err)
 	}
-	defer binFile.Close()
+	defer scramFile.Close()
 
 	subFileName := sect.FileName(opt) + ".subq"
 	_, err = os.Stat(subFileName)
@@ -36,7 +36,7 @@ func (sect *Section) ReadSection(opt *option.Option) {
 	for i := range sect.EndSector - sect.StartSector {
 		data := make([]byte, scsi.SECTOR_DATA_SIZE)
 		subq := make([]byte, scsi.SECTOR_SUBQ_SIZE)
-		_, err = binFile.ReadAt(data, int64(i)*int64(scsi.SECTOR_DATA_SIZE))
+		_, err = scramFile.ReadAt(data, int64(i)*int64(scsi.SECTOR_DATA_SIZE))
 		if err != nil {
 			panic(err)
 		}

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 
-	"dreamdump/cd"
 	"dreamdump/cd/sections"
 	"dreamdump/option"
 )
@@ -20,9 +19,9 @@ func DreamDumpDisc(opt *option.Option) {
 	}
 	sectionMap := sections.GetSectionMap(opt)
 	sections.ReadSections(opt, &sectionMap)
-	sectors := sections.ExtractSectionsToSectors(&sectionMap)
-	qtoc := cd.QTocNew()
-	qtoc.AddSectors(&sectors)
+	qtoc := sections.ExtractSectionsToQtoc(&sectionMap)
+	dense := sections.ExtractSectionsToSectors(opt, &sectionMap)
+	fmt.Println(dense.NewOffsetManager(sections.DC_START))
 	for i, track := range qtoc.Tracks {
 		fmt.Println(i, *track)
 		for ii, index := range track.Indexs {

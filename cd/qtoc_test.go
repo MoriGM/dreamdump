@@ -11,40 +11,35 @@ import (
 func TestAddSector(t *testing.T) {
 	qtoc := cd.QTocNew()
 
-	sector := cd.Sector{}
-	sector.Sub.Qchannel = [12]uint8{
+	qchannel := cd.QChannel{
 		0x41, 0x05, 0x00, 0x36, 0x51, 0x15, 0x00, 0xA4,
 		0x28, 0x32, 0xD0, 0x0D,
 	}
-	qtoc.AddSector(&sector)
+	qtoc.AddSector(&qchannel)
 
-	sector = cd.Sector{}
-	sector.Sub.Qchannel = [12]uint8{
+	qchannel = cd.QChannel{
 		0x41, 0x05, 0x01, 0x36, 0x51, 0x15, 0x00, 0xA4,
 		0x28, 0x33, 0xD0, 0x0D,
 	}
-	qtoc.AddSector(&sector)
+	qtoc.AddSector(&qchannel)
 
-	sector = cd.Sector{}
-	sector.Sub.Qchannel = [12]uint8{
+	qchannel = cd.QChannel{
 		0x41, 0x05, 0x01, 0x36, 0x51, 0x15, 0x00, 0xA4,
 		0x28, 0x34, 0xD0, 0x0D,
 	}
-	qtoc.AddSector(&sector)
+	qtoc.AddSector(&qchannel)
 
-	sector = cd.Sector{}
-	sector.Sub.Qchannel = [12]uint8{
+	qchannel = cd.QChannel{
 		0x41, 0x06, 0x00, 0x36, 0x51, 0x15, 0x00, 0xA4,
 		0x28, 0x35, 0xD0, 0x0D,
 	}
-	qtoc.AddSector(&sector)
+	qtoc.AddSector(&qchannel)
 
-	sector = cd.Sector{}
-	sector.Sub.Qchannel = [12]uint8{
+	qchannel = cd.QChannel{
 		0x41, 0x06, 0x01, 0x36, 0x51, 0x15, 0x00, 0xA4,
 		0x28, 0x36, 0xD0, 0x0D,
 	}
-	qtoc.AddSector(&sector)
+	qtoc.AddSector(&qchannel)
 
 	if track, ok := qtoc.Tracks[5]; ok {
 		assert.Equal(t, track.LBA, int32(469983))

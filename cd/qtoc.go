@@ -14,42 +14,32 @@ func QTocNew() QToc {
 	return qtoc
 }
 
-func (qtoc *QToc) AddSectors(sectors *[]Sector) {
-	for sectorNumber := range len(*sectors) {
-		sector := &(*sectors)[sectorNumber]
-		if !sector.Sub.Qchannel.CheckParity() {
-			continue
-		}
-		qtoc.AddSector(sector)
-	}
-}
-
-func (qtoc *QToc) AddSector(sector *Sector) {
-	if track, ok := qtoc.Tracks[sector.Sub.Qchannel.TrackNumber()]; ok {
-		if index, ok := track.Indexs[sector.Sub.Qchannel.IndexNumber()]; ok {
-			index.LBA = min(sector.Sub.Qchannel.LBA(), index.LBA)
+func (qtoc *QToc) AddSector(qchannel *QChannel) {
+	if track, ok := qtoc.Tracks[qchannel.TrackNumber()]; ok {
+		if index, ok := track.Indexs[qchannel.IndexNumber()]; ok {
+			index.LBA = min(qchannel.LBA(), index.LBA)
 		} else {
-			track.Indexs[sector.Sub.Qchannel.IndexNumber()] = &Index{
-				LBA: sector.Sub.Qchannel.LBA(),
+			track.Indexs[qchannel.IndexNumber()] = &Index{
+				LBA: qchannel.LBA(),
 			}
 		}
 
-		if sector.Sub.Qchannel.IndexNumber() == 1 {
-			track.LBA = min(sector.Sub.Qchannel.LBA(), track.LBA)
-			track.Type = sector.Sub.Qchannel.TrackType()
+		if qchannel.IndexNumber() == 1 {
+			track.LBA = min(qchannel.LBA(), track.LBA)
+			track.Type = qchannel.TrackType()
 		}
 
 		return
 	}
-	lba := sector.Sub.Qchannel.LBA()
-	if sector.Sub.Qchannel.IndexNumber() == 0 {
+	lba := qchannel.LBA()
+	if qchannel.IndexNumber() == 0 {
 		lba = math.MaxInt32
 	}
-	qtoc.Tracks[sector.Sub.Qchannel.TrackNumber()] = &Track{
+	qtoc.Tracks[qchannel.TrackNumber()] = &Track{
 		LBA:  lba,
-		Type: sector.Sub.Qchannel.TrackType(),
-		Indexs: map[uint8]*Index{sector.Sub.Qchannel.IndexNumber(): {
-			LBA: sector.Sub.Qchannel.LBA(),
+		Type: qchannel.TrackType(),
+		Indexs: map[uint8]*Index{qchannel.IndexNumber(): {
+			LBA: qchannel.LBA(),
 		}},
 	}
 }
