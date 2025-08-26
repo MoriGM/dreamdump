@@ -7,8 +7,6 @@
 *.dll
 *.so
 *.dylib
-*.bin
-*.scm
 dreamdump
 
 # Test binary, built with `go test -c`
@@ -29,8 +27,11 @@ go.work.sum
 
 # env file
 .env
-.vscode
 
 # Editor/IDE
 # .idea/
-# .vscode/
+.vscode/
+
+# WorkDirs
+doc/
+Game/

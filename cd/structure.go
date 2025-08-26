@@ -17,7 +17,6 @@ type (
 )
 
 type Subchannel struct {
-	Pchannel [12]uint8
 	Qchannel QChannel
 }
 

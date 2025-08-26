@@ -1,7 +1,9 @@
 package cli
 
 import (
+	"errors"
 	"fmt"
+	"os"
 
 	"dreamdump/cd"
 	"dreamdump/cd/sections"
@@ -9,6 +11,13 @@ import (
 )
 
 func DreamDumpDisc(opt *option.Option) {
+	_, err := os.Stat(opt.PathName)
+	if errors.Is(err, os.ErrNotExist) {
+		err := os.Mkdir(opt.PathName, 0o744)
+		if err != nil {
+			panic(err)
+		}
+	}
 	sectionMap := sections.GetSectionMap(opt)
 	sections.ReadSections(opt, &sectionMap)
 	sectors := sections.ExtractSectionsToSectors(&sectionMap)

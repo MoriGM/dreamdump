@@ -7,13 +7,11 @@ import (
 )
 
 const (
-	SUBCHANNEL_P = 7
 	SUBCHANNEL_Q = 6
 )
 
 func (sub *Subchannel) Parse(subcodes [scsi.SECTOR_SUB_SIZE]uint8) {
 	for i, subcode := range subcodes {
-		sub.Pchannel[(i-(i%8))/8] |= ((subcode >> SUBCHANNEL_P) & 0x01) << (7 - (i % 8))
 		sub.Qchannel[(i-(i%8))/8] |= ((subcode >> SUBCHANNEL_Q) & 0x01) << (7 - (i % 8))
 	}
 }

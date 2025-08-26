@@ -17,4 +17,5 @@ type Option struct {
 	CutOff      int32
 	ReadOffset  int16
 	ImageName   string
+	PathName    string
 }

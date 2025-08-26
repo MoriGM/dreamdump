@@ -4,6 +4,8 @@ import (
 	"slices"
 	"strconv"
 
+	"dreamdump/option"
+
 	"github.com/cespare/xxhash/v2"
 )
 
@@ -28,4 +30,10 @@ func (sect *Section) IsMatching(currentHash string) bool {
 
 func (sect *Section) AddHash(currentHash string) {
 	sect.Hashes = append(sect.Hashes, currentHash)
+}
+
+func (sect *Section) FileName(opt *option.Option) string {
+	sectionRange := strconv.FormatInt(int64(sect.StartSector), 10) + "-" + strconv.FormatInt(int64(sect.EndSector), 10)
+	sectionName := opt.PathName + "/" + opt.ImageName + "-" + sectionRange
+	return sectionName
 }

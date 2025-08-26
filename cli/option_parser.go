@@ -2,6 +2,7 @@ package cli
 
 import (
 	"os"
+	"path"
 	"strconv"
 	"strings"
 
@@ -29,6 +30,7 @@ func SetupOptions() option.Option {
 		Device:      "/dev/sr0",
 		CutOff:      sections.DC_DEFAULT_CUTOFF,
 		ImageName:   "Game",
+		PathName:    "./Game",
 	}
 
 	device := FindArgumentString("drive")
@@ -55,6 +57,11 @@ func SetupOptions() option.Option {
 	imageName := FindArgumentString("image-name")
 	if imageName != nil {
 		opt.ImageName = *imageName
+	}
+
+	pathName := FindArgumentString("path-name")
+	if imageName != nil {
+		opt.PathName = path.Dir(*pathName)
 	}
 
 	sectorOrder := FindArgumentString("sector-order")

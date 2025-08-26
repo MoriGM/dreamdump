@@ -10,6 +10,9 @@ import (
 )
 
 func ReadSections(opt *option.Option, sectionMap *[]Section) {
+	for sectionNumber := range len(*sectionMap) {
+		(*sectionMap)[sectionNumber].ReadSection(opt)
+	}
 	for {
 		allMatching := true
 		for sectionNumber := range len(*sectionMap) {
@@ -29,6 +32,7 @@ func ReadSections(opt *option.Option, sectionMap *[]Section) {
 			if section.IsMatching(hash) {
 				section.Matched = true
 				log.Println("Section hash is matching " + strconv.Itoa(sectionNumber) + " Hash:" + hash)
+				section.WriteSection(opt)
 				continue
 			}
 			allMatching = false
