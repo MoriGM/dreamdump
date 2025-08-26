@@ -34,6 +34,9 @@ func GetSectionMap(opt *option.Option) []Section {
 		if count >= opt.CutOff {
 			break
 		}
+		if len(sections) == 14 {
+			return sections
+		}
 	}
 	sections = append(sections, Section{
 		StartSector: opt.CutOff,

@@ -2,6 +2,7 @@ package cli
 
 import (
 	"os"
+	"strconv"
 	"strings"
 
 	"dreamdump/cd/sections"
@@ -37,13 +38,16 @@ func SetupOptions() option.Option {
 
 	dvdDriveDeviceFile, err := sgio.OpenScsiDevice(opt.Device)
 	if err != nil {
-		log.Println("This drive is unkown")
+		log.Println("This drive is unkown or is missing it gd-rom")
 		os.Exit(exit_codes.UNKOWN_DRIVE)
 	}
 	opt.Drive = dvdDriveDeviceFile
+
 	currentDrive := scsi_commands.Inquiry(&opt)
+	log.PrintDriveInfo(currentDrive)
 	knownDrive := drive.IsKnownDrive(currentDrive)
 	if knownDrive != nil {
+		log.Println("Good Drive found.")
 		opt.SectorOrder = knownDrive.SectorOrder
 		opt.ReadOffset = knownDrive.ReadOffset
 	}
@@ -67,6 +71,15 @@ func SetupOptions() option.Option {
 		if *sectorOrder == "DATA_SUB_C2" {
 			opt.SectorOrder = option.DATA_SUB_C2
 		}
+	}
+
+	readOffset := FindArgumentString("read-offset")
+	if readOffset != nil {
+		offset, err := strconv.ParseInt(*readOffset, 10, 16)
+		if err != nil {
+			panic(err)
+		}
+		opt.ReadOffset = int16(offset)
 	}
 
 	if opt.CutOff > sections.DC_END {

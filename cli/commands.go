@@ -12,7 +12,7 @@ func DreamDumpDisc(opt *option.Option) {
 	sectionMap := sections.GetSectionMap(opt)
 	sections.ReadSections(opt, &sectionMap)
 	sectors := sections.ExtractSectionsToSectors(&sectionMap)
-	qtoc := cd.QToc{}
+	qtoc := cd.QTocNew()
 	qtoc.AddSectors(&sectors)
 	for i, track := range qtoc.Tracks {
 		fmt.Println(i, *track)

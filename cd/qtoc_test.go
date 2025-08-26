@@ -9,7 +9,7 @@ import (
 )
 
 func TestAddSector(t *testing.T) {
-	qtoc := cd.QToc{}
+	qtoc := cd.QTocNew()
 
 	sector := cd.Sector{}
 	sector.Sub.Qchannel = [12]uint8{
