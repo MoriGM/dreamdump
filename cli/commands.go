@@ -21,7 +21,7 @@ func DreamDumpDisc(opt *option.Option) {
 	sections.ReadSections(opt, &sectionMap)
 	qtoc := sections.ExtractSectionsToQtoc(&sectionMap)
 	dense := sections.ExtractSectionsToDense(opt, &sectionMap)
-	fmt.Println(dense.NewOffsetManager(sections.DC_START))
+	fmt.Println(dense.NewOffsetManager(sections.DC_START).SampleOffset)
 	for i, track := range qtoc.Tracks {
 		fmt.Println(i, *track)
 		for ii, index := range track.Indexs {

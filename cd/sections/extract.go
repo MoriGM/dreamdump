@@ -7,7 +7,7 @@ import (
 )
 
 func ExtractSectionsToDense(opt *option.Option, sections *[]Section) *cd.Dense {
-	dense := make(cd.Dense, int(DC_END-DC_START)+1)
+	dense := make(cd.Dense, (int(DC_END-DC_START)+1)*scsi.SECTOR_DATA_SIZE)
 
 	skip := (opt.ReadOffset * 4)
 	if skip < 0 {
@@ -21,6 +21,7 @@ func ExtractSectionsToDense(opt *option.Option, sections *[]Section) *cd.Dense {
 			skip = 0
 			pos += scsi.SECTOR_DATA_SIZE
 			endPos += scsi.SECTOR_DATA_SIZE
+			endPos = min(endPos, int(DC_END-DC_START)*scsi.SECTOR_DATA_SIZE)
 		}
 	}
 
@@ -28,7 +29,7 @@ func ExtractSectionsToDense(opt *option.Option, sections *[]Section) *cd.Dense {
 }
 
 func ExtractSectionsToQtoc(sections *[]Section) *cd.QToc {
-	qtoc := new(cd.QToc)
+	qtoc := cd.QTocNew()
 	for sectionNumber := range len(*sections) {
 		for sectorNumber := range len((*sections)[sectionNumber].Sectors) {
 			qtoc.AddSector(&(*sections)[sectionNumber].Sectors[sectorNumber].Sub.Qchannel)

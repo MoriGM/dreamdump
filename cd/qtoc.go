@@ -8,13 +8,16 @@ type QToc struct {
 	Tracks map[uint8]*Track
 }
 
-func QTocNew() QToc {
-	qtoc := QToc{}
+func QTocNew() *QToc {
+	qtoc := new(QToc)
 	qtoc.Tracks = make(map[uint8]*Track)
 	return qtoc
 }
 
 func (qtoc *QToc) AddSector(qchannel *QChannel) {
+	if !qchannel.CheckParity() {
+		return
+	}
 	if track, ok := qtoc.Tracks[qchannel.TrackNumber()]; ok {
 		if index, ok := track.Indexs[qchannel.IndexNumber()]; ok {
 			index.LBA = min(qchannel.LBA(), index.LBA)
