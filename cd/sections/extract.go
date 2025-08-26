@@ -14,14 +14,14 @@ func ExtractSectionsToDense(opt *option.Option, sections *[]Section) *cd.Dense {
 		panic("Drive read offset cannot be minus")
 	}
 	pos := 0
-	endPos := scsi.SECTOR_DATA_SIZE
+	endPos := scsi.SECTOR_DATA_SIZE - int(skip)
 	for sectionNumber := range len(*sections) {
 		for sectorNumber := range len((*sections)[sectionNumber].Sectors) {
-			copy(dense[pos:endPos], (*sections)[sectionNumber].Sectors[sectorNumber].Data[skip:])
-			skip = 0
-			pos += scsi.SECTOR_DATA_SIZE
+			copy(dense[pos:endPos], (*sections)[sectionNumber].Sectors[sectorNumber].Data[skip:scsi.SECTOR_DATA_SIZE])
+			pos += scsi.SECTOR_DATA_SIZE - int(skip)
 			endPos += scsi.SECTOR_DATA_SIZE
 			endPos = min(endPos, int(DC_END-DC_START)*scsi.SECTOR_DATA_SIZE)
+			skip = 0
 		}
 	}
 

@@ -28,4 +28,5 @@ func DreamDumpDisc(opt *option.Option) {
 			fmt.Println(ii, *index)
 		}
 	}
+	dense.Split(qtoc)
 }
