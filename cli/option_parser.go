@@ -31,6 +31,7 @@ func SetupOptions() option.Option {
 		CutOff:      sections.DC_DEFAULT_CUTOFF,
 		ImageName:   "Game",
 		PathName:    "./Game",
+		ReadOffset:  0,
 	}
 
 	device := FindArgumentString("drive")
