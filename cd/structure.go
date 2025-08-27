@@ -33,7 +33,8 @@ const (
 
 type Track struct {
 	Type   uint8
-	LBA    int32
+	Lba    int32
+	LbaEnd int32
 	Indexs map[uint8]*Index
 }
 

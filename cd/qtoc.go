@@ -18,6 +18,9 @@ func (qtoc *QToc) AddSector(qchannel *QChannel) {
 	if !qchannel.CheckParity() {
 		return
 	}
+	if track, ok := qtoc.Tracks[qchannel.TrackNumber()-1]; ok {
+		track.LbaEnd = min(track.LbaEnd, qchannel.LBA())
+	}
 	if track, ok := qtoc.Tracks[qchannel.TrackNumber()]; ok {
 		if index, ok := track.Indexs[qchannel.IndexNumber()]; ok {
 			index.LBA = min(qchannel.LBA(), index.LBA)
@@ -28,7 +31,7 @@ func (qtoc *QToc) AddSector(qchannel *QChannel) {
 		}
 
 		if qchannel.IndexNumber() == 1 {
-			track.LBA = min(qchannel.LBA(), track.LBA)
+			track.Lba = min(qchannel.LBA(), track.Lba)
 			track.Type = qchannel.TrackType()
 		}
 
@@ -39,8 +42,9 @@ func (qtoc *QToc) AddSector(qchannel *QChannel) {
 		lba = math.MaxInt32
 	}
 	qtoc.Tracks[qchannel.TrackNumber()] = &Track{
-		LBA:  lba,
-		Type: qchannel.TrackType(),
+		Lba:    lba,
+		LbaEnd: math.MaxInt32,
+		Type:   qchannel.TrackType(),
 		Indexs: map[uint8]*Index{qchannel.IndexNumber(): {
 			LBA: qchannel.LBA(),
 		}},
