@@ -61,7 +61,7 @@ func SetupOptions() option.Option {
 	}
 
 	pathName := FindArgumentString("image-path")
-	if imageName != nil {
+	if pathName != nil {
 		opt.PathName = path.Dir(*pathName)
 	}
 
