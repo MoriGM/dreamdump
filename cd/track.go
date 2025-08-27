@@ -1,8 +1,8 @@
 package cd
 
 func (track *Track) GetStartLBA() int32 {
-	if index, ok := track.Indexs[0]; track.Type == TRACK_TYPE_AUDIO && ok {
-		return index.LBA
+	if index, ok := track.Indexs[0]; ok {
+		return max(index.LBA, DENSE_LBA_START)
 	}
-	return track.Lba
+	return max(track.Lba, DENSE_LBA_START)
 }

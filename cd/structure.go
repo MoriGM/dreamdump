@@ -32,12 +32,22 @@ const (
 )
 
 type Track struct {
-	Type   uint8
-	Lba    int32
-	LbaEnd int32
-	Indexs map[uint8]*Index
+	Type        uint8
+	Lba         int32
+	LbaEnd      int32
+	TrackNumber uint8
+	Indexs      map[uint8]*Index
 }
 
 type Index struct {
 	LBA int32
+}
+
+type TrackMeta struct {
+	FileName string
+	CRC32    uint32
+	MD5      [16]byte
+	SHA1     [20]byte
+	Size     uint32
+	Sectors  uint32
 }

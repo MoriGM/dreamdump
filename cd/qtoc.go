@@ -5,7 +5,8 @@ import (
 )
 
 type QToc struct {
-	Tracks map[uint8]*Track
+	Tracks          map[uint8]*Track
+	LastTrackNumber uint8
 }
 
 func QTocNew() *QToc {
@@ -20,6 +21,11 @@ func (qtoc *QToc) AddSector(qchannel *QChannel) {
 	}
 	if track, ok := qtoc.Tracks[qchannel.TrackNumber()-1]; ok {
 		track.LbaEnd = min(track.LbaEnd, qchannel.LBA())
+	}
+	if qchannel.TrackNumber() == 110 {
+		if track, ok := qtoc.Tracks[qtoc.LastTrackNumber]; ok {
+			track.LbaEnd = min(track.LbaEnd, qchannel.LBA())
+		}
 	}
 	if track, ok := qtoc.Tracks[qchannel.TrackNumber()]; ok {
 		if index, ok := track.Indexs[qchannel.IndexNumber()]; ok {
@@ -48,5 +54,9 @@ func (qtoc *QToc) AddSector(qchannel *QChannel) {
 		Indexs: map[uint8]*Index{qchannel.IndexNumber(): {
 			LBA: qchannel.LBA(),
 		}},
+		TrackNumber: qchannel.TrackNumber(),
+	}
+	if qchannel.TrackNumber() != 110 {
+		qtoc.LastTrackNumber = max(qchannel.TrackNumber(), qtoc.LastTrackNumber)
 	}
 }

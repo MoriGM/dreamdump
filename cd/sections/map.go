@@ -7,7 +7,7 @@ import (
 
 const (
 	DC_START          int32 = 44990
-	DC_END            int32 = 549151
+	DC_END            int32 = 549152
 	DC_INTERVAL       int32 = 10289
 	DC_DEFAULT_CUTOFF int32 = 446261
 )
