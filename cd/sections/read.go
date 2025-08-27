@@ -25,7 +25,7 @@ func ReadSections(opt *option.Option, sectionMap *[]Section) {
 			if err != nil {
 				allMatching = false
 				section.Sectors = nil
-				log.Println("Error while reading section " + strconv.Itoa(sectionNumber))
+				log.Println("Error while reading section " + strconv.Itoa(sectionNumber) + "\nError text: " + err.Error())
 				continue
 			}
 			hash := section.Hash()
