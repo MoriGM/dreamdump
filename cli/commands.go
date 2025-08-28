@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"dreamdump/cd/sections"
 	"dreamdump/log"
@@ -26,7 +27,7 @@ func DreamDumpDisc(opt *option.Option) {
 	qtoc.Print()
 	trackMetas := dense.Split(opt, qtoc)
 	for _, trackMeta := range trackMetas {
-		romVaultLine := fmt.Sprintf("<rom name=\"%s\" size=\"%d\" crc=\"%x\" md5=\"%x\" sha1=\"%x\" />", trackMeta.FileName, trackMeta.Size, trackMeta.CRC32, trackMeta.MD5, trackMeta.SHA1)
+		romVaultLine := fmt.Sprintf("<rom name=\"%s\" size=\"%d\" crc=\"%x\" md5=\"%x\" sha1=\"%x\" />", filepath.Base(trackMeta.FileName), trackMeta.Size, trackMeta.CRC32, trackMeta.MD5, trackMeta.SHA1)
 		log.Println(romVaultLine)
 	}
 }
