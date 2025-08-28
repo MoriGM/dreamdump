@@ -40,7 +40,7 @@ type Track struct {
 }
 
 type Index struct {
-	LBA int32
+	Lba int32
 }
 
 type TrackMeta struct {

@@ -35,5 +35,6 @@ func ExtractSectionsToQtoc(sections *[]Section) *cd.QToc {
 			qtoc.AddSector(&(*sections)[sectionNumber].Sectors[sectorNumber].Sub.Qchannel)
 		}
 	}
+	qtoc.Sort()
 	return qtoc
 }

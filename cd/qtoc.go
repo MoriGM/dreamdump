@@ -1,11 +1,14 @@
 package cd
 
 import (
+	"dreamdump/log"
 	"math"
+	"slices"
 )
 
 type QToc struct {
 	Tracks          map[uint8]*Track
+	TrackNames      []uint8
 	LastTrackNumber uint8
 }
 
@@ -29,17 +32,15 @@ func (qtoc *QToc) AddSector(qchannel *QChannel) {
 	}
 	if track, ok := qtoc.Tracks[qchannel.TrackNumber()]; ok {
 		if index, ok := track.Indexs[qchannel.IndexNumber()]; ok {
-			index.LBA = min(qchannel.LBA(), index.LBA)
+			index.Lba = min(qchannel.LBA(), index.Lba)
 		} else {
 			track.Indexs[qchannel.IndexNumber()] = &Index{
-				LBA: qchannel.LBA(),
+				Lba: qchannel.LBA(),
 			}
 		}
 
-		if qchannel.IndexNumber() == 1 {
-			track.Lba = min(qchannel.LBA(), track.Lba)
-			track.Type = qchannel.TrackType()
-		}
+		track.Lba = max(min(qchannel.LBA(), track.Lba), DENSE_LBA_START)
+		track.Type = qchannel.TrackType()
 
 		return
 	}
@@ -52,11 +53,58 @@ func (qtoc *QToc) AddSector(qchannel *QChannel) {
 		LbaEnd: math.MaxInt32,
 		Type:   qchannel.TrackType(),
 		Indexs: map[uint8]*Index{qchannel.IndexNumber(): {
-			LBA: qchannel.LBA(),
+			Lba: qchannel.LBA(),
 		}},
 		TrackNumber: qchannel.TrackNumber(),
 	}
 	if qchannel.TrackNumber() != 110 {
 		qtoc.LastTrackNumber = max(qchannel.TrackNumber(), qtoc.LastTrackNumber)
+	}
+}
+
+func (qtoc *QToc) Sort() {
+	trackKeys := []uint8{}
+	for _, trackNumber := range qtoc.Tracks {
+		trackKeys = append(trackKeys, trackNumber.TrackNumber)
+	}
+	slices.Sort(trackKeys)
+	tracks := make(map[uint8]*Track)
+	for _, key := range trackKeys {
+		tracks[key] = qtoc.Tracks[key]
+	}
+	qtoc.Tracks = tracks
+	qtoc.TrackNames = trackKeys
+}
+
+func (qtoc *QToc) Print() {
+	log.Println("final QTOC:")
+	for trackKeyPos, trackKey := range qtoc.TrackNames {
+		track := qtoc.Tracks[trackKey]
+		trackType := "data"
+		if track.Type == TRACK_TYPE_AUDIO {
+			trackType = "audio"
+		}
+		log.Printf("  track %d {  %s }\n", track.TrackNumber, trackType)
+		indexKeys := []uint8{}
+		for key := range track.Indexs {
+			indexKeys = append(indexKeys, key)
+		}
+		slices.Sort(indexKeys)
+		for _, indexKey := range indexKeys {
+			index := track.Indexs[indexKey]
+			startLBA := index.Lba
+			endLBA := DENSE_LBA_END
+			if nextIndex, ok := track.Indexs[indexKey+1]; ok {
+				endLBA = int(nextIndex.Lba) - 1
+			} else {
+				if len(qtoc.TrackNames) > int(trackKeyPos)+1 {
+					if nextTrack, ok := qtoc.Tracks[qtoc.TrackNames[trackKeyPos+1]]; ok {
+						endLBA = int(nextTrack.Lba) - 1
+					}
+				}
+			}
+
+			log.Printf("    index %02d { LBA: [% 7d ..% 6d]}\n", indexKey, startLBA, endLBA)
+		}
 	}
 }

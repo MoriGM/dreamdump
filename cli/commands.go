@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"dreamdump/cd/sections"
+	"dreamdump/log"
 	"dreamdump/option"
 )
 
@@ -22,15 +23,10 @@ func DreamDumpDisc(opt *option.Option) {
 	qtoc := sections.ExtractSectionsToQtoc(&sectionMap)
 	dense := sections.ExtractSectionsToDense(opt, &sectionMap)
 	fmt.Printf("Write Offset: %d\n", dense.NewOffsetManager(sections.DC_START).SampleOffset)
-	for i, track := range qtoc.Tracks {
-		fmt.Println(i, *track)
-		for ii, index := range track.Indexs {
-			fmt.Println(ii, *index)
-		}
-	}
+	qtoc.Print()
 	trackMetas := dense.Split(opt, qtoc)
 	for _, trackMeta := range trackMetas {
 		romVaultLine := fmt.Sprintf("<rom name=\"%s\" size=\"%d\" crc=\"%x\" md5=\"%x\" sha1=\"%x\" />", trackMeta.FileName, trackMeta.Size, trackMeta.CRC32, trackMeta.MD5, trackMeta.SHA1)
-		fmt.Println(romVaultLine)
+		log.Println(romVaultLine)
 	}
 }

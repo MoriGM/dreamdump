@@ -2,7 +2,6 @@ package cli
 
 import (
 	"os"
-	"path"
 	"strconv"
 	"strings"
 
@@ -62,7 +61,7 @@ func SetupOptions() option.Option {
 
 	pathName := FindArgumentString("image-path")
 	if pathName != nil {
-		opt.PathName = path.Dir(*pathName)
+		opt.PathName = *pathName
 	}
 
 	sectorOrder := FindArgumentString("sector-order")
