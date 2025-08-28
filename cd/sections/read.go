@@ -55,7 +55,7 @@ func ReadSection(opt *option.Option, section *Section) error {
 	for i := section.StartSector; i < section.EndSector; i++ {
 		sector, err := cd.ReadSector(opt, i)
 		if err != nil {
-			return err
+			return fmt.Errorf("scsi error while reading")
 		}
 		if sector.C2.Amount() > 0 {
 			return fmt.Errorf("error reading sector as it contained a c2 error")
