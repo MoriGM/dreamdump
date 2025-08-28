@@ -1,7 +1,6 @@
 package cd
 
 import (
-	"math"
 	"slices"
 
 	"dreamdump/log"
@@ -46,12 +45,9 @@ func (qtoc *QToc) AddSector(qchannel *QChannel) {
 		return
 	}
 	lba := qchannel.LBA()
-	if qchannel.IndexNumber() == 0 {
-		lba = math.MaxInt32
-	}
 	qtoc.Tracks[qchannel.TrackNumber()] = &Track{
 		Lba:    lba,
-		LbaEnd: math.MaxInt32,
+		LbaEnd: DENSE_LBA_END,
 		Type:   qchannel.TrackType(),
 		Indexs: map[uint8]*Index{qchannel.IndexNumber(): {
 			Lba: qchannel.LBA(),
@@ -68,18 +64,13 @@ func (qtoc *QToc) Sort() {
 	for _, trackNumber := range qtoc.Tracks {
 		trackKeys = append(trackKeys, trackNumber.TrackNumber)
 	}
-	slices.Sort(trackKeys)
-	tracks := make(map[uint8]*Track)
-	for _, key := range trackKeys {
-		tracks[key] = qtoc.Tracks[key]
-	}
-	qtoc.Tracks = tracks
+	slices.Sort(trackKeys[:])
 	qtoc.TrackNames = trackKeys
 }
 
 func (qtoc *QToc) Print() {
 	log.Println("final QTOC:")
-	for trackKeyPos, trackKey := range qtoc.TrackNames {
+	for _, trackKey := range qtoc.TrackNames {
 		track := qtoc.Tracks[trackKey]
 		trackType := "data"
 		if track.Type == TRACK_TYPE_AUDIO {
@@ -94,15 +85,9 @@ func (qtoc *QToc) Print() {
 		for _, indexKey := range indexKeys {
 			index := track.Indexs[indexKey]
 			startLBA := index.Lba
-			endLBA := DENSE_LBA_END
+			endLBA := track.LbaEnd - 1
 			if nextIndex, ok := track.Indexs[indexKey+1]; ok {
-				endLBA = int(nextIndex.Lba) - 1
-			} else {
-				if len(qtoc.TrackNames) > int(trackKeyPos)+1 {
-					if nextTrack, ok := qtoc.Tracks[qtoc.TrackNames[trackKeyPos+1]]; ok {
-						endLBA = int(nextTrack.Lba) - 1
-					}
-				}
+				endLBA = nextIndex.Lba - 1
 			}
 
 			log.Printf("    index %02d { LBA: [% 7d ..% 6d]}\n", indexKey, startLBA, endLBA)

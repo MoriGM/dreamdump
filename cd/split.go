@@ -11,17 +11,17 @@ import (
 	"dreamdump/scsi"
 )
 
-func (dense *Dense) Split(opt *option.Option, qtoc *QToc) map[int]TrackMeta {
+func (dense *Dense) Split(opt *option.Option, qtoc *QToc) []TrackMeta {
 	offsetManager := dense.NewOffsetManager(DENSE_LBA_OFFSET)
-	trackMetas := make(map[int]TrackMeta)
-	for trackNumber, track := range qtoc.Tracks {
+	trackMetas := make([]TrackMeta, 0)
+	for _, trackNumber := range qtoc.TrackNames {
+		track := qtoc.Tracks[trackNumber]
 		if trackNumber == 110 {
 			continue
 		}
 		trackFileName := opt.PathName + "/" + opt.ImageName + " (Track " + strconv.Itoa(int(trackNumber)) + ").bin"
 		trackStartSize := (track.GetStartLBA()-DENSE_LBA_OFFSET)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
 		trackEndSize := (min(track.LbaEnd, DENSE_LBA_END)-DENSE_LBA_OFFSET)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
-		trackSize := trackEndSize - trackStartSize
 		trackFile, err := os.OpenFile(trackFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o644)
 		if err != nil {
 			panic(err)
@@ -31,8 +31,16 @@ func (dense *Dense) Split(opt *option.Option, qtoc *QToc) map[int]TrackMeta {
 			data = (*dense)[trackStartSize:trackEndSize]
 		} else {
 			data = make([]byte, 0)
-			counter := 0
-			for lba := track.GetStartLBA() - DENSE_LBA_OFFSET; lba < min(track.LbaEnd, DENSE_LBA_END)-DENSE_LBA_OFFSET; lba++ {
+			pregapCount := int32(0)
+			if index, ok := track.Indexs[0]; ok {
+				startIndex := track.Indexs[1]
+				pregapCount = startIndex.Lba - max(index.Lba, DENSE_LBA_START)
+			}
+			pregapCount = min(pregapCount, 75)
+			if pregapCount > 0 {
+				data = append(data, ZeroSector(pregapCount)...)
+			}
+			for lba := (track.GetStartLBA() + pregapCount) - DENSE_LBA_OFFSET; lba < min(track.LbaEnd, DENSE_LBA_END)-DENSE_LBA_OFFSET; lba++ {
 				lbaStartSize := lba*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
 				lbaEndSize := (lba+1)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
 				var cdSectorData CdSectorData
@@ -41,7 +49,6 @@ func (dense *Dense) Split(opt *option.Option, qtoc *QToc) map[int]TrackMeta {
 				descrambledData := make([]byte, scsi.SECTOR_DATA_SIZE)
 				copy(descrambledData[:], cdSectorData[:])
 				data = append(data, descrambledData...)
-				counter++
 			}
 		}
 
@@ -50,13 +57,22 @@ func (dense *Dense) Split(opt *option.Option, qtoc *QToc) map[int]TrackMeta {
 			panic(err)
 		}
 
-		trackMetas[int(trackNumber)] = TrackMeta{
-			FileName: trackFileName,
-			Size:     uint32(trackSize),
-			CRC32:    crc32.ChecksumIEEE(data),
-			MD5:      md5.Sum(data),
-			SHA1:     sha1.Sum(data),
-		}
+		trackMetas = append(trackMetas, TrackMeta{
+			TrackNumber: trackNumber,
+			FileName:    trackFileName,
+			Size:        uint32(len(data)),
+			CRC32:       crc32.ChecksumIEEE(data),
+			MD5:         md5.Sum(data),
+			SHA1:        sha1.Sum(data),
+		})
 	}
 	return trackMetas
+}
+
+func ZeroSector(count int32) []byte {
+	data := make([]byte, scsi.SECTOR_DATA_SIZE*count)
+	for pos := range scsi.SECTOR_DATA_SIZE * count {
+		data[pos] = 0
+	}
+	return data
 }

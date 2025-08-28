@@ -44,10 +44,11 @@ type Index struct {
 }
 
 type TrackMeta struct {
-	FileName string
-	CRC32    uint32
-	MD5      [16]byte
-	SHA1     [20]byte
-	Size     uint32
-	Sectors  uint32
+	TrackNumber uint8
+	FileName    string
+	CRC32       uint32
+	MD5         [16]byte
+	SHA1        [20]byte
+	Size        uint32
+	Sectors     uint32
 }
