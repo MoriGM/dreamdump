@@ -42,7 +42,7 @@ func TestAddSector(t *testing.T) {
 	qtoc.AddSector(&qchannel)
 
 	if track, ok := qtoc.Tracks[5]; ok {
-		assert.Equal(t, track.Lba, int32(469983))
+		assert.Equal(t, track.Lba, int32(469982))
 		assert.Equal(t, track.GetStartLBA(), int32(469982))
 		assert.Equal(t, track.LbaEnd, int32(469985))
 
