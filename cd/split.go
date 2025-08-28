@@ -34,9 +34,9 @@ func (dense *Dense) Split(opt *option.Option, qtoc *QToc) []TrackMeta {
 			pregapCount := int32(0)
 			if index, ok := track.Indexs[0]; ok {
 				startIndex := track.Indexs[1]
-				pregapCount = startIndex.Lba - max(index.Lba, DENSE_LBA_START)
+				pregapCount = startIndex.Lba - index.Lba
 			}
-			pregapCount = min(pregapCount, 75)
+			pregapCount = max(pregapCount-150, 0)
 			if pregapCount > 0 {
 				data = append(data, ZeroSector(pregapCount)...)
 			}
