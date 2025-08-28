@@ -1,9 +1,10 @@
 package cd
 
 import (
-	"dreamdump/log"
 	"math"
 	"slices"
+
+	"dreamdump/log"
 )
 
 type QToc struct {
