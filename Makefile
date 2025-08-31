@@ -14,5 +14,6 @@ lint:
 	golangci-lint run ./...
 	staticcheck
 	errcheck
+	revive -config revive.toml -formatter friendly ./...
 
 .PHONY: build test fmt lint

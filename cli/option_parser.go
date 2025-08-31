@@ -37,60 +37,8 @@ func SetupOptions() option.Option {
 		Speed:       0xFFFF,
 	}
 
-	device := FindArgumentString("drive")
-	if device != nil {
-		opt.Device = *device
-	}
-
-	dvdDriveDeviceFile, err := sgio.OpenScsiDevice(opt.Device)
-	if err != nil {
-		log.Println("This drive is unkown or is missing it gd-rom")
-		os.Exit(exit_codes.UNKOWN_DRIVE)
-	}
-	opt.Drive = dvdDriveDeviceFile
-
-	currentDrive := scsi_commands.Inquiry(&opt)
-	knownDrive := drive.IsKnownDrive(currentDrive)
-	if knownDrive != nil {
-		log.Println("Good Drive found.")
-		opt.SectorOrder = knownDrive.SectorOrder
-		opt.ReadOffset = knownDrive.ReadOffset
-	}
-	sectorOrder := FindArgumentString("sector-order")
-	if sectorOrder != nil {
-		if (*sectorOrder) == "DATA_C2" {
-			opt.SectorOrder = option.DATA_C2
-		}
-		if (*sectorOrder) == "DATA_SUB" {
-			opt.SectorOrder = option.DATA_SUB
-		}
-		if (*sectorOrder) == "DATA_C2_SUB" {
-			opt.SectorOrder = option.DATA_C2_SUB
-		}
-		if (*sectorOrder) == "DATA_SUB_C2" {
-			opt.SectorOrder = option.DATA_SUB_C2
-		}
-	}
-	currentDrive.PrintDriveInfo(&opt)
-
-	imageName := FindArgumentString("image-name")
-	if imageName != nil {
-		opt.ImageName = *imageName
-	}
-
-	pathName := FindArgumentString("image-path")
-	if pathName != nil {
-		opt.PathName = *pathName
-	}
-
-	readOffset := FindArgumentString("read-offset")
-	if readOffset != nil {
-		offset, err := strconv.ParseInt(*readOffset, 10, 16)
-		if err != nil {
-			panic(err)
-		}
-		opt.ReadOffset = int16(offset)
-	}
+	parseDrivePart(&opt)
+	parsePaths(&opt)
 
 	speed := FindArgumentString("speed")
 	if speed != nil {
@@ -110,4 +58,71 @@ func SetupOptions() option.Option {
 	}
 
 	return opt
+}
+
+func parsePaths(opt *option.Option) {
+	imageName := FindArgumentString("image-name")
+	if imageName != nil {
+		opt.ImageName = *imageName
+	}
+
+	pathName := FindArgumentString("image-path")
+	if pathName != nil {
+		opt.PathName = *pathName
+	}
+}
+
+func parseDrivePart(opt *option.Option) {
+	readOffset := FindArgumentString("read-offset")
+	if readOffset != nil {
+		offset, err := strconv.ParseInt(*readOffset, 10, 16)
+		if err != nil {
+			panic(err)
+		}
+		opt.ReadOffset = int16(offset)
+	}
+
+	device := FindArgumentString("drive")
+	if device != nil {
+		opt.Device = *device
+	}
+
+	initializeDrive(opt)
+
+	currentDrive := scsi_commands.Inquiry(opt)
+	knownDrive := drive.IsKnownDrive(currentDrive)
+	if knownDrive != nil {
+		log.Println("Good Drive found.")
+		opt.SectorOrder = knownDrive.SectorOrder
+		opt.ReadOffset = knownDrive.ReadOffset
+	}
+	sectorOrder := FindArgumentString("sector-order")
+	if sectorOrder != nil {
+		opt.SectorOrder = parseSectorOrder(*sectorOrder)
+	}
+
+	currentDrive.PrintDriveInfo(opt)
+}
+
+func parseSectorOrder(sectorOrder string) int {
+	switch sectorOrder {
+	case "DATA_C2":
+		return option.DATA_C2
+	case "DATA_SUB":
+		return option.DATA_SUB
+	case "DATA_C2_SUB":
+		return option.DATA_C2_SUB
+	case "DATA_SUB_C2":
+		return option.DATA_SUB_C2
+	}
+	return option.DATA_C2_SUB
+}
+
+func initializeDrive(opt *option.Option) {
+	dvdDriveDeviceFile, err := sgio.OpenScsiDevice(opt.Device)
+	if err != nil {
+		log.Println("This drive is unkown or is missing it gd-rom")
+		os.Exit(exit_codes.UNKOWN_DRIVE)
+	}
+	opt.Drive = dvdDriveDeviceFile
 }

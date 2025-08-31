@@ -1,7 +1,7 @@
 package sections
 
 import (
-	"fmt"
+	"errors"
 	"strconv"
 
 	"dreamdump/cd"
@@ -55,10 +55,10 @@ func ReadSection(opt *option.Option, section *Section) error {
 	for lba := section.StartSector; lba < section.EndSector; lba++ {
 		sector, err := cd.ReadSector(opt, lba)
 		if err != nil {
-			return fmt.Errorf("scsi error while reading sector " + strconv.FormatInt(int64(lba), 10))
+			return errors.New("scsi error while reading sector " + strconv.FormatInt(int64(lba), 10))
 		}
 		if sector.C2.Amount() > 0 {
-			return fmt.Errorf("error reading sector " + strconv.FormatInt(int64(lba), 10) + " as it contained a c2 error")
+			return errors.New("error reading sector " + strconv.FormatInt(int64(lba), 10) + " as it contained a c2 error")
 		}
 		section.Sectors[lba-section.StartSector] = sector
 		log.PrintClean("Sector read " + strconv.FormatInt(int64(lba), 10))
