@@ -36,3 +36,5 @@ go.work.sum
 doc/
 Game/
 *.bin
+*.scram
+*.subq

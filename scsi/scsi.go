@@ -30,7 +30,6 @@ func Read(dvdDriveDeviceFile *os.File, cmd interface{}, size uint16) (sgio.SgIoH
 
 	if size > 0 {
 		sg_io_hdr.Dxferp = &block[0]
-
 	}
 
 	err = sgio.SgioSyscall(dvdDriveDeviceFile, &sg_io_hdr)
