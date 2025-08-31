@@ -1,12 +1,13 @@
 package cd
 
 import (
-	"dreamdump/option"
 	"fmt"
 	"os"
 	"path/filepath"
 	"slices"
 	"strconv"
+
+	"dreamdump/option"
 )
 
 func WriteGdi(opt *option.Option, qtoc *QToc, metas map[uint8]TrackMeta) {
