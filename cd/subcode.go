@@ -11,13 +11,13 @@ const (
 )
 
 const (
-	Q_CHANNEL_TRACK_NUMBER = 1
-	Q_CHANNEL_INDEX_NUMBER = 2
-	Q_CHANNEL_MINUTE       = 7
-	Q_CHANNEL_SECOND       = 8
-	Q_CHANNEL_FRAME        = 9
-	Q_CHANNEL_CHECKSUM_MSB = 10
-	Q_CHANNEL_CHECKSUM_LSB = 11
+	Q_CHANNEL_TRACK_NUMBER    = 1
+	Q_CHANNEL_INDEX_NUMBER    = 2
+	Q_CHANNEL_ABSOLUTE_MINUTE = 7
+	Q_CHANNEL_ABSOLUTE_SECOND = 8
+	Q_CHANNEL_ABSOLUTE_FRAME  = 9
+	Q_CHANNEL_CHECKSUM_MSB    = 10
+	Q_CHANNEL_CHECKSUM_LSB    = 11
 )
 
 func (sub *Subchannel) Parse(subcodes [scsi.SECTOR_SUB_SIZE]uint8) {
@@ -31,7 +31,10 @@ func (sub *QChannel) LBA() int32 {
 }
 
 func (sub *QChannel) AbsolutLBA() int32 {
-	return (int32(bcd.ToUint8(sub[Q_CHANNEL_MINUTE])) * MSF_MINUTE) + (int32(bcd.ToUint8(sub[Q_CHANNEL_SECOND])) * MSF_SECOND) + (int32(bcd.ToUint8(sub[Q_CHANNEL_FRAME])))
+	minute := (int32(bcd.ToUint8(sub[Q_CHANNEL_ABSOLUTE_MINUTE])) * MSF_MINUTE)
+	second := (int32(bcd.ToUint8(sub[Q_CHANNEL_ABSOLUTE_SECOND])) * MSF_SECOND)
+	frame := (int32(bcd.ToUint8(sub[Q_CHANNEL_ABSOLUTE_FRAME])))
+	return minute + second + frame
 }
 
 func (sub *QChannel) TrackNumber() uint8 {
