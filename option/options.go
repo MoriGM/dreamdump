@@ -10,6 +10,14 @@ const (
 	DATA_SUB_C2 = 7
 )
 
+const (
+	DC_START          int32 = 44990
+	DC_LBA_START      int32 = 45000
+	DC_END            int32 = 549152
+	DC_INTERVAL       int32 = 10289
+	DC_DEFAULT_CUTOFF int32 = 446261
+)
+
 type Option struct {
 	Device      string
 	Drive       *os.File

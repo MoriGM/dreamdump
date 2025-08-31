@@ -5,13 +5,6 @@ import (
 	"dreamdump/option"
 )
 
-const (
-	DC_START          int32 = 44990
-	DC_END            int32 = 549152
-	DC_INTERVAL       int32 = 10289
-	DC_DEFAULT_CUTOFF int32 = 446261
-)
-
 type Section struct {
 	StartSector int32
 	EndSector   int32
@@ -21,23 +14,23 @@ type Section struct {
 }
 
 func GetSectionMap(opt *option.Option) []Section {
-	count := DC_START
+	count := option.DC_START
 	var sections []Section
 	for {
 		sections = append(sections, Section{
 			StartSector: count,
-			EndSector:   min(count+DC_INTERVAL, opt.CutOff),
+			EndSector:   min(count+option.DC_INTERVAL, opt.CutOff),
 			Hashes:      []string{},
 			Matched:     false,
 		})
-		count += DC_INTERVAL
+		count += option.DC_INTERVAL
 		if count >= opt.CutOff {
 			break
 		}
 	}
 	sections = append(sections, Section{
 		StartSector: opt.CutOff,
-		EndSector:   DC_END,
+		EndSector:   option.DC_END,
 		Hashes:      []string{},
 		Matched:     false,
 	})

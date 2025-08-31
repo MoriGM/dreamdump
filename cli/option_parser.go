@@ -5,7 +5,6 @@ import (
 	"strconv"
 	"strings"
 
-	"dreamdump/cd/sections"
 	"dreamdump/drive"
 	"dreamdump/exit_codes"
 	"dreamdump/log"
@@ -31,7 +30,7 @@ func SetupOptions() option.Option {
 	opt := option.Option{
 		SectorOrder: option.DATA_SUB_C2,
 		Device:      "/dev/sr0",
-		CutOff:      sections.DC_DEFAULT_CUTOFF,
+		CutOff:      option.DC_DEFAULT_CUTOFF,
 		ImageName:   "Game",
 		PathName:    "./Game",
 		ReadOffset:  0,
@@ -105,7 +104,7 @@ func SetupOptions() option.Option {
 		opt.Speed = uint16(speed) * CD_SPEED
 	}
 
-	if opt.CutOff > sections.DC_END {
+	if opt.CutOff > option.DC_END {
 		log.Println("Cutoff can not be bigger than the Disc")
 		os.Exit(exit_codes.CUTOFF_TO_BIG)
 	}

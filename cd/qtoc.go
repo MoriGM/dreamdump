@@ -4,6 +4,7 @@ import (
 	"slices"
 
 	"dreamdump/log"
+	"dreamdump/option"
 )
 
 type QToc struct {
@@ -39,7 +40,7 @@ func (qtoc *QToc) AddSector(qchannel *QChannel) {
 			}
 		}
 
-		track.Lba = max(min(qchannel.LBA(), track.Lba), DENSE_LBA_START)
+		track.Lba = max(min(qchannel.LBA(), track.Lba), option.DC_LBA_START)
 		track.Type = qchannel.TrackType()
 
 		return
@@ -47,7 +48,7 @@ func (qtoc *QToc) AddSector(qchannel *QChannel) {
 	lba := qchannel.LBA()
 	qtoc.Tracks[qchannel.TrackNumber()] = &Track{
 		Lba:    lba,
-		LbaEnd: DENSE_LBA_END,
+		LbaEnd: option.DC_END,
 		Type:   qchannel.TrackType(),
 		Indexs: map[uint8]*Index{qchannel.IndexNumber(): {
 			Lba: qchannel.LBA(),

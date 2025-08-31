@@ -5,6 +5,7 @@ import (
 
 	"dreamdump/cd"
 	"dreamdump/cd/sections"
+	"dreamdump/option"
 	"dreamdump/scsi"
 
 	"gotest.tools/v3/assert"
@@ -14,7 +15,7 @@ func TestGoodHashes(t *testing.T) {
 	section := sections.Section{}
 	section.Sectors = []cd.Sector{}
 
-	for range sections.DC_INTERVAL {
+	for range option.DC_INTERVAL {
 		data := cd.CdSectorData{}
 		for i := range scsi.SECTOR_DATA_SIZE {
 			data[i] = 0
@@ -26,7 +27,7 @@ func TestGoodHashes(t *testing.T) {
 	firstHash := section.Hash()
 	section.Sectors = []cd.Sector{}
 
-	for range sections.DC_INTERVAL {
+	for range option.DC_INTERVAL {
 		data := cd.CdSectorData{}
 		for i := range scsi.SECTOR_DATA_SIZE {
 			data[i] = 0
@@ -44,7 +45,7 @@ func TestSecondTryHashes(t *testing.T) {
 	section := sections.Section{}
 	section.Sectors = []cd.Sector{}
 
-	for range sections.DC_INTERVAL {
+	for range option.DC_INTERVAL {
 		data := cd.CdSectorData{}
 		for i := range scsi.SECTOR_DATA_SIZE {
 			data[i] = 0
@@ -59,7 +60,7 @@ func TestSecondTryHashes(t *testing.T) {
 	assert.Equal(t, len(section.Hashes), 1)
 
 	section.Sectors = []cd.Sector{}
-	for range sections.DC_INTERVAL {
+	for range option.DC_INTERVAL {
 		data := cd.CdSectorData{}
 		for i := range scsi.SECTOR_DATA_SIZE {
 			data[i] = 1
@@ -74,7 +75,7 @@ func TestSecondTryHashes(t *testing.T) {
 	assert.Equal(t, len(section.Hashes), 2)
 
 	section.Sectors = []cd.Sector{}
-	for range sections.DC_INTERVAL {
+	for range option.DC_INTERVAL {
 		data := cd.CdSectorData{}
 		for i := range scsi.SECTOR_DATA_SIZE {
 			data[i] = 0
@@ -94,7 +95,7 @@ func BenchmarkRandomHashes(b *testing.B) {
 	for i := range 256 {
 		section.Sectors = []cd.Sector{}
 
-		for range sections.DC_INTERVAL {
+		for range option.DC_INTERVAL {
 			data := cd.CdSectorData{}
 			for pos := range scsi.SECTOR_DATA_SIZE {
 				data[pos] = uint8(i)

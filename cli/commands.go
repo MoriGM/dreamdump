@@ -28,7 +28,7 @@ func DreamDumpDisc(opt *option.Option) {
 	sections.ReadSections(opt, &sectionMap)
 	qtoc := sections.ExtractSectionsToQtoc(&sectionMap)
 	dense := sections.ExtractSectionsToDense(opt, &sectionMap)
-	fmt.Printf("Write Offset: %d\n", dense.NewOffsetManager(sections.DC_START).SampleOffset)
+	fmt.Printf("Write Offset: %d\n", dense.NewOffsetManager(option.DC_START).SampleOffset)
 	qtoc.Print()
 	trackMetas := dense.Split(opt, qtoc)
 	cd.WriteCue(opt, qtoc, trackMetas)

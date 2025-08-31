@@ -7,7 +7,7 @@ import (
 )
 
 func ExtractSectionsToDense(opt *option.Option, sections *[]Section) *cd.Dense {
-	dense := make(cd.Dense, (int(DC_END-DC_START)+1)*scsi.SECTOR_DATA_SIZE)
+	dense := make(cd.Dense, (int(option.DC_END-option.DC_START)+1)*scsi.SECTOR_DATA_SIZE)
 
 	skip := (opt.ReadOffset * 4)
 	if skip < 0 {
@@ -20,7 +20,7 @@ func ExtractSectionsToDense(opt *option.Option, sections *[]Section) *cd.Dense {
 			copy(dense[pos:endPos], (*sections)[sectionNumber].Sectors[sectorNumber].Data[skip:scsi.SECTOR_DATA_SIZE])
 			pos += scsi.SECTOR_DATA_SIZE - int(skip)
 			endPos += scsi.SECTOR_DATA_SIZE
-			endPos = min(endPos, int(DC_END-DC_START)*scsi.SECTOR_DATA_SIZE)
+			endPos = min(endPos, int(option.DC_END-option.DC_START)*scsi.SECTOR_DATA_SIZE)
 			skip = 0
 		}
 	}

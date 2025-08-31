@@ -4,7 +4,6 @@ import (
 	"os"
 
 	"dreamdump/cd"
-	"dreamdump/cd/sections"
 	"dreamdump/exit_codes"
 	"dreamdump/log"
 	"dreamdump/option"
@@ -54,7 +53,7 @@ func Train(opt *option.Option, direction int) (Training, error) {
 	for {
 		offset := offsetTimer
 		next_sector := last_sector + offsetDirection(direction, offset)
-		if next_sector > sections.DC_END || next_sector < sections.DC_START {
+		if next_sector > option.DC_END || next_sector < option.DC_START {
 			break
 		}
 		_, err := cd.ReadSector(opt, int32(next_sector))

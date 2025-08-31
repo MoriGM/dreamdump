@@ -12,13 +12,13 @@ import (
 )
 
 func (dense *Dense) Split(opt *option.Option, qtoc *QToc) map[uint8]TrackMeta {
-	offsetManager := dense.NewOffsetManager(DENSE_LBA_OFFSET)
+	offsetManager := dense.NewOffsetManager(option.DC_START)
 	trackMetas := make(map[uint8]TrackMeta, 0)
 	for _, trackNumber := range qtoc.TrackNumbers {
 		track := qtoc.Tracks[trackNumber]
 		trackFileName := opt.PathName + "/" + opt.ImageName + " (Track " + strconv.Itoa(int(trackNumber)) + ").bin"
-		trackStartSize := (track.GetStartLBA()-DENSE_LBA_OFFSET)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
-		trackEndSize := (min(track.LbaEnd, DENSE_LBA_END)-DENSE_LBA_OFFSET)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
+		trackStartSize := (track.GetStartLBA()-option.DC_START)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
+		trackEndSize := (min(track.LbaEnd, option.DC_END)-option.DC_START)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
 		trackFile, err := os.OpenFile(trackFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o644)
 		dataType := uint8(0)
 		if err != nil {
@@ -38,7 +38,7 @@ func (dense *Dense) Split(opt *option.Option, qtoc *QToc) map[uint8]TrackMeta {
 			if pregapCount > 0 {
 				data = append(data, ZeroSector(pregapCount)...)
 			}
-			for lba := (track.GetStartLBA() + pregapCount) - DENSE_LBA_OFFSET; lba < min(track.LbaEnd, DENSE_LBA_END)-DENSE_LBA_OFFSET; lba++ {
+			for lba := (track.GetStartLBA() + pregapCount) - option.DC_START; lba < min(track.LbaEnd, option.DC_END)-option.DC_START; lba++ {
 				lbaStartSize := lba*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
 				lbaEndSize := (lba+1)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
 				var cdSectorData CdSectorData
