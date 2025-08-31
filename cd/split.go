@@ -11,18 +11,16 @@ import (
 	"dreamdump/scsi"
 )
 
-func (dense *Dense) Split(opt *option.Option, qtoc *QToc) []TrackMeta {
+func (dense *Dense) Split(opt *option.Option, qtoc *QToc) map[uint8]TrackMeta {
 	offsetManager := dense.NewOffsetManager(DENSE_LBA_OFFSET)
-	trackMetas := make([]TrackMeta, 0)
+	trackMetas := make(map[uint8]TrackMeta, 0)
 	for _, trackNumber := range qtoc.TrackNames {
 		track := qtoc.Tracks[trackNumber]
-		if trackNumber == 110 {
-			continue
-		}
 		trackFileName := opt.PathName + "/" + opt.ImageName + " (Track " + strconv.Itoa(int(trackNumber)) + ").bin"
 		trackStartSize := (track.GetStartLBA()-DENSE_LBA_OFFSET)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
 		trackEndSize := (min(track.LbaEnd, DENSE_LBA_END)-DENSE_LBA_OFFSET)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
 		trackFile, err := os.OpenFile(trackFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o644)
+		dataType := uint8(0)
 		if err != nil {
 			panic(err)
 		}
@@ -46,6 +44,7 @@ func (dense *Dense) Split(opt *option.Option, qtoc *QToc) []TrackMeta {
 				var cdSectorData CdSectorData
 				copy(cdSectorData[0:scsi.SECTOR_DATA_SIZE], (*dense)[lbaStartSize:lbaEndSize])
 				cdSectorData.Descramble()
+				dataType |= cdSectorData.GetDataMode()
 				descrambledData := make([]byte, scsi.SECTOR_DATA_SIZE)
 				copy(descrambledData[:], cdSectorData[:])
 				data = append(data, descrambledData...)
@@ -57,14 +56,15 @@ func (dense *Dense) Split(opt *option.Option, qtoc *QToc) []TrackMeta {
 			panic(err)
 		}
 
-		trackMetas = append(trackMetas, TrackMeta{
+		trackMetas[trackNumber] = TrackMeta{
 			TrackNumber: trackNumber,
 			FileName:    trackFileName,
 			Size:        uint32(len(data)),
 			CRC32:       crc32.ChecksumIEEE(data),
 			MD5:         md5.Sum(data),
 			SHA1:        sha1.Sum(data),
-		})
+			DataType:    dataType,
+		}
 	}
 	return trackMetas
 }

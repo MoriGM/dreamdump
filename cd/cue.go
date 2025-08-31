@@ -1,0 +1,57 @@
+package cd
+
+import (
+	"fmt"
+	"os"
+	"path/filepath"
+
+	"dreamdump/encoding/msf"
+	"dreamdump/option"
+)
+
+func WriteCue(opt *option.Option, qtoc *QToc, metas map[uint8]TrackMeta) {
+	cueFileName := opt.PathName + "/" + opt.ImageName + ".cue"
+	cueFile, err := os.OpenFile(cueFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o744)
+	if err != nil {
+		panic(err)
+	}
+	defer cueFile.Close()
+
+	for _, trackNumber := range qtoc.TrackNames {
+		meta := metas[trackNumber]
+		track := qtoc.Tracks[trackNumber]
+		fileLine := fmt.Sprintf("FILE \"%s\" BINARY\n", filepath.Base(meta.FileName))
+		_, err = cueFile.WriteString(fileLine)
+		if err != nil {
+			panic(err)
+		}
+		trackLine := fmt.Sprintf("  TRACK %02d", trackNumber)
+		if track.Type == TRACK_TYPE_AUDIO {
+			trackLine += " AUDIO\n"
+		} else if meta.DataType == TRACK_TYPE_DATA_MODE1 {
+			trackLine += " MODE1/2352\n"
+		} else if meta.DataType == TRACK_TYPE_DATA_MODE2 {
+			trackLine += " MODE2/2352\n"
+		} else {
+			trackLine += " MODE0/2352\n"
+		}
+		_, err = cueFile.WriteString(trackLine)
+		if err != nil {
+			panic(err)
+		}
+		lba := track.Lba
+		for _, indexNumber := range track.IndexNumbers {
+			index := track.Indexs[indexNumber]
+			indexOffset := index.Lba - lba
+			if indexOffset < 0 {
+				continue
+			}
+			indexLine := fmt.Sprintf("    INDEX %02d %s\n", indexNumber, msf.Encode(indexOffset))
+			_, err = cueFile.WriteString(indexLine)
+			if err != nil {
+				panic(err)
+			}
+			lba = index.Lba
+		}
+	}
+}

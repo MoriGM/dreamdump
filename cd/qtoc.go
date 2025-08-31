@@ -61,8 +61,17 @@ func (qtoc *QToc) AddSector(qchannel *QChannel) {
 
 func (qtoc *QToc) Sort() {
 	trackKeys := []uint8{}
-	for _, trackNumber := range qtoc.Tracks {
-		trackKeys = append(trackKeys, trackNumber.TrackNumber)
+	for _, track := range qtoc.Tracks {
+		if track.TrackNumber == 110 {
+			continue
+		}
+		trackKeys = append(trackKeys, track.TrackNumber)
+		indexKeys := []uint8{}
+		for indexNumber := range track.Indexs {
+			indexKeys = append(indexKeys, indexNumber)
+		}
+		slices.Sort(indexKeys[:])
+		track.IndexNumbers = indexKeys
 	}
 	slices.Sort(trackKeys[:])
 	qtoc.TrackNames = trackKeys
