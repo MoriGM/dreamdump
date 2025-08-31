@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 
 	"dreamdump/cd/sections"
 	"dreamdump/log"
 	"dreamdump/option"
+	"dreamdump/scsi/scsi_commands"
 )
 
 func DreamDumpDisc(opt *option.Option) {
@@ -20,6 +22,8 @@ func DreamDumpDisc(opt *option.Option) {
 		}
 	}
 	sectionMap := sections.GetSectionMap(opt)
+	scsi_commands.SetCDSpeed(opt)
+	log.Println("Set Read Speed to:" + strconv.FormatInt(int64(opt.Speed), 10) + " kbs")
 	sections.ReadSections(opt, &sectionMap)
 	qtoc := sections.ExtractSectionsToQtoc(&sectionMap)
 	dense := sections.ExtractSectionsToDense(opt, &sectionMap)

@@ -13,10 +13,10 @@ type Command struct {
 	Function func(opt *option.Option)
 }
 
-var commands []*Command
+var cliCommands []*Command
 
 func init() {
-	commands = append(commands, &Command{
+	cliCommands = append(cliCommands, &Command{
 		Name:     "disc",
 		Function: DreamDumpDisc,
 	})
@@ -27,7 +27,7 @@ func ExecuteCommand(opt *option.Option) bool {
 		log.Println("Missing command argument")
 		os.Exit(exit_codes.MISSING_COMMAND_ARGUMENTS)
 	}
-	for _, command := range commands {
+	for _, command := range cliCommands {
 		if command.Name == os.Args[1] {
 			command.Function(opt)
 			return true

@@ -2,8 +2,6 @@ package log
 
 import (
 	"fmt"
-
-	"dreamdump/drive"
 )
 
 var clean_len = 0
@@ -36,8 +34,4 @@ func Println(a ...any) {
 func Printf(msg string, a ...any) {
 	cleanLine()
 	clean_len, _ = fmt.Printf(msg, a...)
-}
-
-func PrintDriveInfo(drive *drive.Drive) {
-	Printf("Drive: %s %s %s\n", drive.VendorName, drive.ProductInquiryData, drive.RevisionNumber)
 }

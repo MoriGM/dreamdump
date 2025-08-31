@@ -16,6 +16,7 @@ type Option struct {
 	SectorOrder int
 	CutOff      int32
 	ReadOffset  int16
+	Speed       uint16
 	ImageName   string
 	PathName    string
 }

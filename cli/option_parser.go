@@ -14,6 +14,10 @@ import (
 	"dreamdump/sgio"
 )
 
+const (
+	CD_SPEED = 176
+)
+
 func FindArgumentString(name string) *string {
 	for _, arg := range os.Args {
 		if parts := strings.Split(arg, "="); parts[0] == ("--"+name) && len(parts) == 2 {
@@ -31,6 +35,7 @@ func SetupOptions() option.Option {
 		ImageName:   "Game",
 		PathName:    "./Game",
 		ReadOffset:  0,
+		Speed:       0xFFFF,
 	}
 
 	device := FindArgumentString("drive")
@@ -46,13 +51,28 @@ func SetupOptions() option.Option {
 	opt.Drive = dvdDriveDeviceFile
 
 	currentDrive := scsi_commands.Inquiry(&opt)
-	log.PrintDriveInfo(currentDrive)
 	knownDrive := drive.IsKnownDrive(currentDrive)
 	if knownDrive != nil {
 		log.Println("Good Drive found.")
 		opt.SectorOrder = knownDrive.SectorOrder
 		opt.ReadOffset = knownDrive.ReadOffset
 	}
+	sectorOrder := FindArgumentString("sector-order")
+	if sectorOrder != nil {
+		if (*sectorOrder) == "DATA_C2" {
+			opt.SectorOrder = option.DATA_C2
+		}
+		if (*sectorOrder) == "DATA_SUB" {
+			opt.SectorOrder = option.DATA_SUB
+		}
+		if (*sectorOrder) == "DATA_C2_SUB" {
+			opt.SectorOrder = option.DATA_C2_SUB
+		}
+		if (*sectorOrder) == "DATA_SUB_C2" {
+			opt.SectorOrder = option.DATA_SUB_C2
+		}
+	}
+	currentDrive.PrintDriveInfo(&opt)
 
 	imageName := FindArgumentString("image-name")
 	if imageName != nil {
@@ -64,22 +84,6 @@ func SetupOptions() option.Option {
 		opt.PathName = *pathName
 	}
 
-	sectorOrder := FindArgumentString("sector-order")
-	if sectorOrder != nil {
-		if *sectorOrder == "DATA_C2" {
-			opt.SectorOrder = option.DATA_C2
-		}
-		if *sectorOrder == "DATA_SUB" {
-			opt.SectorOrder = option.DATA_SUB
-		}
-		if *sectorOrder == "DATA_C2_SUB" {
-			opt.SectorOrder = option.DATA_C2_SUB
-		}
-		if *sectorOrder == "DATA_SUB_C2" {
-			opt.SectorOrder = option.DATA_SUB_C2
-		}
-	}
-
 	readOffset := FindArgumentString("read-offset")
 	if readOffset != nil {
 		offset, err := strconv.ParseInt(*readOffset, 10, 16)
@@ -87,6 +91,18 @@ func SetupOptions() option.Option {
 			panic(err)
 		}
 		opt.ReadOffset = int16(offset)
+	}
+
+	speed := FindArgumentString("speed")
+	if speed != nil {
+		speed, err := strconv.ParseInt(*speed, 10, 16)
+		if err != nil {
+			panic(err)
+		}
+		if speed > 48 {
+			speed = 48
+		}
+		opt.Speed = uint16(speed) * CD_SPEED
 	}
 
 	if opt.CutOff > sections.DC_END {

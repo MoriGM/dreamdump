@@ -39,3 +39,12 @@ func ReadCd(opt *option.Option, lba int32) (sgio.SgIoHdr, []byte, []byte) {
 
 	return scsi.Read(opt.Drive, readCdCommand, size)
 }
+
+func SetCDSpeed(opt *option.Option) (sgio.SgIoHdr, []byte, []byte) {
+	readCdCommand := cbd.Speed{
+		OperationCode: scsi.MMC_READ_CD,
+		ReadSpeed:     bigendian.Uint16(opt.Speed),
+	}
+
+	return scsi.Read(opt.Drive, readCdCommand, 0)
+}
