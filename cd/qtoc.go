@@ -8,7 +8,7 @@ import (
 
 type QToc struct {
 	Tracks          map[uint8]*Track
-	TrackNames      []uint8
+	TrackNumbers    []uint8
 	LastTrackNumber uint8
 }
 
@@ -74,12 +74,12 @@ func (qtoc *QToc) Sort() {
 		track.IndexNumbers = indexKeys
 	}
 	slices.Sort(trackKeys[:])
-	qtoc.TrackNames = trackKeys
+	qtoc.TrackNumbers = trackKeys
 }
 
 func (qtoc *QToc) Print() {
 	log.Println("final QTOC:")
-	for _, trackKey := range qtoc.TrackNames {
+	for _, trackKey := range qtoc.TrackNumbers {
 		track := qtoc.Tracks[trackKey]
 		trackType := "data"
 		if track.Type == TRACK_TYPE_AUDIO {

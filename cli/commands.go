@@ -32,7 +32,8 @@ func DreamDumpDisc(opt *option.Option) {
 	qtoc.Print()
 	trackMetas := dense.Split(opt, qtoc)
 	cd.WriteCue(opt, qtoc, trackMetas)
-	for _, trackNumber := range qtoc.TrackNames {
+	cd.WriteGdi(opt, qtoc, trackMetas)
+	for _, trackNumber := range qtoc.TrackNumbers {
 		trackMeta := trackMetas[trackNumber]
 		romVaultLine := fmt.Sprintf("<rom name=\"%s\" size=\"%d\" crc=\"%x\" md5=\"%x\" sha1=\"%x\" />", filepath.Base(trackMeta.FileName), trackMeta.Size, trackMeta.CRC32, trackMeta.MD5, trackMeta.SHA1)
 		log.Println(romVaultLine)

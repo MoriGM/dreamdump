@@ -17,7 +17,7 @@ func WriteCue(opt *option.Option, qtoc *QToc, metas map[uint8]TrackMeta) {
 	}
 	defer cueFile.Close()
 
-	for _, trackNumber := range qtoc.TrackNames {
+	for _, trackNumber := range qtoc.TrackNumbers {
 		meta := metas[trackNumber]
 		track := qtoc.Tracks[trackNumber]
 		fileLine := fmt.Sprintf("FILE \"%s\" BINARY\n", filepath.Base(meta.FileName))

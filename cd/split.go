@@ -14,7 +14,7 @@ import (
 func (dense *Dense) Split(opt *option.Option, qtoc *QToc) map[uint8]TrackMeta {
 	offsetManager := dense.NewOffsetManager(DENSE_LBA_OFFSET)
 	trackMetas := make(map[uint8]TrackMeta, 0)
-	for _, trackNumber := range qtoc.TrackNames {
+	for _, trackNumber := range qtoc.TrackNumbers {
 		track := qtoc.Tracks[trackNumber]
 		trackFileName := opt.PathName + "/" + opt.ImageName + " (Track " + strconv.Itoa(int(trackNumber)) + ").bin"
 		trackStartSize := (track.GetStartLBA()-DENSE_LBA_OFFSET)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
