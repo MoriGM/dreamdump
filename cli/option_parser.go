@@ -34,7 +34,7 @@ func SetupOptions() option.Option {
 		ImageName:   "Game",
 		PathName:    "./Game",
 		ReadOffset:  0,
-		Speed:       0xFFFF,
+		Speed:       0,
 	}
 
 	parseDrivePart(&opt)

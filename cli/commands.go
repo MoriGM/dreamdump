@@ -23,12 +23,17 @@ func DreamDumpDisc(opt *option.Option) {
 		}
 	}
 	sectionMap := sections.GetSectionMap(opt)
-	scsi_commands.SetCDSpeed(opt)
-	log.Println("Set Read Speed to:" + strconv.FormatInt(int64(opt.Speed), 10) + " kbs")
+	if opt.Speed > 0 {
+		scsi_commands.SetCDSpeed(opt)
+		log.Println("Set Read Speed to:" + strconv.FormatInt(int64(opt.Speed), 10) + " kbs")
+		log.Println()
+	}
 	sections.ReadSections(opt, &sectionMap)
 	qtoc := sections.ExtractSectionsToQtoc(&sectionMap)
 	dense := sections.ExtractSectionsToDense(opt, &sectionMap)
+	log.Println()
 	fmt.Printf("Write Offset: %d\n", dense.NewOffsetManager(option.DC_START).SampleOffset)
+	log.Println()
 	qtoc.Print()
 	log.Println()
 	trackMetas := dense.Split(opt, qtoc)
