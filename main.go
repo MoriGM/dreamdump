@@ -13,5 +13,4 @@ func main() {
 	if !commandFound {
 		log.Println(os.Args[0] + " <disc> [--drive= --sector-order= --image-path= --image-name= --speed= --read-offset= --cutoff=]")
 	}
-	defer option.Drive.Close()
 }
