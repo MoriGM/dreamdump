@@ -38,23 +38,24 @@ func SetupOptions() option.Option {
 	}
 
 	parseDrivePart(&opt)
+	initializeDrive(&opt)
 	parsePaths(&opt)
 
-	speed := FindArgumentString("speed")
-	if speed != nil {
-		speed, err := strconv.ParseInt(*speed, 10, 16)
+	cutoff := FindArgumentString("cutoff")
+	if cutoff != nil {
+		cutoff, err := strconv.ParseInt(*cutoff, 10, 64)
 		if err != nil {
 			panic(err)
 		}
-		if speed > 48 {
-			speed = 48
+		if int32(cutoff) > option.DC_END {
+			log.Println("Cutoff can not be bigger than the Disc")
+			os.Exit(exit_codes.CUTOFF_TO_BIG)
 		}
-		opt.Speed = uint16(speed) * CD_SPEED
-	}
-
-	if opt.CutOff > option.DC_END {
-		log.Println("Cutoff can not be bigger than the Disc")
-		os.Exit(exit_codes.CUTOFF_TO_BIG)
+		if int32(cutoff) < option.DC_START {
+			log.Println("Cutoff can smaller than the Disc")
+			os.Exit(exit_codes.CUTOFF_TO_BIG)
+		}
+		opt.CutOff = int32(cutoff)
 	}
 
 	return opt
@@ -82,26 +83,27 @@ func parseDrivePart(opt *option.Option) {
 		opt.ReadOffset = int16(offset)
 	}
 
-	device := FindArgumentString("drive")
-	if device != nil {
-		opt.Device = *device
+	speed := FindArgumentString("speed")
+	if speed != nil {
+		speed, err := strconv.ParseInt(*speed, 10, 16)
+		if err != nil {
+			panic(err)
+		}
+		if speed > 48 {
+			speed = 48
+		}
+		opt.Speed = uint16(speed) * CD_SPEED
 	}
 
-	initializeDrive(opt)
-
-	currentDrive := scsi_commands.Inquiry(opt)
-	knownDrive := drive.IsKnownDrive(currentDrive)
-	if knownDrive != nil {
-		log.Println("Good Drive found.")
-		opt.SectorOrder = knownDrive.SectorOrder
-		opt.ReadOffset = knownDrive.ReadOffset
-	}
 	sectorOrder := FindArgumentString("sector-order")
 	if sectorOrder != nil {
 		opt.SectorOrder = parseSectorOrder(*sectorOrder)
 	}
 
-	currentDrive.PrintDriveInfo(opt)
+	device := FindArgumentString("drive")
+	if device != nil {
+		opt.Device = *device
+	}
 }
 
 func parseSectorOrder(sectorOrder string) int {
@@ -124,5 +126,16 @@ func initializeDrive(opt *option.Option) {
 		log.Println("This drive is unkown or is missing it gd-rom")
 		os.Exit(exit_codes.UNKOWN_DRIVE)
 	}
+
 	opt.Drive = dvdDriveDeviceFile
+
+	currentDrive := scsi_commands.Inquiry(opt)
+	knownDrive := drive.IsKnownDrive(currentDrive)
+	if knownDrive != nil {
+		log.Println("Good Drive found.")
+		opt.SectorOrder = knownDrive.SectorOrder
+		opt.ReadOffset = knownDrive.ReadOffset
+	}
+
+	currentDrive.PrintDriveInfo(opt)
 }
