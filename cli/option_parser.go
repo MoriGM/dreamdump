@@ -43,7 +43,7 @@ func SetupOptions() option.Option {
 
 	cutoff := FindArgumentString("cutoff")
 	if cutoff != nil {
-		cutoff, err := strconv.ParseInt(*cutoff, 10, 64)
+		cutoff, err := strconv.ParseInt(*cutoff, 10, 32)
 		if err != nil {
 			panic(err)
 		}
