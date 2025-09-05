@@ -9,8 +9,8 @@ import (
 	"dreamdump/exit_codes"
 	"dreamdump/log"
 	"dreamdump/option"
+	"dreamdump/scsi/driver/sgio"
 	"dreamdump/scsi/scsi_commands"
-	"dreamdump/sgio"
 )
 
 const (

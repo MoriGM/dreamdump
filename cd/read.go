@@ -3,8 +3,8 @@ package cd
 import (
 	"dreamdump/option"
 	"dreamdump/scsi"
+	"dreamdump/scsi/driver/sgio"
 	"dreamdump/scsi/scsi_commands"
-	"dreamdump/sgio"
 )
 
 func ReadSector(opt *option.Option, lba int32) (Sector, error) {

@@ -5,7 +5,7 @@ import (
 	"dreamdump/option"
 	"dreamdump/scsi"
 	"dreamdump/scsi/cbd"
-	"dreamdump/sgio"
+	"dreamdump/scsi/driver/sgio"
 )
 
 func ReadCd(opt *option.Option, lba int32) (sgio.SgIoHdr, []byte, []byte) {

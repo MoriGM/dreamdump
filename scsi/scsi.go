@@ -5,7 +5,7 @@ import (
 	"encoding/binary"
 	"os"
 
-	"dreamdump/sgio"
+	"dreamdump/scsi/driver/sgio"
 )
 
 func Read(dvdDriveDeviceFile *os.File, cmd interface{}, size uint16) (sgio.SgIoHdr, []byte, []byte) {

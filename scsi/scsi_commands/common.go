@@ -9,7 +9,7 @@ import (
 	"dreamdump/option"
 	"dreamdump/scsi"
 	"dreamdump/scsi/cbd"
-	"dreamdump/sgio"
+	"dreamdump/scsi/driver/sgio"
 )
 
 func Inquiry(opt *option.Option) *drive.Drive {
