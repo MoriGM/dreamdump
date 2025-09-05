@@ -1,7 +1,5 @@
 package sgio
 
-import "os"
-
 const (
 	SG_GET_VERSION_NUM   = 0x2282
 	SG_IO                = 0x2285
@@ -78,8 +76,4 @@ type SgIoHdr struct {
 	Resid          int32
 	Duration       uint32
 	Info           uint32
-}
-
-type SgioDriver struct {
-	Handle *os.File
 }

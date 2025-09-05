@@ -8,12 +8,6 @@ func Int32(num int32) int32 {
 	return int32(binary.BigEndian.Uint32(bytes[:]))
 }
 
-func Uint32(num uint32) uint32 {
-	var bytes [4]byte
-	binary.NativeEndian.PutUint32(bytes[:], num)
-	return binary.BigEndian.Uint32(bytes[:])
-}
-
 func Uint16(num uint16) uint16 {
 	var bytes [2]byte
 	binary.NativeEndian.PutUint16(bytes[:], num)
