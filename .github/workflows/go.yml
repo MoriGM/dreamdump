@@ -106,5 +106,5 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: dreamdump-${{env.release_name}}_win_${{matrix.platform}}.exe
+        name: dreamdump-${{env.release_name}}_win_${{matrix.platform}}
         path: ./dreamdump.exe
