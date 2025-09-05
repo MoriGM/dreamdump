@@ -83,7 +83,7 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: dreamdump-${{env.release_name}}_${{matrix.os}}_${{matrix.platform}}
+        name: dreamdump-${{env.release_name}}_linux_${{matrix.platform}}
         path: ./dreamdump
 
   build-windows:
@@ -106,5 +106,5 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: dreamdump-${{env.release_name}}_${{matrix.os}}_${{matrix.platform}}
+        name: dreamdump-${{env.release_name}}_win_${{matrix.platform}}.exe
         path: ./dreamdump.exe
