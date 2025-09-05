@@ -3,18 +3,18 @@ package cd
 import (
 	"dreamdump/option"
 	"dreamdump/scsi"
-	"dreamdump/scsi/driver/sgio"
+	"dreamdump/scsi/driver"
 	"dreamdump/scsi/scsi_commands"
 )
 
 func ReadSector(opt *option.Option, lba int32) (Sector, error) {
-	sg_io_hdr, senseBuf, block := scsi_commands.ReadCd(opt, lba)
-	err := sgio.CheckSense(&sg_io_hdr, &senseBuf)
+	status := scsi_commands.ReadCd(opt, lba)
+	err := driver.CheckSense(&status)
 	if err != nil {
 		return Sector{}, err
 	}
 
-	return ConvertRawToSector(opt, block), nil
+	return ConvertRawToSector(opt, status.Block), nil
 }
 
 func ConvertRawToSector(opt *option.Option, block []uint8) Sector {

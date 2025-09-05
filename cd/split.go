@@ -38,7 +38,7 @@ func (dense *Dense) Split(opt *option.Option, qtoc *QToc) map[uint8]TrackMeta {
 			if pregapCount > 0 {
 				data = append(data, ZeroSector(pregapCount)...)
 			}
-			for lba := (track.GetStartLBA() + pregapCount) - option.DC_START; lba < min(track.LbaEnd, option.DC_END)-option.DC_START; lba++ {
+			for lba := (track.GetStartLBA() + pregapCount) - option.DC_START; lba < min(track.LbaEnd, option.DC_LBA_END)-option.DC_START; lba++ {
 				lbaStartSize := lba*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
 				lbaEndSize := (lba+1)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
 				var cdSectorData CdSectorData

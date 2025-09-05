@@ -35,6 +35,9 @@ go.work.sum
 # WorkDirs
 doc/
 Game/
-*.bin
-*.scram
-*.subq
+*/*.gdi
+*/*.cue
+*/*.log
+*/*.bin
+*/*.scram
+*/*.subq

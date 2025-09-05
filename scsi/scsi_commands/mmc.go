@@ -5,10 +5,10 @@ import (
 	"dreamdump/option"
 	"dreamdump/scsi"
 	"dreamdump/scsi/cbd"
-	"dreamdump/scsi/driver/sgio"
+	"dreamdump/scsi/driver"
 )
 
-func ReadCd(opt *option.Option, lba int32) (sgio.SgIoHdr, []byte, []byte) {
+func ReadCd(opt *option.Option, lba int32) driver.Status {
 	size := uint16(scsi.SECTOR_DATA_SIZE)
 
 	readCdCommand := cbd.ReadCD{
@@ -37,14 +37,14 @@ func ReadCd(opt *option.Option, lba int32) (sgio.SgIoHdr, []byte, []byte) {
 		readCdCommand.Subchannel = cbd.ReadCD_SUBCODE_RAW
 	}
 
-	return scsi.Read(opt.Drive, readCdCommand, size)
+	return driver.Read(opt.Drive, readCdCommand, size)
 }
 
-func SetCDSpeed(opt *option.Option) (sgio.SgIoHdr, []byte, []byte) {
+func SetCDSpeed(opt *option.Option) driver.Status {
 	readCdCommand := cbd.Speed{
 		OperationCode: scsi.MMC_READ_CD,
 		ReadSpeed:     bigendian.Uint16(opt.Speed),
 	}
 
-	return scsi.Read(opt.Drive, readCdCommand, 0)
+	return driver.Read(opt.Drive, readCdCommand, 0)
 }

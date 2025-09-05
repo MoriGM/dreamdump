@@ -100,7 +100,7 @@ func (qtoc *QToc) Print() {
 				endLBA = nextIndex.Lba - 1
 			}
 
-			log.Printf("    index %02d { LBA: [% 7d ..% 6d]}\n", indexKey, startLBA, endLBA)
+			log.Printf("    index %02d { LBA: [% 7d ..% 6d]}\n", indexKey, startLBA, min(endLBA, option.DC_LBA_END))
 		}
 	}
 }

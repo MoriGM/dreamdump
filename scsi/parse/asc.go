@@ -1,4 +1,4 @@
-package sgio
+package parse
 
 var errmap map[string]string
 

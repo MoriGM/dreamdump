@@ -1,4 +1,4 @@
-package sgio
+package parse
 
 import (
 	"bytes"
@@ -6,10 +6,10 @@ import (
 )
 
 func stringify(a, b byte) string {
-	return dumpHex(append([]byte{a}, b))
+	return DumpHex(append([]byte{a}, b))
 }
 
-func dumpHex(data []byte) string {
+func DumpHex(data []byte) string {
 	var buf bytes.Buffer
 	var tmp [3]byte
 	for i := range data {

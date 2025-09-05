@@ -9,7 +9,7 @@ import (
 	"dreamdump/option"
 	"dreamdump/scsi"
 	"dreamdump/scsi/cbd"
-	"dreamdump/scsi/driver/sgio"
+	"dreamdump/scsi/driver"
 )
 
 func Inquiry(opt *option.Option) *drive.Drive {
@@ -19,14 +19,14 @@ func Inquiry(opt *option.Option) *drive.Drive {
 		TransferLength: bigendian.Uint16(size),
 	}
 
-	sg_io_hdr, senseBuf, block := scsi.Read(opt.Drive, inquiryCommand, size)
-	err := sgio.CheckSense(&sg_io_hdr, &senseBuf)
+	status := driver.Read(opt.Drive, inquiryCommand, size)
+	err := driver.CheckSense(&status)
 	if err != nil {
 		panic(err)
 	}
 
 	drive := new(drive.Drive)
-	buf := bytes.NewReader(block[8:46])
+	buf := bytes.NewReader(status.Block[8:46])
 	err = binary.Read(buf, binary.LittleEndian, drive)
 	if err != nil {
 		panic(err)

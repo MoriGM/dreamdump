@@ -9,7 +9,7 @@ import (
 	"dreamdump/exit_codes"
 	"dreamdump/log"
 	"dreamdump/option"
-	"dreamdump/scsi/driver/sgio"
+	"dreamdump/scsi/driver"
 	"dreamdump/scsi/scsi_commands"
 )
 
@@ -121,13 +121,13 @@ func parseSectorOrder(sectorOrder string) int {
 }
 
 func initializeDrive(opt *option.Option) {
-	dvdDriveDeviceFile, err := sgio.OpenScsiDevice(opt.Device)
+	driveDeviceFile, err := driver.OpenScsiDevice(opt.Device)
 	if err != nil {
 		log.Println("This drive is unkown or is missing it gd-rom")
 		os.Exit(exit_codes.UNKOWN_DRIVE)
 	}
 
-	opt.Drive = dvdDriveDeviceFile
+	opt.Drive = driveDeviceFile
 
 	currentDrive := scsi_commands.Inquiry(opt)
 	knownDrive := drive.IsKnownDrive(currentDrive)
