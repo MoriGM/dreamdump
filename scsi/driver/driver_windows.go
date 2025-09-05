@@ -4,9 +4,10 @@ package driver
 
 import (
 	"bytes"
-	"dreamdump/scsi/driver/win32"
 	"encoding/binary"
 	"unsafe"
+
+	"dreamdump/scsi/driver/win32"
 
 	"golang.org/x/sys/windows"
 )

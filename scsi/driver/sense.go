@@ -1,8 +1,9 @@
 package driver
 
 import (
-	"dreamdump/scsi/parse"
 	"errors"
+
+	"dreamdump/scsi/parse"
 )
 
 func CheckSense(status *Status) error {
