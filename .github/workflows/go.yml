@@ -63,11 +63,11 @@ jobs:
     - name: Test
       run: go test -v ./...
       
-  build:
+  build-linux:
     needs: test
     strategy:
       matrix:
-        os: [ubuntu-24.04, windows-2022]
+        os: [ubuntu-24.04]
         platform: [64]
     runs-on: ${{matrix.os}}
     steps:
@@ -85,3 +85,26 @@ jobs:
       with:
         name: dreamdump-${{env.release_name}}_${{matrix.os}}_${{matrix.platform}}
         path: ./dreamdump
+
+  build-windows:
+    needs: test
+    strategy:
+      matrix:
+        os: [windows-2022]
+        platform: [64]
+    runs-on: ${{matrix.os}}
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.25'
+    - name: Build
+      run: go build -v ./...
+    - name: Build Artifact
+      run: go build -v .
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: dreamdump-${{env.release_name}}_${{matrix.os}}_${{matrix.platform}}
+        path: ./dreamdump.exe
