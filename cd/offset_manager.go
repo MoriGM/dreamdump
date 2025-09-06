@@ -5,6 +5,7 @@ import (
 
 	"dreamdump/encoding/bcd"
 	"dreamdump/encoding/msf"
+	"dreamdump/option"
 	"dreamdump/scsi"
 )
 
@@ -51,4 +52,12 @@ func (dense Dense) NewOffsetManager(lba int32) *OffsetManager {
 	}
 
 	return offsetManager
+}
+
+func (dense *Dense) GetLBA(offsetManager *OffsetManager, lba int32) *CdSectorData {
+	lbaStartSize := (lba-option.DC_START)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
+	lbaEndSize := ((lba+1)-option.DC_START)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
+	var cdSectorData CdSectorData
+	copy(cdSectorData[0:scsi.SECTOR_DATA_SIZE], (*dense)[lbaStartSize:lbaEndSize])
+	return &cdSectorData
 }

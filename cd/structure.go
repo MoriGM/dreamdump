@@ -22,7 +22,7 @@ type Sector struct {
 
 const (
 	TRACK_TYPE_DATA       uint8 = 0x04
-	TRACK_TYPE_AUDIO      uint8 = 0x01
+	TRACK_TYPE_AUDIO      uint8 = 0x00
 	TRACK_TYPE_DATA_MODE1 uint8 = 0x01
 	TRACK_TYPE_DATA_MODE2 uint8 = 0x02
 )

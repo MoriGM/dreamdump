@@ -11,7 +11,7 @@ import (
 	"dreamdump/scsi"
 )
 
-func (dense *Dense) Split(opt *option.Option, qtoc *QToc) map[uint8]TrackMeta {
+func (dense *Dense) QTocSplit(opt *option.Option, qtoc *QToc) map[uint8]TrackMeta {
 	offsetManager := dense.NewOffsetManager(option.DC_START)
 	trackMetas := make(map[uint8]TrackMeta, 0)
 	for _, trackNumber := range qtoc.TrackNumbers {

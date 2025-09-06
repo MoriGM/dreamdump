@@ -82,11 +82,11 @@ func (qtoc *QToc) Print() {
 	log.Println("final QTOC:")
 	for _, trackKey := range qtoc.TrackNumbers {
 		track := qtoc.Tracks[trackKey]
-		trackType := "data"
+		trackType := " data"
 		if track.Type == TRACK_TYPE_AUDIO {
 			trackType = "audio"
 		}
-		log.Printf("  track %d {  %s }\n", track.TrackNumber, trackType)
+		log.Printf("  track %d { %s }\n", track.TrackNumber, trackType)
 		indexKeys := []uint8{}
 		for key := range track.Indexs {
 			indexKeys = append(indexKeys, key)
