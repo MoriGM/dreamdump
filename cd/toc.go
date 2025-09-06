@@ -38,8 +38,7 @@ func ParseToc(sector *CdSectorData) []*Track {
 		lba -= 300
 		if trackNumber == TOC_FIRST_TRACK {
 			lba += 150
-		}
-		if trackType == TRACK_TYPE_DATA {
+		} else if trackType == TRACK_TYPE_DATA {
 			lba -= 75
 		}
 		track := new(Track)

@@ -26,4 +26,5 @@ type Option struct {
 	Speed       uint16
 	ImageName   string
 	PathName    string
+	QTocSplit   bool
 }

@@ -2,6 +2,7 @@ package cli
 
 import (
 	"os"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -16,6 +17,10 @@ import (
 const (
 	CD_SPEED = 176
 )
+
+func HasArgumentString(name string) bool {
+	return slices.Contains(os.Args, "--"+name)
+}
 
 func FindArgumentString(name string) *string {
 	for _, arg := range os.Args {
@@ -35,11 +40,13 @@ func SetupOptions() option.Option {
 		PathName:    "./Game",
 		ReadOffset:  0,
 		Speed:       0,
+		QTocSplit:   false,
 	}
 
+	parseSplit(&opt)
+	parsePaths(&opt)
 	parseDrivePart(&opt)
 	initializeDrive(&opt)
-	parsePaths(&opt)
 
 	cutoff := FindArgumentString("cutoff")
 	if cutoff != nil {
@@ -59,6 +66,10 @@ func SetupOptions() option.Option {
 	}
 
 	return opt
+}
+
+func parseSplit(opt *option.Option) {
+	opt.QTocSplit = HasArgumentString("force-qtoc")
 }
 
 func parsePaths(opt *option.Option) {

@@ -42,7 +42,12 @@ func DreamDumpDisc(opt *option.Option) {
 	log.Println()
 	qtoc.Print()
 	log.Println()
-	trackMetas := dense.QTocSplit(opt, qtoc)
+	var trackMetas map[uint8]cd.TrackMeta
+	if opt.QTocSplit {
+		trackMetas = dense.QTocSplit(opt, qtoc)
+	} else {
+		trackMetas = dense.TocSplit(opt, toc)
+	}
 	cd.WriteCue(opt, qtoc, trackMetas)
 	cd.WriteGdi(opt, qtoc, trackMetas)
 	for _, trackNumber := range qtoc.TrackNumbers {

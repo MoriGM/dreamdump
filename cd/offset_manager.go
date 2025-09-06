@@ -22,6 +22,16 @@ type OffsetManager struct {
 	SampleOffset   int32
 }
 
+func (sector CdSectorData) HasSyncHeader() bool {
+	syncFrame := []uint8{0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00}
+	for i, magicNumber := range syncFrame {
+		if magicNumber != sector[i] {
+			return false
+		}
+	}
+	return true
+}
+
 func (dense Dense) NewOffsetManager(lba int32) *OffsetManager {
 	syncFrame := []uint8{0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00}
 	syncByteOffset := int32(bytes.Index(dense, syncFrame))
