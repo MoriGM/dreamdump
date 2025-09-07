@@ -1,8 +1,7 @@
 package drive
 
 import (
-	"log"
-
+	"dreamdump/log"
 	"dreamdump/option"
 )
 
