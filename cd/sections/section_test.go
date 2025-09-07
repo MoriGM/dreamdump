@@ -13,26 +13,26 @@ import (
 
 func TestGoodHashes(t *testing.T) {
 	section := sections.Section{}
-	section.Sectors = []cd.Sector{}
+	section.Sectors = []*cd.Sector{}
 
 	for range option.DC_INTERVAL {
 		data := cd.CdSectorData{}
 		for i := range scsi.SECTOR_DATA_SIZE {
 			data[i] = 0
 		}
-		section.Sectors = append(section.Sectors, cd.Sector{
+		section.Sectors = append(section.Sectors, &cd.Sector{
 			Data: data,
 		})
 	}
 	firstHash := section.Hash()
-	section.Sectors = []cd.Sector{}
+	section.Sectors = []*cd.Sector{}
 
 	for range option.DC_INTERVAL {
 		data := cd.CdSectorData{}
 		for i := range scsi.SECTOR_DATA_SIZE {
 			data[i] = 0
 		}
-		section.Sectors = append(section.Sectors, cd.Sector{
+		section.Sectors = append(section.Sectors, &cd.Sector{
 			Data: data,
 		})
 	}
@@ -43,14 +43,14 @@ func TestGoodHashes(t *testing.T) {
 
 func TestSecondTryHashes(t *testing.T) {
 	section := sections.Section{}
-	section.Sectors = []cd.Sector{}
+	section.Sectors = []*cd.Sector{}
 
 	for range option.DC_INTERVAL {
 		data := cd.CdSectorData{}
 		for i := range scsi.SECTOR_DATA_SIZE {
 			data[i] = 0
 		}
-		section.Sectors = append(section.Sectors, cd.Sector{
+		section.Sectors = append(section.Sectors, &cd.Sector{
 			Data: data,
 		})
 	}
@@ -59,13 +59,13 @@ func TestSecondTryHashes(t *testing.T) {
 	section.AddHash(hash)
 	assert.Equal(t, len(section.Hashes), 1)
 
-	section.Sectors = []cd.Sector{}
+	section.Sectors = []*cd.Sector{}
 	for range option.DC_INTERVAL {
 		data := cd.CdSectorData{}
 		for i := range scsi.SECTOR_DATA_SIZE {
 			data[i] = 1
 		}
-		section.Sectors = append(section.Sectors, cd.Sector{
+		section.Sectors = append(section.Sectors, &cd.Sector{
 			Data: data,
 		})
 	}
@@ -74,13 +74,13 @@ func TestSecondTryHashes(t *testing.T) {
 	section.AddHash(hash)
 	assert.Equal(t, len(section.Hashes), 2)
 
-	section.Sectors = []cd.Sector{}
+	section.Sectors = []*cd.Sector{}
 	for range option.DC_INTERVAL {
 		data := cd.CdSectorData{}
 		for i := range scsi.SECTOR_DATA_SIZE {
 			data[i] = 0
 		}
-		section.Sectors = append(section.Sectors, cd.Sector{
+		section.Sectors = append(section.Sectors, &cd.Sector{
 			Data: data,
 		})
 	}
@@ -93,14 +93,14 @@ func TestSecondTryHashes(t *testing.T) {
 func BenchmarkRandomHashes(b *testing.B) {
 	section := sections.Section{}
 	for i := range 256 {
-		section.Sectors = []cd.Sector{}
+		section.Sectors = []*cd.Sector{}
 
 		for range option.DC_INTERVAL {
 			data := cd.CdSectorData{}
 			for pos := range scsi.SECTOR_DATA_SIZE {
 				data[pos] = uint8(i)
 			}
-			section.Sectors = append(section.Sectors, cd.Sector{
+			section.Sectors = append(section.Sectors, &cd.Sector{
 				Data: data,
 			})
 		}

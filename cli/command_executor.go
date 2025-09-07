@@ -3,6 +3,7 @@ package cli
 import (
 	"os"
 
+	"dreamdump/cli/commands"
 	"dreamdump/exit_codes"
 	"dreamdump/log"
 	"dreamdump/option"
@@ -18,7 +19,10 @@ var cliCommands []*Command
 func init() {
 	cliCommands = append(cliCommands, &Command{
 		Name:     "disc",
-		Function: DreamDumpDisc,
+		Function: commands.DreamDumpDisc,
+	}, &Command{
+		Name:     "split",
+		Function: commands.DreamDumpSplit,
 	})
 }
 

@@ -7,22 +7,21 @@ import (
 	"dreamdump/scsi/scsi_commands"
 )
 
-func ReadSector(opt *option.Option, lba int32) (Sector, error) {
+func ReadSector(opt *option.Option, lba int32) (*Sector, error) {
 	status := scsi_commands.ReadCd(opt, lba)
 	err := driver.CheckSense(&status)
 	if err != nil {
-		return Sector{}, err
+		return nil, err
 	}
 
 	return ConvertRawToSector(opt, status.Block), nil
 }
 
-func ConvertRawToSector(opt *option.Option, block []uint8) Sector {
-	sectorContent := Sector{
-		Data: [scsi.SECTOR_DATA_SIZE]uint8(block[0:scsi.SECTOR_DATA_SIZE]),
-		C2:   [scsi.SECTOR_C2_SIZE]uint8{},
-		Sub:  Subchannel{},
-	}
+func ConvertRawToSector(opt *option.Option, block []uint8) *Sector {
+	sectorContent := new(Sector)
+	sectorContent.Data = [scsi.SECTOR_DATA_SIZE]uint8(block[0:scsi.SECTOR_DATA_SIZE])
+	sectorContent.C2 = [scsi.SECTOR_C2_SIZE]uint8{}
+	sectorContent.Sub = Subchannel{}
 
 	if opt.SectorOrder == option.DATA_C2 {
 		sectorContent.C2 = [scsi.SECTOR_C2_SIZE]uint8(block[scsi.SECTOR_DATA_SIZE:scsi.SECTOR_DATA_C2_SIZE])

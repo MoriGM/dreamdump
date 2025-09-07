@@ -8,6 +8,7 @@ import (
 )
 
 func PrintXMLHashes(toc []*Track, trackMetas map[uint8]TrackMeta) {
+	log.Println("dat:")
 	for _, tocTrack := range toc {
 		if tocTrack.TrackNumber == 110 {
 			break

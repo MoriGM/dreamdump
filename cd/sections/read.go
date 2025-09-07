@@ -9,18 +9,22 @@ import (
 	"dreamdump/option"
 )
 
-func ReadSections(opt *option.Option, sectionMap *[]Section) {
+func ReadFileSections(opt *option.Option, sectionMap *[]*Section) {
 	for sectionNumber := range len(*sectionMap) {
 		(*sectionMap)[sectionNumber].ReadSection(opt)
 	}
+}
+
+func ReadSections(opt *option.Option, sectionMap *[]*Section) {
+	ReadFileSections(opt, sectionMap)
 	for {
 		allMatching := true
 		for sectionNumber := range len(*sectionMap) {
-			section := &(*sectionMap)[sectionNumber]
+			section := (*sectionMap)[sectionNumber]
 			if section.Matched {
 				continue
 			}
-			section.Sectors = make([]cd.Sector, section.EndSector-section.StartSector)
+			section.Sectors = make([]*cd.Sector, section.EndSector-section.StartSector)
 			err := ReadSection(opt, section)
 			if err != nil {
 				allMatching = false

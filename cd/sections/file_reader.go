@@ -32,7 +32,7 @@ func (sect *Section) ReadSection(opt *option.Option) {
 	}
 	defer subFile.Close()
 
-	sect.Sectors = make([]cd.Sector, sect.EndSector-sect.StartSector)
+	sect.Sectors = make([]*cd.Sector, sect.EndSector-sect.StartSector)
 	for i := range sect.EndSector - sect.StartSector {
 		data := make([]byte, scsi.SECTOR_DATA_SIZE)
 		subq := make([]byte, scsi.SECTOR_SUBQ_SIZE)
@@ -44,6 +44,7 @@ func (sect *Section) ReadSection(opt *option.Option) {
 		if err != nil {
 			panic(err)
 		}
+		sect.Sectors[i] = new(cd.Sector)
 		copy(sect.Sectors[i].Data[:], data[:])
 		copy(sect.Sectors[i].Sub.Qchannel[:], subq[:])
 	}

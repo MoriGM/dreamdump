@@ -6,7 +6,7 @@ import (
 	"dreamdump/scsi"
 )
 
-func ExtractSectionsToDense(opt *option.Option, sections *[]Section) *cd.Dense {
+func ExtractSectionsToDense(opt *option.Option, sections *[]*Section) *cd.Dense {
 	dense := make(cd.Dense, (int(option.DC_END-option.DC_START)+1)*scsi.SECTOR_DATA_SIZE)
 
 	skip := (opt.ReadOffset * 4)
@@ -28,7 +28,7 @@ func ExtractSectionsToDense(opt *option.Option, sections *[]Section) *cd.Dense {
 	return &dense
 }
 
-func ExtractSectionsToQtoc(sections *[]Section) *cd.QToc {
+func ExtractSectionsToQtoc(sections *[]*Section) *cd.QToc {
 	qtoc := cd.QTocNew()
 	for sectionNumber := range len(*sections) {
 		for sectorNumber := range len((*sections)[sectionNumber].Sectors) {

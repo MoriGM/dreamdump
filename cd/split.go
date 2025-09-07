@@ -35,58 +35,123 @@ func (dense *Dense) TocSplit(opt *option.Option, tracks []*Track) map[uint8]Trac
 }
 
 func (dense *Dense) SplitTrack(opt *option.Option, track *Track, offsetManager *OffsetManager) TrackMeta {
+	if track.Type == TRACK_TYPE_DATA {
+		return dense.splitData(opt, track, offsetManager)
+	}
+	return dense.splitAudio(opt, track, offsetManager)
+}
+
+func (dense *Dense) splitData(opt *option.Option, track *Track, offsetManager *OffsetManager) TrackMeta {
 	trackFileName := opt.PathName + "/" + opt.ImageName + " (Track " + strconv.Itoa(int(track.TrackNumber)) + ").bin"
 	trackFile, err := os.OpenFile(trackFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o644)
-	dataType := uint8(0)
 	if err != nil {
 		panic(err)
 	}
-	var data []byte
-	if track.Type == TRACK_TYPE_AUDIO {
-		trackStartSize := (track.GetStartLBA()-option.DC_START)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
-		trackEndSize := (min(track.LbaEnd, option.DC_END)-option.DC_START)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
-		data = (*dense)[trackStartSize:trackEndSize]
-	} else {
-		data = make([]byte, 0)
-		for lba := (track.GetStartLBA()) - option.DC_START; lba < min(track.LbaEnd, option.DC_LBA_END)-option.DC_START; lba++ {
-			lbaStartSize := lba*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
-			lbaEndSize := (lba+1)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
-			var cdSectorData CdSectorData
-			copy(cdSectorData[0:scsi.SECTOR_DATA_SIZE], (*dense)[lbaStartSize:lbaEndSize])
-			var descrambledData []byte
-			if cdSectorData.HasSyncHeader() {
-				cdSectorData.Descramble()
-				dataType |= cdSectorData.GetDataMode()
-				descrambledData = make([]byte, scsi.SECTOR_DATA_SIZE)
-				copy(descrambledData[:], cdSectorData[:])
-			} else {
-				descrambledData = make([]byte, scsi.SECTOR_DATA_SIZE)
-			}
 
-			data = append(data, descrambledData...)
+	dataType := uint8(0)
+
+	crc32Sum := crc32.NewIEEE()
+	md5Sum := md5.New()
+	sha1Sum := sha1.New()
+
+	trackStartSize := (track.GetStartLBA()-option.DC_START)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
+	trackEndSize := (min(track.LbaEnd, option.DC_LBA_END)-option.DC_START)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
+
+	for lba := (track.GetStartLBA()) - option.DC_START; lba < min(track.LbaEnd, option.DC_LBA_END)-option.DC_START; lba++ {
+		lbaStartSize := lba*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
+		lbaEndSize := (lba+1)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
+		var cdSectorData CdSectorData
+		copy(cdSectorData[0:scsi.SECTOR_DATA_SIZE], (*dense)[lbaStartSize:lbaEndSize])
+		var descrambledData []byte
+		if cdSectorData.HasSyncHeader() {
+			cdSectorData.Descramble()
+			dataType |= cdSectorData.GetDataMode()
+			descrambledData = make([]byte, scsi.SECTOR_DATA_SIZE)
+			copy(descrambledData[:], cdSectorData[:])
+		} else {
+			descrambledData = make([]byte, scsi.SECTOR_DATA_SIZE)
+		}
+
+		_, err := crc32Sum.Write(descrambledData)
+		if err != nil {
+			panic(err)
+		}
+		_, err = md5Sum.Write(descrambledData)
+		if err != nil {
+			panic(err)
+		}
+		_, err = sha1Sum.Write(descrambledData)
+		if err != nil {
+			panic(err)
+		}
+		_, err = trackFile.Write(descrambledData)
+		if err != nil {
+			panic(err)
 		}
 	}
 
-	_, err = trackFile.Write(data)
+	err = trackFile.Close()
 	if err != nil {
 		panic(err)
 	}
 
-	return TrackMeta{
+	trackMeta := TrackMeta{
 		TrackNumber: track.TrackNumber,
 		FileName:    trackFileName,
-		Size:        uint32(len(data)),
-		CRC32:       crc32.ChecksumIEEE(data),
-		MD5:         md5.Sum(data),
-		SHA1:        sha1.Sum(data),
+		Size:        uint32(trackEndSize - trackStartSize),
+		CRC32:       crc32Sum.Sum32(),
+		MD5:         [16]byte(md5Sum.Sum(nil)),
+		SHA1:        [20]byte(sha1Sum.Sum(nil)),
 		DataType:    dataType,
 	}
+
+	return trackMeta
 }
 
-func ZeroSector(count int32) []byte {
-	data := make([]byte, scsi.SECTOR_DATA_SIZE*count)
-	for pos := range scsi.SECTOR_DATA_SIZE * count {
-		data[pos] = 0
+func (dense *Dense) splitAudio(opt *option.Option, track *Track, offsetManager *OffsetManager) TrackMeta {
+	trackFileName := opt.PathName + "/" + opt.ImageName + " (Track " + strconv.Itoa(int(track.TrackNumber)) + ").bin"
+	file, err := os.OpenFile(trackFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o644)
+	if err != nil {
+		panic(err)
 	}
-	return data
+
+	crc32Sum := crc32.NewIEEE()
+	md5Sum := md5.New()
+	sha1Sum := sha1.New()
+
+	trackStartSize := (track.GetStartLBA()-option.DC_START)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
+	trackEndSize := (min(track.LbaEnd, option.DC_LBA_END)-option.DC_START)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
+
+	_, err = crc32Sum.Write((*dense)[trackStartSize:trackEndSize])
+	if err != nil {
+		panic(err)
+	}
+	_, err = md5Sum.Write((*dense)[trackStartSize:trackEndSize])
+	if err != nil {
+		panic(err)
+	}
+	_, err = sha1Sum.Write((*dense)[trackStartSize:trackEndSize])
+	if err != nil {
+		panic(err)
+	}
+	_, err = file.Write((*dense)[trackStartSize:trackEndSize])
+	if err != nil {
+		panic(err)
+	}
+	trackMeta := TrackMeta{
+		TrackNumber: track.TrackNumber,
+		FileName:    trackFileName,
+		Size:        uint32(trackEndSize - trackStartSize),
+		CRC32:       crc32Sum.Sum32(),
+		MD5:         [16]byte(md5Sum.Sum(nil)),
+		SHA1:        [20]byte(sha1Sum.Sum(nil)),
+		DataType:    0,
+	}
+
+	err = file.Close()
+	if err != nil {
+		panic(err)
+	}
+
+	return trackMeta
 }

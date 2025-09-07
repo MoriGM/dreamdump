@@ -310,16 +310,16 @@ func TestExtractSectionsToDense(t *testing.T) {
 		0x91, 0x96, 0xEC, 0x6E, 0xCD, 0xEC, 0x55, 0x8D, 0xFF, 0x25, 0xE4, 0x49, 0x86, 0x71, 0x8E, 0x2A,
 	}
 
-	sectorOne := cd.Sector{}
+	sectorOne := new(cd.Sector)
 	sectorOne.Data = dataOne
 
-	sectorTwo := cd.Sector{}
+	sectorTwo := new(cd.Sector)
 	sectorTwo.Data = dataTwo
 
-	section := sections.Section{}
+	section := &sections.Section{}
 	section.Sectors = append(section.Sectors, sectorOne)
 	section.Sectors = append(section.Sectors, sectorTwo)
-	sectionMap := []sections.Section{section}
+	sectionMap := []*sections.Section{section}
 
 	dense := sections.ExtractSectionsToDense(&option.Option{ReadOffset: 6}, &sectionMap)
 	offsetManager := dense.NewOffsetManager(44990)

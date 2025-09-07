@@ -49,11 +49,7 @@ func TestHasC2GoodSector(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	sector := cd.Sector{
-		C2: c2,
-	}
-
-	assert.Equal(t, sector.C2.Amount(), uint16(0))
+	assert.Equal(t, c2.Amount(), uint16(0))
 }
 
 func TestHasC2BadSector(t *testing.T) {
@@ -97,9 +93,5 @@ func TestHasC2BadSector(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	sector := cd.Sector{
-		C2: c2,
-	}
-
-	assert.Equal(t, sector.C2.Amount(), uint16(28))
+	assert.Equal(t, c2.Amount(), uint16(28))
 }
