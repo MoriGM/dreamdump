@@ -1,9 +1,10 @@
 package cd
 
 import (
-	"dreamdump/log"
 	"fmt"
 	"path/filepath"
+
+	"dreamdump/log"
 )
 
 func PrintXMLHashes(toc []*Track, trackMetas map[uint8]TrackMeta) {
