@@ -321,7 +321,7 @@ func TestExtractSectionsToDense(t *testing.T) {
 	section.Sectors = append(section.Sectors, sectorTwo)
 	sectionMap := []*sections.Section{section}
 
-	dense := sections.ExtractSectionsToDense(&option.Option{ReadOffset: 6}, &sectionMap)
+	dense := sections.ExtractSectionsToDense(&option.Option{ReadOffset: 6}, sectionMap)
 	offsetManager := dense.NewOffsetManager(44990)
 	assert.Equal(t, offsetManager.SyncByteOffset, uint32(52))
 	assert.Equal(t, offsetManager.ByteOffset, int32(52))

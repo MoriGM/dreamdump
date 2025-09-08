@@ -74,18 +74,9 @@ func (dense *Dense) splitData(opt *option.Option, track *Track, offsetManager *O
 			descrambledData.Write(make([]byte, scsi.SECTOR_DATA_SIZE))
 		}
 
-		_, err := crc32Sum.Write(descrambledData.Bytes())
-		if err != nil {
-			panic(err)
-		}
-		_, err = md5Sum.Write(descrambledData.Bytes())
-		if err != nil {
-			panic(err)
-		}
-		_, err = sha1Sum.Write(descrambledData.Bytes())
-		if err != nil {
-			panic(err)
-		}
+		crc32Sum.Write(descrambledData.Bytes())
+		md5Sum.Write(descrambledData.Bytes())
+		sha1Sum.Write(descrambledData.Bytes())
 		_, err = trackFile.Write(descrambledData.Bytes())
 		if err != nil {
 			panic(err)

@@ -30,8 +30,10 @@ func DreamDumpDisc(opt *option.Option) {
 	}
 
 	sectionMap := sections.GetSectionMap(opt)
-	sections.ReadSections(opt, &sectionMap)
+	sections.ReadSections(opt, sectionMap)
 
-	trackMetas, toc, qtoc := split(opt, &sectionMap)
+	dense, qtoc := sections.ExtractSections(opt, sectionMap)
+
+	trackMetas, toc, qtoc := split(opt, dense, qtoc)
 	info(opt, trackMetas, toc, qtoc)
 }

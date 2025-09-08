@@ -11,12 +11,7 @@ import (
 	"dreamdump/option"
 )
 
-func split(opt *option.Option, sectionMap *[]*sections.Section) (map[uint8]cd.TrackMeta, []*cd.Track, *cd.QToc) {
-	dense := sections.ExtractSectionsToDense(opt, sectionMap)
-	qtoc := sections.ExtractSectionsToQtoc(sectionMap)
-	for _, section := range *sectionMap {
-		section.Sectors = nil
-	}
+func split(opt *option.Option, dense *cd.Dense, qtoc *cd.QToc) (map[uint8]cd.TrackMeta, []*cd.Track, *cd.QToc) {
 	offsetManager := dense.NewOffsetManager(option.DC_START)
 
 	specialSector := dense.GetLBA(offsetManager, option.DC_LBA_START)
@@ -55,7 +50,7 @@ func DreamDumpSplit(opt *option.Option) {
 		}
 	}
 	sectionMap := sections.GetSectionMap(opt)
-	sections.ReadFileSections(opt, &sectionMap)
+	sections.ReadFileSections(opt, sectionMap)
 	for _, section := range sectionMap {
 		if !section.Matched {
 			log.Println("Not all sections are matching")
@@ -63,7 +58,8 @@ func DreamDumpSplit(opt *option.Option) {
 		}
 	}
 
-	trackMetas, toc, qtoc := split(opt, &sectionMap)
+	dense, qtoc := sections.ExtractSections(opt, sectionMap)
+	trackMetas, toc, qtoc := split(opt, dense, qtoc)
 	sectionMap = nil
 	info(opt, trackMetas, toc, qtoc)
 }
