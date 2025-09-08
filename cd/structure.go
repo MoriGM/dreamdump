@@ -5,9 +5,9 @@ import (
 )
 
 type (
-	CdSectorData [scsi.SECTOR_DATA_SIZE]uint8
-	CdSectorC2   [scsi.SECTOR_C2_SIZE]uint8
-	QChannel     [12]uint8
+	CdSectorData [scsi.SECTOR_DATA_SIZE]byte
+	CdSectorC2   [scsi.SECTOR_C2_SIZE]byte
+	QChannel     [12]byte
 )
 
 type Subchannel struct {

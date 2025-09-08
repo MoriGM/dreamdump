@@ -1,6 +1,7 @@
 package cd
 
 import (
+	"bytes"
 	"crypto/md5"
 	"crypto/sha1"
 	"hash/crc32"
@@ -13,7 +14,7 @@ import (
 
 func (dense *Dense) QTocSplit(opt *option.Option, qtoc *QToc) map[uint8]TrackMeta {
 	offsetManager := dense.NewOffsetManager(option.DC_START)
-	trackMetas := make(map[uint8]TrackMeta, 0)
+	trackMetas := make(map[uint8]TrackMeta, len(qtoc.TrackNumbers))
 	for _, trackNumber := range qtoc.TrackNumbers {
 		track := qtoc.Tracks[trackNumber]
 
@@ -24,7 +25,7 @@ func (dense *Dense) QTocSplit(opt *option.Option, qtoc *QToc) map[uint8]TrackMet
 
 func (dense *Dense) TocSplit(opt *option.Option, tracks []*Track) map[uint8]TrackMeta {
 	offsetManager := dense.NewOffsetManager(option.DC_START)
-	trackMetas := make(map[uint8]TrackMeta, 0)
+	trackMetas := make(map[uint8]TrackMeta, len(tracks))
 	for _, track := range tracks {
 		if track.TrackNumber == 110 {
 			break
@@ -57,34 +58,35 @@ func (dense *Dense) splitData(opt *option.Option, track *Track, offsetManager *O
 	trackStartSize := (track.GetStartLBA()-option.DC_START)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
 	trackEndSize := (min(track.LbaEnd, option.DC_LBA_END)-option.DC_START)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
 
+	var cdSectorData CdSectorData
+	var descrambledData bytes.Buffer
 	for lba := (track.GetStartLBA()) - option.DC_START; lba < min(track.LbaEnd, option.DC_LBA_END)-option.DC_START; lba++ {
+		descrambledData.Reset()
+
 		lbaStartSize := lba*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
 		lbaEndSize := (lba+1)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
-		var cdSectorData CdSectorData
 		copy(cdSectorData[0:scsi.SECTOR_DATA_SIZE], (*dense)[lbaStartSize:lbaEndSize])
-		var descrambledData []byte
 		if cdSectorData.HasSyncHeader() {
 			cdSectorData.Descramble()
 			dataType |= cdSectorData.GetDataMode()
-			descrambledData = make([]byte, scsi.SECTOR_DATA_SIZE)
-			copy(descrambledData[:], cdSectorData[:])
+			descrambledData.Write(cdSectorData[:])
 		} else {
-			descrambledData = make([]byte, scsi.SECTOR_DATA_SIZE)
+			descrambledData.Write(make([]byte, scsi.SECTOR_DATA_SIZE))
 		}
 
-		_, err := crc32Sum.Write(descrambledData)
+		_, err := crc32Sum.Write(descrambledData.Bytes())
 		if err != nil {
 			panic(err)
 		}
-		_, err = md5Sum.Write(descrambledData)
+		_, err = md5Sum.Write(descrambledData.Bytes())
 		if err != nil {
 			panic(err)
 		}
-		_, err = sha1Sum.Write(descrambledData)
+		_, err = sha1Sum.Write(descrambledData.Bytes())
 		if err != nil {
 			panic(err)
 		}
-		_, err = trackFile.Write(descrambledData)
+		_, err = trackFile.Write(descrambledData.Bytes())
 		if err != nil {
 			panic(err)
 		}
@@ -115,25 +117,9 @@ func (dense *Dense) splitAudio(opt *option.Option, track *Track, offsetManager *
 		panic(err)
 	}
 
-	crc32Sum := crc32.NewIEEE()
-	md5Sum := md5.New()
-	sha1Sum := sha1.New()
-
 	trackStartSize := (track.GetStartLBA()-option.DC_START)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
 	trackEndSize := (min(track.LbaEnd, option.DC_LBA_END)-option.DC_START)*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
 
-	_, err = crc32Sum.Write((*dense)[trackStartSize:trackEndSize])
-	if err != nil {
-		panic(err)
-	}
-	_, err = md5Sum.Write((*dense)[trackStartSize:trackEndSize])
-	if err != nil {
-		panic(err)
-	}
-	_, err = sha1Sum.Write((*dense)[trackStartSize:trackEndSize])
-	if err != nil {
-		panic(err)
-	}
 	_, err = file.Write((*dense)[trackStartSize:trackEndSize])
 	if err != nil {
 		panic(err)
@@ -142,9 +128,9 @@ func (dense *Dense) splitAudio(opt *option.Option, track *Track, offsetManager *
 		TrackNumber: track.TrackNumber,
 		FileName:    trackFileName,
 		Size:        uint32(trackEndSize - trackStartSize),
-		CRC32:       crc32Sum.Sum32(),
-		MD5:         [16]byte(md5Sum.Sum(nil)),
-		SHA1:        [20]byte(sha1Sum.Sum(nil)),
+		CRC32:       crc32.ChecksumIEEE((*dense)[trackStartSize:trackEndSize]),
+		MD5:         md5.Sum((*dense)[trackStartSize:trackEndSize]),
+		SHA1:        sha1.Sum((*dense)[trackStartSize:trackEndSize]),
 		DataType:    0,
 	}
 
