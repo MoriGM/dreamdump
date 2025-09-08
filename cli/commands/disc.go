@@ -1,8 +1,6 @@
 package commands
 
 import (
-	"errors"
-	"os"
 	"strconv"
 
 	"dreamdump/cd/sections"
@@ -14,14 +12,6 @@ import (
 
 func DreamDumpDisc(opt *option.Option) {
 	setup.InitializeDrive(opt)
-	_, err := os.Stat(opt.PathName)
-	if errors.Is(err, os.ErrNotExist) {
-		err := os.Mkdir(opt.PathName, 0o744)
-		if err != nil {
-			panic(err)
-		}
-	}
-
 	log.Println()
 	if opt.Speed > 0 {
 		scsi_commands.SetCDSpeed(opt)

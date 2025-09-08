@@ -1,6 +1,7 @@
 package log
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -64,8 +65,15 @@ func Printf(msg string, a ...any) {
 }
 
 func Setup(opt *option.Option) {
+	_, err := os.Stat(opt.PathName)
+	if errors.Is(err, os.ErrNotExist) {
+		err := os.Mkdir(opt.PathName, 0o744)
+		if err != nil {
+			panic(err)
+		}
+	}
 	logFileName := opt.PathName + "/" + opt.ImageName + ".log"
-	file, err := os.OpenFile(logFileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
+	file, err := os.OpenFile(logFileName, os.O_APPEND|os.O_WRONLY, 0o644)
 	if err != nil {
 		panic(err)
 	}
