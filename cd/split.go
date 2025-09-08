@@ -25,7 +25,7 @@ func (dense *Dense) QTocSplit(opt *option.Option, qtoc *QToc) map[uint8]TrackMet
 
 func (dense *Dense) TocSplit(opt *option.Option, tracks []*Track) map[uint8]TrackMeta {
 	offsetManager := dense.NewOffsetManager(option.DC_START)
-	trackMetas := make(map[uint8]TrackMeta, len(tracks))
+	trackMetas := make(map[uint8]TrackMeta, len(tracks)-1)
 	for _, track := range tracks {
 		if track.TrackNumber == 110 {
 			break
