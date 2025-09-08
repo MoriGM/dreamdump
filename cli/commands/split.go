@@ -60,6 +60,5 @@ func DreamDumpSplit(opt *option.Option) {
 
 	dense, qtoc := sections.ExtractSections(opt, sectionMap)
 	trackMetas, toc, qtoc := split(opt, dense, qtoc)
-	sectionMap = nil
 	info(opt, trackMetas, toc, qtoc)
 }
