@@ -2,7 +2,6 @@ package commands
 
 import (
 	"errors"
-	"fmt"
 	"os"
 
 	"dreamdump/cd"
@@ -19,7 +18,7 @@ func split(opt *option.Option, dense *cd.Dense, qtoc *cd.QToc) (map[uint8]cd.Tra
 	toc := cd.ParseToc(specialSector)
 
 	log.Println()
-	fmt.Printf("Write Offset: %d\n", offsetManager.SampleOffset)
+	log.Printf("Write Offset: %d\n", offsetManager.SampleOffset)
 
 	log.Println()
 	cd.PrintToc(toc)
