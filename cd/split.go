@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"crypto/md5"
 	"crypto/sha1"
+	"fmt"
 	"hash/crc32"
 	"os"
-	"strconv"
 
 	"dreamdump/option"
 	"dreamdump/scsi"
@@ -15,10 +15,16 @@ import (
 func (dense *Dense) QTocSplit(opt *option.Option, qtoc *QToc) map[uint8]TrackMeta {
 	offsetManager := dense.NewOffsetManager(option.DC_START)
 	trackMetas := make(map[uint8]TrackMeta, len(qtoc.TrackNumbers))
+
+	var trackFileName string
 	for _, trackNumber := range qtoc.TrackNumbers {
 		track := qtoc.Tracks[trackNumber]
-
-		trackMetas[trackNumber] = dense.SplitTrack(opt, track, offsetManager)
+		if len(qtoc.TrackNumbers) > 9 {
+			trackFileName = fmt.Sprintf("%s/%s (Track %02d).bin", opt.PathName, opt.ImageName, track.TrackNumber)
+		} else {
+			trackFileName = fmt.Sprintf("%s/%s (Track %d).bin", opt.PathName, opt.ImageName, track.TrackNumber)
+		}
+		trackMetas[trackNumber] = dense.SplitTrack(trackFileName, track, offsetManager)
 	}
 	return trackMetas
 }
@@ -26,24 +32,30 @@ func (dense *Dense) QTocSplit(opt *option.Option, qtoc *QToc) map[uint8]TrackMet
 func (dense *Dense) TocSplit(opt *option.Option, tracks []*Track) map[uint8]TrackMeta {
 	offsetManager := dense.NewOffsetManager(option.DC_START)
 	trackMetas := make(map[uint8]TrackMeta, len(tracks)-1)
+
+	var trackFileName string
 	for _, track := range tracks {
 		if track.TrackNumber == 110 {
 			break
 		}
-		trackMetas[track.TrackNumber] = dense.SplitTrack(opt, track, offsetManager)
+		if len(tracks) > 9 {
+			trackFileName = fmt.Sprintf("%s/%s (Track %02d).bin", opt.PathName, opt.ImageName, track.TrackNumber)
+		} else {
+			trackFileName = fmt.Sprintf("%s/%s (Track %d).bin", opt.PathName, opt.ImageName, track.TrackNumber)
+		}
+		trackMetas[track.TrackNumber] = dense.SplitTrack(trackFileName, track, offsetManager)
 	}
 	return trackMetas
 }
 
-func (dense *Dense) SplitTrack(opt *option.Option, track *Track, offsetManager *OffsetManager) TrackMeta {
+func (dense *Dense) SplitTrack(trackFileName string, track *Track, offsetManager *OffsetManager) TrackMeta {
 	if track.Type == TRACK_TYPE_DATA {
-		return dense.splitData(opt, track, offsetManager)
+		return dense.splitData(trackFileName, track, offsetManager)
 	}
-	return dense.splitAudio(opt, track, offsetManager)
+	return dense.splitAudio(trackFileName, track, offsetManager)
 }
 
-func (dense *Dense) splitData(opt *option.Option, track *Track, offsetManager *OffsetManager) TrackMeta {
-	trackFileName := opt.PathName + "/" + opt.ImageName + " (Track " + strconv.Itoa(int(track.TrackNumber)) + ").bin"
+func (dense *Dense) splitData(trackFileName string, track *Track, offsetManager *OffsetManager) TrackMeta {
 	trackFile, err := os.OpenFile(trackFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o644)
 	if err != nil {
 		panic(err)
@@ -101,8 +113,7 @@ func (dense *Dense) splitData(opt *option.Option, track *Track, offsetManager *O
 	return trackMeta
 }
 
-func (dense *Dense) splitAudio(opt *option.Option, track *Track, offsetManager *OffsetManager) TrackMeta {
-	trackFileName := opt.PathName + "/" + opt.ImageName + " (Track " + strconv.Itoa(int(track.TrackNumber)) + ").bin"
+func (dense *Dense) splitAudio(trackFileName string, track *Track, offsetManager *OffsetManager) TrackMeta {
 	file, err := os.OpenFile(trackFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o644)
 	if err != nil {
 		panic(err)
