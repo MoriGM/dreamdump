@@ -16,7 +16,7 @@ func OpenScsiDevice(fname string) (any, error) {
 	return win32.OpenScsiDevice(fname)
 }
 
-func Read(fileHandle any, cmd any, size uint16) Status {
+func Read(fileHandle any, cmd any, size uint32) Status {
 	driveDeviceFile, ok := fileHandle.(windows.Handle)
 	if !ok {
 		panic("Error while casting")
@@ -43,7 +43,7 @@ func Read(fileHandle any, cmd any, size uint16) Status {
 			CdbLength:          uint8(cmdBlk.Len()),
 			Cdb:                [16]uint8(cmdBlk.Bytes()),
 			DataIn:             win32.SCSI_IOCTL_DATA_IN,
-			DataTransferLength: uint32(size),
+			DataTransferLength: size,
 			TimeOutValue:       5,
 		},
 		SD: win32.SENSE_DATA{},
