@@ -56,15 +56,21 @@ func ReadSections(opt *option.Option, sectionMap []*Section) {
 }
 
 func ReadSection(opt *option.Option, section *Section) error {
-	for lba := section.StartSector; lba < section.EndSector; lba++ {
-		sector, err := cd.ReadSector(opt, lba)
+	for lba := section.StartSector; lba < section.EndSector; lba += int32(opt.ReadAtOnce) {
+		readAmount := opt.ReadAtOnce
+		if (lba + int32(opt.ReadAtOnce)) > section.EndSector {
+			readAmount = opt.ReadAtOnce - uint8(lba+int32(opt.ReadAtOnce)-(section.EndSector))
+		}
+		sectors, err := cd.ReadSectors(opt, lba, readAmount)
 		if err != nil {
 			return errors.Join(errors.New("scsi error while reading sector "+strconv.FormatInt(int64(lba), 10)), err)
 		}
-		if sector.C2.Amount() > 0 {
-			return errors.New("error reading sector " + strconv.FormatInt(int64(lba), 10) + " as it contained a c2 error")
+		for i, sector := range sectors {
+			if sector.C2.Amount() > 0 {
+				return errors.New("error reading sector " + strconv.FormatInt(int64(lba), 10) + " as it contained a c2 error")
+			}
+			section.Sectors[(lba+int32(i))-section.StartSector] = sector
 		}
-		section.Sectors[lba-section.StartSector] = sector
 		log.PrintClean("Sector read " + strconv.FormatInt(int64(lba), 10))
 	}
 	return nil

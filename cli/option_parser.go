@@ -38,6 +38,7 @@ func SetupOptions() option.Option {
 		ReadOffset:  0,
 		Speed:       0,
 		QTocSplit:   false,
+		ReadAtOnce:  26,
 	}
 
 	parseSplit(&opt)
@@ -88,6 +89,15 @@ func parseDrivePart(opt *option.Option) {
 			panic(err)
 		}
 		opt.ReadOffset = int16(offset)
+	}
+
+	readAtOnceString := FindArgumentString("read-at-once")
+	if readAtOnceString != nil {
+		readAtOnce, err := strconv.ParseInt(*readAtOnceString, 10, 8)
+		if err != nil {
+			panic(err)
+		}
+		opt.ReadAtOnce = uint8(readAtOnce)
 	}
 
 	speed := FindArgumentString("speed")

@@ -27,4 +27,5 @@ type Option struct {
 	ImageName   string
 	PathName    string
 	QTocSplit   bool
+	ReadAtOnce  uint8
 }

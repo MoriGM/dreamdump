@@ -19,7 +19,7 @@ func Inquiry(opt *option.Option) *drive.Drive {
 		TransferLength: bigendian.Uint16(size),
 	}
 
-	status := driver.Read(opt.Drive, inquiryCommand, size)
+	status := driver.Read(opt.Drive, inquiryCommand, uint32(size))
 	err := driver.CheckSense(&status)
 	if err != nil {
 		panic(err)

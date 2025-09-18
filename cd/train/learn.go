@@ -41,7 +41,7 @@ func Train(opt *option.Option, direction int) (Training, error) {
 		last_sector = TRAIN_DIRECTION_START_LBA
 	}
 
-	_, err := cd.ReadSector(opt, int32(last_sector))
+	_, err := cd.ReadSectors(opt, int32(last_sector), 1)
 	if err != nil {
 		log.Println("Cannot read inital train sector")
 		os.Exit(exit_codes.CANNONT_READ_INITAL_TRAIN)
@@ -56,7 +56,7 @@ func Train(opt *option.Option, direction int) (Training, error) {
 		if next_sector > option.DC_END || next_sector < option.DC_START {
 			break
 		}
-		_, err := cd.ReadSector(opt, int32(next_sector))
+		_, err := cd.ReadSectors(opt, int32(next_sector), 1)
 		if err != nil {
 			offsetTimer = offset >> 8
 			continue
@@ -77,7 +77,7 @@ func (training *Training) Play(opt *option.Option, untilLBA int32) {
 		if training.Direction == TRAIN_DIRECTION_END && lba < untilLBA {
 			break
 		}
-		_, err := cd.ReadSector(opt, lba)
+		_, err := cd.ReadSectors(opt, lba, 1)
 		if err != nil {
 			log.Println("Error while playing the trained list of lba's")
 			os.Exit(exit_codes.ERROR_PLAYING_TRAIN_PLAYBOOK)

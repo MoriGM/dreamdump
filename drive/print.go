@@ -17,5 +17,5 @@ func (drive *Drive) PrintDriveInfo(opt *option.Option) {
 	case option.DATA_SUB_C2:
 		sectorOrder = "DATA_SUB_C2"
 	}
-	log.Printf("Drive: %s %s %s Read Offset:%d Sector Order: %s\n", drive.VendorName, drive.ProductInquiryData, drive.RevisionNumber, opt.ReadOffset, sectorOrder)
+	log.Printf("Drive: %s %s %s Read Offset:%d  Sector Order: %s  Read at once: %d\n", drive.VendorName, drive.ProductInquiryData, drive.RevisionNumber, opt.ReadOffset, sectorOrder, opt.ReadAtOnce)
 }

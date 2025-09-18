@@ -7,14 +7,40 @@ import (
 	"dreamdump/scsi/scsi_commands"
 )
 
-func ReadSector(opt *option.Option, lba int32) (*Sector, error) {
-	status := scsi_commands.ReadCd(opt, lba)
+func ReadSectors(opt *option.Option, lba int32, readAtOnce uint8) ([]*Sector, error) {
+	status := scsi_commands.ReadCd(opt, lba, readAtOnce)
 	err := driver.CheckSense(&status)
 	if err != nil {
 		return nil, err
 	}
 
-	return ConvertRawToSector(opt, status.Block), nil
+	return ConvertRawToSectors(opt, status.Block, readAtOnce), nil
+}
+
+func ConvertRawToSectors(opt *option.Option, block []uint8, readAtOnce uint8) []*Sector {
+	sectors := make([]*Sector, readAtOnce)
+	blockSize := option.DATA
+
+	if opt.SectorOrder == option.DATA_C2 {
+		blockSize = scsi.SECTOR_DATA_C2_SIZE
+	}
+
+	if opt.SectorOrder == option.DATA_SUB {
+		blockSize = scsi.SECTOR_DATA_SUB_SIZE
+	}
+
+	if opt.SectorOrder == option.DATA_C2_SUB || opt.SectorOrder == option.DATA_SUB_C2 {
+		blockSize = scsi.SECTOR_DATA_C2_SUB_SIZE
+	}
+
+	for i := range readAtOnce {
+		start := int(i) * blockSize
+		end := (int(i) + 1) * blockSize
+		sectorBlock := block[start:end]
+		sectors[i] = ConvertRawToSector(opt, sectorBlock)
+	}
+
+	return sectors
 }
 
 func ConvertRawToSector(opt *option.Option, block []uint8) *Sector {

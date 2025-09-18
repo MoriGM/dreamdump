@@ -14,7 +14,7 @@ func OpenScsiDevice(fname string) (any, error) {
 	return sgio.OpenScsiDevice(fname)
 }
 
-func Read(fileHandle any, cmd interface{}, size uint16) Status {
+func Read(fileHandle any, cmd interface{}, size uint32) Status {
 	driveDeviceFile, ok := fileHandle.(*os.File)
 	if !ok {
 		panic("Error while casting")
@@ -31,7 +31,7 @@ func Read(fileHandle any, cmd interface{}, size uint16) Status {
 		InterfaceID:    int32('S'),
 		CmdLen:         uint8(cmdBlk.Len()),
 		MxSbLen:        sgio.SENSE_BUF_LEN,
-		DxferLen:       uint32(size),
+		DxferLen:       size,
 		DxferDirection: sgio.SG_DXFER_FROM_DEV,
 		Cmdp:           &cmdBlk.Bytes()[0],
 		Sbp:            &senseBuf[0],

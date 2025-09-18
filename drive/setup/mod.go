@@ -26,6 +26,7 @@ func InitializeDrive(opt *option.Option) {
 		log.Println("Good Drive found.")
 		opt.SectorOrder = knownDrive.SectorOrder
 		opt.ReadOffset = knownDrive.ReadOffset
+		opt.ReadAtOnce = knownDrive.ReadAtOnce
 	}
 
 	currentDrive.PrintDriveInfo(opt)

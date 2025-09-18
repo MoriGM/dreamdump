@@ -12,15 +12,16 @@ type DriveOption struct {
 	RevisionNumber     string
 	SectorOrder        int
 	ReadOffset         int16
+	ReadAtOnce         uint8
 }
 
 var DriveList []*DriveOption
 
 func init() {
 	DriveList = []*DriveOption{
-		{"TSSTcorp", "DVD-ROM SH-D162C", "DC02", option.DATA_SUB_C2, +6},
-		{"TSSTcorp", "DVD-ROM SH-D163A", "DC02", option.DATA_SUB_C2, +6},
-		{"LITE-ON", "DVD D LH-16D1P", "ZZ00", option.DATA_SUB_C2, +6},
+		{"TSSTcorp", "DVD-ROM SH-D162C", "DC02", option.DATA_SUB_C2, +6, 1},
+		{"TSSTcorp", "DVD-ROM SH-D163A", "DC02", option.DATA_SUB_C2, +6, 1},
+		{"LITE-ON", "DVD D LH-16D1P", "ZZ00", option.DATA_SUB_C2, +6, 26},
 	}
 }
 
