@@ -38,10 +38,11 @@ func SetupOptions() option.Option {
 		ReadOffset:  0,
 		Speed:       0,
 		QTocSplit:   false,
+		Train:       false,
 		ReadAtOnce:  26,
 	}
 
-	parseSplit(&opt)
+	parseSpecial(&opt)
 	parsePaths(&opt)
 	parseDrivePart(&opt)
 
@@ -65,8 +66,9 @@ func SetupOptions() option.Option {
 	return opt
 }
 
-func parseSplit(opt *option.Option) {
+func parseSpecial(opt *option.Option) {
 	opt.QTocSplit = HasArgumentString("force-qtoc")
+	opt.Train = HasArgumentString("train")
 }
 
 func parsePaths(opt *option.Option) {

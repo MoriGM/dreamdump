@@ -18,6 +18,18 @@ func ReadFileSections(opt *option.Option, sectionMap []*Section) {
 func ReadSections(opt *option.Option, sectionMap []*Section) {
 	ReadFileSections(opt, sectionMap)
 	for {
+		if opt.Train {
+			log.Println("Train drive start:")
+			for lba := 55000; lba > int(option.DC_START); lba -= int(opt.ReadAtOnce) {
+				_, err := cd.ReadSectors(opt, int32(lba), opt.ReadAtOnce)
+				if err != nil {
+					panic(err)
+				}
+				log.PrintClean("Sector read " + strconv.FormatInt(int64(lba), 10))
+			}
+			log.Println("Training drive start finished")
+			log.Println()
+		}
 		allMatching := true
 		for sectionNumber := range len(sectionMap) {
 			section := sectionMap[sectionNumber]
