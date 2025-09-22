@@ -19,23 +19,17 @@ func ReadSections(opt *option.Option, sectionMap []*Section) {
 	ReadFileSections(opt, sectionMap)
 	for {
 		if opt.Train && !sectionMap[0].Matched {
-			log.Println("Train drive start:")
-			for lba := 55000; lba > int(option.DC_START); lba -= int(opt.ReadAtOnce) {
-				_, err := cd.ReadSectors(opt, int32(lba), opt.ReadAtOnce)
-				if err != nil {
-					panic(err)
-				}
-				log.PrintClean("Sector read " + strconv.FormatInt(int64(lba), 10))
-			}
-			log.Println("Training drive start finished")
-			log.Println()
+			TrainStart(opt)
 		}
 		allMatching := true
-		for sectionNumber := range len(sectionMap) {
-			section := sectionMap[sectionNumber]
+		var sectionNumber int
+		for sectionPosition := range len(sectionMap) {
+			section := sectionMap[sectionPosition]
+			sectionNumber = sectionPosition + 1
 			if section.Matched {
 				continue
 			}
+
 			section.Sectors = make([]*cd.Sector, section.EndSector-section.StartSector)
 			err := ReadSection(opt, section)
 			if err != nil {
@@ -44,6 +38,7 @@ func ReadSections(opt *option.Option, sectionMap []*Section) {
 				log.Println("Error while reading section " + strconv.Itoa(sectionNumber) + "\nError text: " + err.Error())
 				continue
 			}
+
 			hash := section.Hash()
 			if section.IsMatching(hash) {
 				section.Matched = true
@@ -51,14 +46,17 @@ func ReadSections(opt *option.Option, sectionMap []*Section) {
 				section.WriteSection(opt)
 				continue
 			}
+
+			section.Sectors = nil
+
 			allMatching = false
 			section.AddHash(hash)
-			section.Sectors = nil
-			if len(section.Hashes) > 1 {
-				log.Println("Section " + strconv.Itoa(sectionNumber) + " not matching and read from " + strconv.FormatInt(int64(section.StartSector), 10) + " to " + strconv.FormatInt(int64(section.EndSector), 10))
-			} else {
+
+			if len(section.Hashes) == 1 {
 				log.Println("Inital section " + strconv.Itoa(sectionNumber) + " read from " + strconv.FormatInt(int64(section.StartSector), 10) + " to " + strconv.FormatInt(int64(section.EndSector), 10))
+				continue
 			}
+			log.Println("Section " + strconv.Itoa(sectionNumber) + " not matching and read from " + strconv.FormatInt(int64(section.StartSector), 10) + " to " + strconv.FormatInt(int64(section.EndSector), 10))
 		}
 
 		if allMatching {
@@ -73,16 +71,19 @@ func ReadSection(opt *option.Option, section *Section) error {
 		if (lba + int32(opt.ReadAtOnce)) > section.EndSector {
 			readAmount = opt.ReadAtOnce - uint8(lba+int32(opt.ReadAtOnce)-(section.EndSector))
 		}
+
 		sectors, err := cd.ReadSectors(opt, lba, readAmount)
 		if err != nil {
 			return errors.Join(errors.New("scsi error while reading sector "+strconv.FormatInt(int64(lba), 10)), err)
 		}
+
 		for i, sector := range sectors {
 			if sector.C2.Amount() > 0 {
 				return errors.New("error reading sector " + strconv.FormatInt(int64(lba), 10) + " as it contained a c2 error")
 			}
 			section.Sectors[(lba+int32(i))-section.StartSector] = sector
 		}
+
 		log.PrintClean("Sector read " + strconv.FormatInt(int64(lba), 10))
 	}
 	return nil
