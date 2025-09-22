@@ -18,7 +18,7 @@ func ReadFileSections(opt *option.Option, sectionMap []*Section) {
 func ReadSections(opt *option.Option, sectionMap []*Section) {
 	ReadFileSections(opt, sectionMap)
 	for {
-		if opt.Train {
+		if opt.Train && !sectionMap[0].Matched {
 			log.Println("Train drive start:")
 			for lba := 55000; lba > int(option.DC_START); lba -= int(opt.ReadAtOnce) {
 				_, err := cd.ReadSectors(opt, int32(lba), opt.ReadAtOnce)
