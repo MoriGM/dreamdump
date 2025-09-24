@@ -104,10 +104,9 @@ jobs:
     - name: Create user
       run: |
         useradd -m build
-        su - build
     - uses: actions/checkout@v4
     - name: Build archlinux package
-      run: makepkg --noconfirm
+      run: su build -c "makepkg --noconfirm"
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
