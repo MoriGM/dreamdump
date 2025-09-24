@@ -107,7 +107,7 @@ jobs:
         su - build
     - uses: actions/checkout@v4
     - name: Build archlinux package
-      run: su nobody -c "makepkg --noconfirm"
+      run: makepkg --noconfirm
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
