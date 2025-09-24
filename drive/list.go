@@ -26,6 +26,7 @@ func init() {
 		{"LITE-ON", "DVD D LH-16D1P", "ZZ00", option.DATA_SUB_C2, +6, 26, false},
 		// Meh
 		{"LITE-ON", "DVD D DH-16D3S", "ZZ00", option.DATA_C2_SUB, +6, 32, true},
+		{"TSSTcorp", "DVD-ROM SH-D163B", "ZZ02", option.DATA_C2_SUB, +6, 26, true},
 	}
 }
 
