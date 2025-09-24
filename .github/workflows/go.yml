@@ -13,6 +13,7 @@ on:
 env:
   build_type: Release
   release_name: build_${{github.run_number}}
+  latest_go_version: '1.25'
 
 jobs:
   format:
@@ -22,7 +23,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: '1.25'
+        go-version: ${{env.latest_go_version}}
     - name: Install gofumpt
       run: go install mvdan.cc/gofumpt@latest
     - name: Check formating
@@ -76,7 +77,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: '1.25'
+        go-version: ${{env.latest_go_version}}
     - name: Build
       run: go build -v ./...
     - name: Build Artifact
@@ -100,9 +101,9 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: '1.25'
+        go-version: ${{env.latest_go_version}}
     - name: Build archlinux package
-      run: makepkg
+      run: su nobody -c "makepkg --noconfirm"
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
@@ -121,7 +122,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: '1.25'
+        go-version: ${{env.latest_go_version}}
     - name: Build
       run: go build -v ./...
     - name: Build Artifact
