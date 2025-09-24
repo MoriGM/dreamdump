@@ -89,6 +89,9 @@ jobs:
   
   build-arch:
     needs: test
+    strategy:
+      matrix:
+        platform: [64]
     runs-on: ubuntu-latest
     container: archlinux
     steps:
@@ -108,7 +111,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: dreamdump-${{env.release_name}}_arch_${{matrix.platform}}
-        path: dreamdump*.zip
+        path: dreamdump*.pkg.tar.zst
 
   build-windows:
     needs: test

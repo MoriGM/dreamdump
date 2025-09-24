@@ -19,5 +19,5 @@ go build .
 }
 
 package() {
-install -D -m755 ${srcdir}/$pkgname-main/dreamdump -t ${pkgdir}/usr/bin/
+install -D -m755 $pkgname-main/dreamdump -t ${pkgdir}/usr/bin/
 }
