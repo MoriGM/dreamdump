@@ -24,6 +24,6 @@ func DreamDumpDisc(opt *option.Option) {
 
 	dense, qtoc := sections.ExtractSections(opt, sectionMap)
 
-	trackMetas, toc, qtoc := split(opt, dense, qtoc)
-	info(opt, trackMetas, toc, qtoc)
+	trackMetas, toc, qtoc, headerSector := split(opt, dense, qtoc)
+	info(opt, trackMetas, toc, qtoc, headerSector)
 }

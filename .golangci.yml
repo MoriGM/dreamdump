@@ -26,6 +26,7 @@ linters:
         - fmt.Printf
         - (*bytes.Buffer).Write
         - (io.Writer).Write
+        - (*strings.Builder).WriteString
       # Display function signature instead of selector.
       # Default: false
       verbose: true

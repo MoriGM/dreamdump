@@ -10,12 +10,12 @@ import (
 	"dreamdump/option"
 )
 
-func split(opt *option.Option, dense *cd.Dense, qtoc *cd.QToc) (map[uint8]cd.TrackMeta, []*cd.Track, *cd.QToc) {
+func split(opt *option.Option, dense *cd.Dense, qtoc *cd.QToc) (map[uint8]cd.TrackMeta, []*cd.Track, *cd.QToc, *cd.CdSectorData) {
 	offsetManager := dense.NewOffsetManager(option.DC_START)
 
-	specialSector := dense.GetLBA(offsetManager, option.DC_LBA_START)
-	specialSector.Descramble()
-	toc := cd.ParseToc(specialSector)
+	headerSector := dense.GetLBA(offsetManager, option.DC_LBA_START)
+	headerSector.Descramble()
+	toc := cd.ParseToc(headerSector)
 
 	log.Println()
 	log.Printf("Write Offset: %d\n", offsetManager.SampleOffset)
@@ -37,7 +37,7 @@ func split(opt *option.Option, dense *cd.Dense, qtoc *cd.QToc) (map[uint8]cd.Tra
 
 	dense = nil
 
-	return trackMetas, toc, qtoc
+	return trackMetas, toc, qtoc, headerSector
 }
 
 func DreamDumpSplit(opt *option.Option) {
@@ -58,6 +58,6 @@ func DreamDumpSplit(opt *option.Option) {
 	}
 
 	dense, qtoc := sections.ExtractSections(opt, sectionMap)
-	trackMetas, toc, qtoc := split(opt, dense, qtoc)
-	info(opt, trackMetas, toc, qtoc)
+	trackMetas, toc, qtoc, headerSector := split(opt, dense, qtoc)
+	info(opt, trackMetas, toc, qtoc, headerSector)
 }
