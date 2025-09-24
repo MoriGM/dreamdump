@@ -93,15 +93,19 @@ jobs:
     runs-on: ubuntu-latest
     container: archlinux
     steps:
-    - name: Install software
-      run: | 
-        pacman -Syu --noconfirm
-        pacman -S base-devel --noconfirm
-    - uses: actions/checkout@v4
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
         go-version: ${{env.latest_go_version}}
+    - name: Install software
+      run: | 
+        pacman -Syu --noconfirm
+        pacman -S base-devel --noconfirm
+    - name: Create user
+      run: |
+        useradd -m build
+        su - build
+    - uses: actions/checkout@v4
     - name: Build archlinux package
       run: su nobody -c "makepkg --noconfirm"
     - name: Upload Artifact
