@@ -102,12 +102,12 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build archlinux package
       run: |
-        chmod 777 -r ./
+        chown build:build -R ./
         su build -c "makepkg --noconfirm"
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: dreamdump-${{env.release_name}}_linux_${{matrix.platform}}
+        name: dreamdump-${{env.release_name}}_arch_${{matrix.platform}}
         path: dreamdump*.zip
 
   build-windows:
