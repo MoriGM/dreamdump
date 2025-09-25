@@ -105,6 +105,8 @@ jobs:
     - name: Clone GuillaumeFalourd/poc-github-actions PUBLIC repository
       uses: GuillaumeFalourd/clone-github-repo-action@v2.1
       with:
+        owner: 'MoriGM'
+        repository: 'dreamdump'
         depth: 1
         branch: ¼{{env.branch}}
     - name: Build archlinux package
