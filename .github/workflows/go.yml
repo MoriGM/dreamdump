@@ -98,24 +98,27 @@ jobs:
     - name: Install software
       run: | 
         pacman -Syu --noconfirm
-        pacman -S base-devel go --noconfirm
+        pacman -S base-devel go git --noconfirm
     - name: Create user
       run: |
         useradd -m build
     - name: Clone GuillaumeFalourd/poc-github-actions PUBLIC repository
       uses: GuillaumeFalourd/clone-github-repo-action@v2.1
       with:
+        owner: 'MoriGM'
+        repository: 'dreamdump'
         depth: 1
         branch: ¼{{env.branch}}
     - name: Build archlinux package
       run: |
         chown build:build -R ./
+        cd dreamdump
         su build -c "makepkg --noconfirm"
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: dreamdump-${{env.release_name}}_arch_${{matrix.platform}}
-        path: dreamdump*.pkg.tar.zst
+        path: dreamdump/dreamdump*.pkg.tar.zst
 
   build-windows:
     needs: test
