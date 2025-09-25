@@ -11,9 +11,9 @@ on:
   pull_request:
 
 env:
-  build_type: Release
   release_name: build_${{github.run_number}}
   latest_go_version: '1.25'
+  branch: ${{github.ref_name}}
 
 jobs:
   format:
@@ -98,11 +98,15 @@ jobs:
     - name: Install software
       run: | 
         pacman -Syu --noconfirm
-        pacman -S base-devel go --noconfirm
+        pacman -S base-devel go git --noconfirm
     - name: Create user
       run: |
         useradd -m build
-    - uses: actions/checkout@v4
+    - name: Clone GuillaumeFalourd/poc-github-actions PUBLIC repository
+      uses: GuillaumeFalourd/clone-github-repo-action@v2.1
+      with:
+        depth: 1
+        branch: ¼{{env.branch}}
     - name: Build archlinux package
       run: |
         chown build:build -R ./
