@@ -118,7 +118,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: dreamdump-${{env.release_name}}_arch_${{matrix.platform}}
-        path: dreamdump*.pkg.tar.zst
+        path: dreamdump/dreamdump*.pkg.tar.zst
 
   build-windows:
     needs: test
