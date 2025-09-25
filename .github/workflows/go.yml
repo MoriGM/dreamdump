@@ -112,6 +112,7 @@ jobs:
     - name: Build archlinux package
       run: |
         chown build:build -R ./
+        cd dreamdump
         su build -c "makepkg --noconfirm"
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
