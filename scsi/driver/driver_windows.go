@@ -44,7 +44,7 @@ func Read(fileHandle any, cmd any, size uint32) Status {
 			Cdb:                [16]uint8(cmdBlk.Bytes()),
 			DataIn:             win32.SCSI_IOCTL_DATA_IN,
 			DataTransferLength: size,
-			TimeOutValue:       5,
+			TimeOutValue:       30,
 		},
 		SD: win32.SENSE_DATA{},
 	}
@@ -57,7 +57,12 @@ func Read(fileHandle any, cmd any, size uint32) Status {
 
 	err = win32.ScsiCall(driveDeviceFile, sptd_sd)
 	if err != nil {
-		panic(err)
+		return Status{
+			Status: 0xFF,
+			Key:    0xFF,
+			Asc:    0xFF,
+			AscQ:   0xFF,
+		}
 	}
 
 	status := Status{

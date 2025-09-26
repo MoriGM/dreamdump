@@ -5,6 +5,7 @@ import (
 	"dreamdump/scsi"
 	"dreamdump/scsi/driver"
 	"dreamdump/scsi/scsi_commands"
+	"errors"
 )
 
 func ReadSectors(opt *option.Option, lba int32, readAtOnce uint8) ([]*Sector, error) {
@@ -12,6 +13,9 @@ func ReadSectors(opt *option.Option, lba int32, readAtOnce uint8) ([]*Sector, er
 	err := driver.CheckSense(&status)
 	if err != nil {
 		return nil, err
+	}
+	if status.Status != 0 {
+		return nil, errors.New("scsi Error")
 	}
 
 	return ConvertRawToSectors(opt, status.Block, readAtOnce), nil
