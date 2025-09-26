@@ -1,11 +1,12 @@
 package cd
 
 import (
+	"errors"
+
 	"dreamdump/option"
 	"dreamdump/scsi"
 	"dreamdump/scsi/driver"
 	"dreamdump/scsi/scsi_commands"
-	"errors"
 )
 
 func ReadSectors(opt *option.Option, lba int32, readAtOnce uint8) ([]*Sector, error) {
