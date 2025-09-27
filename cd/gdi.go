@@ -33,7 +33,7 @@ func WriteGdi(opt *option.Option, qtoc *QToc, metas map[uint8]TrackMeta) {
 	if err != nil {
 		panic(err)
 	}
-	secondTrackLine := fmt.Sprintf("%s2   [fix] 4 2352 [fix] 0\n", zeroPadding)
+	secondTrackLine := fmt.Sprintf("%s2   [fix] 0 2352 [fix] 0\n", zeroPadding)
 	_, err = cueFile.WriteString(secondTrackLine)
 	if err != nil {
 		panic(err)
