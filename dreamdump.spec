@@ -21,7 +21,6 @@ git clone file://%{SOURCEURL0} .
 go build -o dreamdump -v .
 
 %install
-pwd
 mkdir -p %{buildroot}/usr/bin
 install -Dpm0755 dreamdump %{buildroot}/usr/bin/dreamdump
 
