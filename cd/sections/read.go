@@ -11,6 +11,7 @@ import (
 
 func ReadFileSections(opt *option.Option, sectionMap []*Section) {
 	for sectionNumber := range len(sectionMap) {
+		sectionMap[sectionNumber].ReadHash(opt)
 		sectionMap[sectionNumber].ReadSection(opt)
 	}
 }
@@ -51,6 +52,7 @@ func ReadSections(opt *option.Option, sectionMap []*Section) {
 
 			allMatching = false
 			section.AddHash(hash)
+			section.WriteHash(opt)
 
 			if len(section.Hashes) == 1 {
 				log.Println("Inital section " + strconv.Itoa(sectionNumber) + " read from " + strconv.FormatInt(int64(section.StartSector), 10) + " to " + strconv.FormatInt(int64(section.EndSector), 10))

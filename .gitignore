@@ -41,3 +41,4 @@ Game/
 */*.bin
 */*.scram
 */*.subq
+*/*.hash

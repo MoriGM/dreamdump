@@ -12,25 +12,27 @@ func (sect *Section) WriteSection(opt *option.Option) {
 }
 
 func (sect *Section) WriteScramSection(opt *option.Option) {
-	binFile, err := os.OpenFile(sect.FileName(opt)+".scram", os.O_CREATE|os.O_WRONLY, 0o644)
+	scramFileName := sect.FileName(opt) + ".scram"
+	scramFile, err := os.OpenFile(scramFileName, os.O_CREATE|os.O_WRONLY, 0o644)
 	if err != nil {
 		panic(err)
 	}
-	defer binFile.Close()
+	defer scramFile.Close()
 	for _, sector := range sect.Sectors {
-		_, err = binFile.Write(sector.Data[:])
+		_, err = scramFile.Write(sector.Data[:])
 		if err != nil {
 			panic(err)
 		}
 	}
-	err = binFile.Sync()
+	err = scramFile.Sync()
 	if err != nil {
 		panic(err)
 	}
 }
 
 func (sect *Section) WriteSubSection(opt *option.Option) {
-	subFile, err := os.OpenFile(sect.FileName(opt)+".subq", os.O_CREATE|os.O_WRONLY, 0o644)
+	subFileName := sect.FileName(opt) + ".subq"
+	subFile, err := os.OpenFile(subFileName, os.O_CREATE|os.O_WRONLY, 0o644)
 	if err != nil {
 		panic(err)
 	}
@@ -42,6 +44,25 @@ func (sect *Section) WriteSubSection(opt *option.Option) {
 		}
 	}
 	err = subFile.Sync()
+	if err != nil {
+		panic(err)
+	}
+}
+
+func (sect *Section) WriteHash(opt *option.Option) {
+	hashFileName := sect.FileName(opt) + ".hash"
+	hashFile, err := os.OpenFile(hashFileName, os.O_CREATE|os.O_WRONLY, 0o644)
+	if err != nil {
+		panic(err)
+	}
+	defer hashFile.Close()
+	for _, hash := range sect.Hashes {
+		_, err := hashFile.WriteString(hash + "\n")
+		if err != nil {
+			panic(err)
+		}
+	}
+	err = hashFile.Sync()
 	if err != nil {
 		panic(err)
 	}

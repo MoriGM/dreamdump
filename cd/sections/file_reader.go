@@ -1,6 +1,7 @@
 package sections
 
 import (
+	"bufio"
 	"errors"
 	"os"
 
@@ -8,6 +9,23 @@ import (
 	"dreamdump/option"
 	"dreamdump/scsi"
 )
+
+func (sect *Section) ReadHash(opt *option.Option) {
+	hashFileName := sect.FileName(opt) + ".hash"
+	_, err := os.Stat(hashFileName)
+	if errors.Is(err, os.ErrNotExist) {
+		return
+	}
+	hashFile, err := os.OpenFile(hashFileName, os.O_RDONLY, 0o644)
+	if err != nil {
+		panic(err)
+	}
+	defer hashFile.Close()
+	hashFileScanner := bufio.NewScanner(hashFile)
+	for hashFileScanner.Scan() {
+		sect.Hashes = append(sect.Hashes, hashFileScanner.Text())
+	}
+}
 
 func (sect *Section) ReadSection(opt *option.Option) {
 	scramFileName := sect.FileName(opt) + ".scram"
