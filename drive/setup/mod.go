@@ -23,7 +23,7 @@ func InitializeDrive(opt *option.Option) {
 	currentDrive := scsi_commands.Inquiry(opt)
 	knownDrive := drive.IsKnownDrive(currentDrive)
 	if knownDrive != nil {
-		log.Println("Good Drive found.")
+		log.Println("Kown Drive found.")
 		opt.SectorOrder = knownDrive.SectorOrder
 		opt.ReadOffset = knownDrive.ReadOffset
 		if opt.ReadAtOnce == 26 {
