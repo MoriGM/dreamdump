@@ -11,7 +11,7 @@ import (
 
 func WriteCue(opt *option.Option, qtoc *QToc, metas map[uint8]TrackMeta) {
 	cueFileName := opt.PathName + "/" + opt.ImageName + ".cue"
-	cueFile, err := os.OpenFile(cueFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o744)
+	cueFile, err := os.OpenFile(cueFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o644)
 	if err != nil {
 		panic(err)
 	}
