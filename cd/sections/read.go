@@ -42,9 +42,9 @@ func ReadSections(opt *option.Option, sectionMap []*Section) {
 
 			hash := section.Hash()
 			if section.IsMatching(hash) {
+				section.WriteSection(opt)
 				section.Matched = true
 				log.Println("Section hash is matching " + strconv.Itoa(sectionNumber) + " Hash:" + hash)
-				section.WriteSection(opt)
 				continue
 			}
 
