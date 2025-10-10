@@ -13,7 +13,7 @@ func (sect *Section) WriteSection(opt *option.Option) {
 
 func (sect *Section) WriteScramSection(opt *option.Option) {
 	scramFileName := sect.FileName(opt) + ".scram"
-	scramFile, err := os.OpenFile(scramFileName, os.O_CREATE|os.O_WRONLY, 0o644)
+	scramFile, err := os.OpenFile(scramFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o644)
 	if err != nil {
 		panic(err)
 	}
@@ -32,7 +32,7 @@ func (sect *Section) WriteScramSection(opt *option.Option) {
 
 func (sect *Section) WriteSubSection(opt *option.Option) {
 	subFileName := sect.FileName(opt) + ".subq"
-	subFile, err := os.OpenFile(subFileName, os.O_CREATE|os.O_WRONLY, 0o644)
+	subFile, err := os.OpenFile(subFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o644)
 	if err != nil {
 		panic(err)
 	}
@@ -51,7 +51,7 @@ func (sect *Section) WriteSubSection(opt *option.Option) {
 
 func (sect *Section) WriteHash(opt *option.Option) {
 	hashFileName := sect.FileName(opt) + ".hash"
-	hashFile, err := os.OpenFile(hashFileName, os.O_CREATE|os.O_WRONLY, 0o644)
+	hashFile, err := os.OpenFile(hashFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o644)
 	if err != nil {
 		panic(err)
 	}
