@@ -13,7 +13,7 @@ import (
 func DreamDumpDisc(opt *option.Option) {
 	setup.InitializeDrive(opt)
 	log.Println()
-	if opt.Speed > 0 {
+	if opt.Speed > 4 {
 		scsi_commands.SetCDSpeed(opt)
 		log.Println("Set Read Speed to:" + strconv.FormatInt(int64(opt.Speed), 10) + " kbs")
 		log.Println()
