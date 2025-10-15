@@ -14,7 +14,7 @@ Supported commands:
 
 Supported options:
 `--drive=<drivePath>`
-`--sector-oder=<sectorOrder>`
+`--sector-order=<sectorOrder>`
 `--read-offset=<number>`
 `--image-path=<name>`
 `--image-name=<name>`
