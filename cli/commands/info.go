@@ -11,5 +11,7 @@ func info(opt *option.Option, trackMetas map[uint8]cd.TrackMeta, toc []*cd.Track
 	cd.WriteGdi(opt, qtoc, trackMetas)
 	cd.PrintXMLHashes(toc, trackMetas)
 	log.Println()
+	cd.PrintTrackMeta(toc, trackMetas)
+	log.Println()
 	cd.PrintHeader(headerSector)
 }

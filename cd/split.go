@@ -72,6 +72,7 @@ func (dense *Dense) splitData(trackFileName string, track *Track, offsetManager 
 
 	var cdSectorData CdSectorData
 	var descrambledData bytes.Buffer
+	var invalidSyncSectors uint32
 	for lba := (track.GetStartLBA()) - option.DC_START; lba < min(track.LbaEnd, option.DC_LBA_END)-option.DC_START; lba++ {
 		descrambledData.Reset()
 
@@ -84,6 +85,7 @@ func (dense *Dense) splitData(trackFileName string, track *Track, offsetManager 
 			descrambledData.Write(cdSectorData[:])
 		} else {
 			descrambledData.Write(make([]byte, scsi.SECTOR_DATA_SIZE))
+			invalidSyncSectors++
 		}
 
 		crc32Sum.Write(descrambledData.Bytes())
@@ -100,14 +102,19 @@ func (dense *Dense) splitData(trackFileName string, track *Track, offsetManager 
 		panic(err)
 	}
 
+	size := uint32(trackEndSize - trackStartSize)
+	sectors := size / scsi.SECTOR_DATA_SIZE
+
 	trackMeta := TrackMeta{
-		TrackNumber: track.TrackNumber,
-		FileName:    trackFileName,
-		Size:        uint32(trackEndSize - trackStartSize),
-		CRC32:       crc32Sum.Sum32(),
-		MD5:         [16]byte(md5Sum.Sum(nil)),
-		SHA1:        [20]byte(sha1Sum.Sum(nil)),
-		DataType:    dataType,
+		TrackNumber:        track.TrackNumber,
+		FileName:           trackFileName,
+		Size:               size,
+		Sectors:            sectors,
+		CRC32:              crc32Sum.Sum32(),
+		MD5:                [16]byte(md5Sum.Sum(nil)),
+		SHA1:               [20]byte(sha1Sum.Sum(nil)),
+		DataType:           dataType,
+		InvalidSyncSectors: invalidSyncSectors,
 	}
 
 	return trackMeta
