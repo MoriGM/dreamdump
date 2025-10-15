@@ -1,6 +1,6 @@
 # Maintainer: MoriGM
 pkgname=dreamdump
-pkgver=0.0.0
+pkgver=0.0.0-rc1
 pkgrel=1
 pkgdesc='A programm to dump the dreamcasts HD Area of a gd-rom'
 arch=(x86_64)
