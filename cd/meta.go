@@ -34,5 +34,6 @@ func PrintTrackMeta(toc []*Track, trackMetas map[uint8]TrackMeta) {
 		if trackMeta.InvalidSyncSectors > 0 {
 			log.Printf("  invalid sync sectors: %d\n", trackMeta.InvalidSyncSectors)
 		}
+		log.Println()
 	}
 }
