@@ -2,6 +2,7 @@ package cli
 
 import (
 	"os"
+	"strings"
 
 	"dreamdump/cli/commands"
 	"dreamdump/exit_codes"
@@ -31,6 +32,7 @@ func ExecuteCommand(opt *option.Option) bool {
 		log.Println("Missing command argument")
 		os.Exit(exit_codes.MISSING_COMMAND_ARGUMENTS)
 	}
+	log.Printf("arguments: %s\n", strings.Join(os.Args[1:], " "))
 	for _, command := range cliCommands {
 		if command.Name == os.Args[1] {
 			command.Function(opt)
