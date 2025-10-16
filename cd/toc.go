@@ -67,7 +67,7 @@ func ParseToc(sector *CdSectorData) []*Track {
 }
 
 func PrintToc(tracks []*Track) {
-	log.Println("final TOC:")
+	log.Println("disc TOC:")
 	for _, track := range tracks {
 		trackType := " data"
 		if track.Type == TRACK_TYPE_AUDIO {
