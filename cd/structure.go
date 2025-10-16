@@ -21,10 +21,12 @@ type Sector struct {
 }
 
 const (
-	TRACK_TYPE_DATA       uint8 = 0x04
-	TRACK_TYPE_AUDIO      uint8 = 0x00
-	TRACK_TYPE_DATA_MODE1 uint8 = 0x01
-	TRACK_TYPE_DATA_MODE2 uint8 = 0x02
+	TRACK_TYPE_DATA             uint8 = 0x04
+	TRACK_TYPE_AUDIO            uint8 = 0x00
+	TRACK_TYPE_DATA_MODE1       uint8 = 0x01
+	TRACK_TYPE_DATA_MODE2       uint8 = 0x02
+	TRACK_TYPE_DATA_MODE2_FORM1 uint8 = 0x3
+	TRACK_TYPE_DATA_MODE2_FORM2 uint8 = 0x4
 )
 
 type Track struct {
