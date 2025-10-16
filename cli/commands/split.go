@@ -17,15 +17,16 @@ func split(opt *option.Option, dense *cd.Dense, qtoc *cd.QToc) (map[uint8]cd.Tra
 	headerSector.Descramble()
 	toc := cd.ParseToc(headerSector)
 
-	log.Println()
-	log.Printf("Write Offset: %d\n", offsetManager.SampleOffset)
-
+	log.Println("*** SPLIT")
 	log.Println()
 	cd.PrintToc(toc)
 
 	log.Println()
 	qtoc.Print()
 
+	log.Println()
+
+	log.Printf("Write Offset: %d\n", offsetManager.SampleOffset)
 	log.Println()
 
 	var trackMetas map[uint8]cd.TrackMeta

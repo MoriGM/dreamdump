@@ -9,7 +9,7 @@ import (
 
 func PrintXMLHashes(toc []*Track, trackMetas map[uint8]TrackMeta) {
 	log.Println("*** HASH")
-	log.Println("")
+	log.Println()
 	log.Println("dat:")
 	for _, tocTrack := range toc {
 		if tocTrack.TrackNumber == 110 {
@@ -22,7 +22,7 @@ func PrintXMLHashes(toc []*Track, trackMetas map[uint8]TrackMeta) {
 }
 
 func PrintTrackMeta(toc []*Track, trackMetas map[uint8]TrackMeta) {
-	log.Println("")
+	log.Println()
 	log.Println("*** INFO")
 	for _, tocTrack := range toc {
 		if tocTrack.TrackNumber == 110 || tocTrack.Type != TRACK_TYPE_DATA {
