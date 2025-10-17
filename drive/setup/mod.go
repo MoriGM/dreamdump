@@ -14,7 +14,7 @@ import (
 func InitializeDrive(opt *option.Option) {
 	driveDeviceFile, err := driver.OpenScsiDevice(opt.Device)
 	if err != nil {
-		log.Println("This drive is unkown or is missing it gd-rom")
+		log.Println("This drive is unknown or is missing it gd-rom")
 		os.Exit(exit_codes.UNKOWN_DRIVE)
 	}
 
@@ -23,7 +23,7 @@ func InitializeDrive(opt *option.Option) {
 	currentDrive := scsi_commands.Inquiry(opt)
 	knownDrive := drive.IsKnownDrive(currentDrive)
 	if knownDrive != nil {
-		log.Println("Kown Drive found.")
+		log.Println("Known Drive found.")
 		opt.SectorOrder = knownDrive.SectorOrder
 		opt.ReadOffset = knownDrive.ReadOffset
 		if opt.ReadAtOnce == 26 {
