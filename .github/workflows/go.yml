@@ -89,11 +89,7 @@ jobs:
   
   build-arch:
     needs: test
-    on:
-      push:
-        branches: [ "main" ]
-      pull_request:
-        branches: [ "main" ]
+    if: github.ref == 'refs/heads/main'
     strategy:
       matrix:
         platform: [64]
