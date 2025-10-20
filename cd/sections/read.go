@@ -55,7 +55,7 @@ func ReadSections(opt *option.Option, sectionMap []*Section) {
 			section.WriteHash(opt)
 
 			if len(section.Hashes) == 1 {
-				log.Println("Inital section " + strconv.Itoa(sectionNumber) + " read from " + strconv.FormatInt(int64(section.StartSector), 10) + " to " + strconv.FormatInt(int64(section.EndSector), 10))
+				log.Println("Initial section " + strconv.Itoa(sectionNumber) + " read from " + strconv.FormatInt(int64(section.StartSector), 10) + " to " + strconv.FormatInt(int64(section.EndSector), 10))
 				continue
 			}
 			log.Println("Section " + strconv.Itoa(sectionNumber) + " not matching and read from " + strconv.FormatInt(int64(section.StartSector), 10) + " to " + strconv.FormatInt(int64(section.EndSector), 10))
