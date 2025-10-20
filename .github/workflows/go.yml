@@ -89,6 +89,11 @@ jobs:
   
   build-arch:
     needs: test
+    on:
+      push:
+        branches: [ "main" ]
+      pull_request:
+        branches: [ "main" ]
     strategy:
       matrix:
         platform: [64]
@@ -108,9 +113,6 @@ jobs:
         owner: 'MoriGM'
         repository: 'dreamdump'
         depth: 1
-    - name: Switch branch
-      run: |
-        git checkout ${{env.branch}}
     - name: Build archlinux package
       run: |
         chown build:build -R ./
