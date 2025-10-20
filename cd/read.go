@@ -2,7 +2,10 @@ package cd
 
 import (
 	"errors"
+	"os"
 
+	"dreamdump/exit_codes"
+	"dreamdump/log"
 	"dreamdump/option"
 	"dreamdump/scsi"
 	"dreamdump/scsi/driver"
@@ -11,6 +14,11 @@ import (
 
 func ReadSectors(opt *option.Option, lba int32, readAtOnce uint8) ([]*Sector, error) {
 	status := scsi_commands.ReadCd(opt, lba, readAtOnce)
+	if status.Asc == 0x3A {
+		log.Println()
+		log.Println("Error Medium is not present")
+		os.Exit(exit_codes.MEDIUM_NOT_PRESENT)
+	}
 	err := driver.CheckSense(&status)
 	if err != nil {
 		return nil, err
