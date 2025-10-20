@@ -108,7 +108,9 @@ jobs:
         owner: 'MoriGM'
         repository: 'dreamdump'
         depth: 1
-        branch: ¼{{env.branch}}
+    - name: Switch branch
+      run: |
+        git checkout ${{env.branch}}
     - name: Build archlinux package
       run: |
         chown build:build -R ./
