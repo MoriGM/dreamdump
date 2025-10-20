@@ -29,4 +29,5 @@ type Option struct {
 	QTocSplit   bool
 	Train       bool
 	ReadAtOnce  uint8
+	Retries     uint8
 }

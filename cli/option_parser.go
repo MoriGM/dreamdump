@@ -40,6 +40,7 @@ func SetupOptions() option.Option {
 		QTocSplit:   false,
 		Train:       false,
 		ReadAtOnce:  26,
+		Retries:     20,
 	}
 
 	parseSpecial(&opt)
@@ -69,6 +70,14 @@ func SetupOptions() option.Option {
 func parseSpecial(opt *option.Option) {
 	opt.QTocSplit = HasArgumentString("force-qtoc")
 	opt.Train = HasArgumentString("train")
+	retries := FindArgumentString("retries")
+	if retries != nil {
+		offset, err := strconv.ParseUint(*retries, 10, 8)
+		if err != nil {
+			panic(err)
+		}
+		opt.Retries = uint8(offset)
+	}
 }
 
 func parsePaths(opt *option.Option) {

@@ -2,9 +2,11 @@ package sections
 
 import (
 	"errors"
+	"os"
 	"strconv"
 
 	"dreamdump/cd"
+	"dreamdump/exit_codes"
 	"dreamdump/log"
 	"dreamdump/option"
 )
@@ -18,7 +20,7 @@ func ReadFileSections(opt *option.Option, sectionMap []*Section) {
 
 func ReadSections(opt *option.Option, sectionMap []*Section) {
 	ReadFileSections(opt, sectionMap)
-	for {
+	for range opt.Retries {
 		if opt.Train && !sectionMap[0].Matched {
 			TrainStart(opt)
 		}
@@ -65,6 +67,12 @@ func ReadSections(opt *option.Option, sectionMap []*Section) {
 			return
 		}
 	}
+	log.Println()
+	log.Println("Retry count exceeded. Please try again.")
+	if !sectionMap[0].Matched {
+		log.Println("Section 1 isn't matching. Please try with --train")
+	}
+	os.Exit(exit_codes.NO_MATCHING_READS)
 }
 
 func ReadSection(opt *option.Option, section *Section) error {

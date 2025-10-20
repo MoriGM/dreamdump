@@ -14,11 +14,12 @@ Supported commands:
 
 Supported options:
 `--drive=<drivePath>`
-`--sector-order=<sectorOrder>`
-`--read-offset=<number>`
-`--image-path=<name>`
-`--image-name=<name>`
-`--cutoff=<cutoff>`
-`--read-at-once=<number>`
-`--speed=<number>`
-`--force-qtoc`
+`--sector-order=<sectorOrder>`   
+`--read-offset=<number>`   
+`--image-path=<name>`   
+`--image-name=<name>`   
+`--cutoff=<cutoff>`   
+`--read-at-once=<number[1-20(Linux allows 40)]>`   
+`--speed=<number>`   
+`--force-qtoc`   
+`--retries=<number[1-255]>`   
