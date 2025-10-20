@@ -12,8 +12,8 @@ Supported commands:
 `disc`
 `split`
 
-Supported options:
-`--drive=<drivePath>`
+Supported options:   
+`--drive=<drivePath>`   
 `--sector-order=<sectorOrder>`   
 `--read-offset=<number>`   
 `--image-path=<name>`   
