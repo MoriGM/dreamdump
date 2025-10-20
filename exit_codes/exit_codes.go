@@ -7,4 +7,6 @@ const (
 	MISSING_COMMAND_ARGUMENTS    = 0x04
 	CUTOFF_TO_BIG                = 0x05
 	ERROR_TRAINING_START         = 0x06
+	NO_MATCHING_READS            = 0x07
+	MEDIUM_NOT_PRESENT           = 0x08
 )
