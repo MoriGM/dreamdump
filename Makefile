@@ -1,4 +1,5 @@
 PKGNAME=dreamdump
+GO_CRITIC_FLAGS=-@ifElseChain.minThreshold=4 -enable='octalLiteral,yodaStyleExpr,zeroByteRepeat,badSorting,builtinShadow,commentFormatting'
 
 build: test
 	go build -v ./...
@@ -15,6 +16,9 @@ lint:
 	staticcheck
 	errcheck
 	revive -config revive.toml -formatter friendly ./...
-	go-critic check -@ifElseChain.minThreshold=4 ./...
+	go-critic check ${GO_CRITIC_FLAGS} ./...
 
-.PHONY: build test fmt lint
+install:
+	go install .
+
+.PHONY: build test fmt lint install
