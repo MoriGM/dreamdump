@@ -35,7 +35,7 @@ func Read(fileHandle any, cmd any, size uint32) Status {
 
 	block := make([]byte, size)
 
-	sptd_sd := &win32.SPTD_SD{
+	sptdSd := &win32.SPTD_SD{
 		SPTD: win32.SCSI_PASS_THROUGH_DIRECT_STRUCT{
 			TargetId:           0,
 			PathId:             0,
@@ -48,14 +48,14 @@ func Read(fileHandle any, cmd any, size uint32) Status {
 		},
 		SD: win32.SENSE_DATA{},
 	}
-	sptd_sd.SPTD.Length = uint16(unsafe.Sizeof(sptd_sd.SPTD))
-	sptd_sd.SPTD.SenseInfoLength = uint8(unsafe.Sizeof(sptd_sd.SD))
-	sptd_sd.SPTD.SenseInfoOffset = uint32(unsafe.Offsetof(sptd_sd.SD))
+	sptdSd.SPTD.Length = uint16(unsafe.Sizeof(sptdSd.SPTD))
+	sptdSd.SPTD.SenseInfoLength = uint8(unsafe.Sizeof(sptdSd.SD))
+	sptdSd.SPTD.SenseInfoOffset = uint32(unsafe.Offsetof(sptdSd.SD))
 	if size > 0 {
-		sptd_sd.SPTD.DataBuffer = &block[0]
+		sptdSd.SPTD.DataBuffer = &block[0]
 	}
 
-	err = win32.ScsiCall(driveDeviceFile, sptd_sd)
+	err = win32.ScsiCall(driveDeviceFile, sptdSd)
 	if err != nil {
 		return Status{
 			Status: 0xFF,
@@ -66,10 +66,10 @@ func Read(fileHandle any, cmd any, size uint32) Status {
 	}
 
 	status := Status{
-		Status: sptd_sd.SPTD.ScsiStatus,
-		Key:    sptd_sd.SD.SenseKey,
-		Asc:    sptd_sd.SD.AdditionalSenseCode,
-		AscQ:   sptd_sd.SD.AdditionalSenseCodeQualifier,
+		Status: sptdSd.SPTD.ScsiStatus,
+		Key:    sptdSd.SD.SenseKey,
+		Asc:    sptdSd.SD.AdditionalSenseCode,
+		AscQ:   sptdSd.SD.AdditionalSenseCodeQualifier,
 		Block:  block,
 	}
 	return status

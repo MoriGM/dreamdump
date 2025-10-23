@@ -27,7 +27,7 @@ func Read(fileHandle any, cmd interface{}, size uint32) Status {
 
 	block := make([]byte, size)
 	senseBuf := make([]byte, sgio.SENSE_BUF_LEN)
-	sg_io_hdr := sgio.SgIoHdr{
+	sgIoHdr := sgio.SgIoHdr{
 		InterfaceID:    int32('S'),
 		CmdLen:         uint8(cmdBlk.Len()),
 		MxSbLen:        sgio.SENSE_BUF_LEN,
@@ -39,16 +39,16 @@ func Read(fileHandle any, cmd interface{}, size uint32) Status {
 	}
 
 	if size > 0 {
-		sg_io_hdr.Dxferp = &block[0]
+		sgIoHdr.Dxferp = &block[0]
 	}
 
-	err = sgio.SgioSyscall(driveDeviceFile, &sg_io_hdr)
+	err = sgio.SgioSyscall(driveDeviceFile, &sgIoHdr)
 	if err != nil {
 		panic(err)
 	}
 
 	status := Status{
-		Status: sg_io_hdr.Status,
+		Status: sgIoHdr.Status,
 		Key:    senseBuf[2] & 0x0F,
 		Asc:    senseBuf[12],
 		AscQ:   senseBuf[13],

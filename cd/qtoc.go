@@ -71,10 +71,10 @@ func (qtoc *QToc) Sort() {
 		for indexNumber := range track.Indexs {
 			indexKeys = append(indexKeys, indexNumber)
 		}
-		slices.Sort(indexKeys[:])
+		slices.Sort(indexKeys)
 		track.IndexNumbers = indexKeys
 	}
-	slices.Sort(trackKeys[:])
+	slices.Sort(trackKeys)
 	qtoc.TrackNumbers = trackKeys
 }
 

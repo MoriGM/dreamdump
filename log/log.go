@@ -10,19 +10,19 @@ import (
 )
 
 var (
-	clean_len = 0
-	logFile   *os.File
+	cleanLen = 0
+	logFile  *os.File
 )
 
 func cleanLine() {
-	cleanText := "\r" + strings.Repeat(" ", clean_len) + "\r"
+	cleanText := "\r" + strings.Repeat(" ", cleanLen) + "\r"
 	fmt.Print(cleanText)
 }
 
 func Print(a ...any) {
 	text := fmt.Sprint(a...)
 	fmt.Print(text)
-	clean_len = len(text)
+	cleanLen = len(text)
 	if logFile != nil {
 		_, err := logFile.WriteString(text)
 		if err != nil {
@@ -42,7 +42,7 @@ func Println(a ...any) {
 	text += "\n"
 	cleanLine()
 	fmt.Print(text)
-	clean_len = 0
+	cleanLen = 0
 	if logFile != nil {
 		_, err := logFile.WriteString(text)
 		if err != nil {
@@ -54,7 +54,7 @@ func Println(a ...any) {
 func Printf(msg string, a ...any) {
 	text := fmt.Sprintf(msg, a...)
 	cleanLine()
-	clean_len = len(text)
+	cleanLen = len(text)
 	fmt.Print(text)
 	if logFile != nil {
 		_, err := logFile.WriteString(text)

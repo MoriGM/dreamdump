@@ -63,8 +63,8 @@ func (sect *Section) ReadSection(opt *option.Option) {
 			panic(err)
 		}
 		sect.Sectors[i] = new(cd.Sector)
-		copy(sect.Sectors[i].Data[:], data[:])
-		copy(sect.Sectors[i].Sub.Qchannel[:], subq[:])
+		copy(sect.Sectors[i].Data[:], data)
+		copy(sect.Sectors[i].Sub.Qchannel[:], subq)
 	}
 	sect.Matched = true
 }

@@ -47,7 +47,7 @@ func (dense Dense) NewOffsetManager(lba int32) *OffsetManager {
 	syncByteOffset := int32(syncByteIndex)
 	if syncByteOffset >= scsi.SECTOR_DATA_SIZE {
 		zeroSectorCount = syncByteOffset / int32(scsi.SECTOR_DATA_SIZE)
-		syncByteOffset = syncByteOffset % scsi.SECTOR_DATA_SIZE
+		syncByteOffset %= scsi.SECTOR_DATA_SIZE
 	}
 
 	correctSector := CdSectorData(dense[syncByteIndex : syncByteIndex+scsi.SECTOR_DATA_SIZE])

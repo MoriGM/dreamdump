@@ -15,5 +15,6 @@ lint:
 	staticcheck
 	errcheck
 	revive -config revive.toml -formatter friendly ./...
+	go-critic check ./...
 
 .PHONY: build test fmt lint

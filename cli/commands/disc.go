@@ -1,10 +1,12 @@
 package commands
 
 import (
+	"os"
 	"strconv"
 
 	"dreamdump/cd/sections"
 	"dreamdump/drive/setup"
+	"dreamdump/exit_codes"
 	"dreamdump/log"
 	"dreamdump/option"
 	"dreamdump/scsi/scsi_commands"
@@ -20,7 +22,16 @@ func DreamDumpDisc(opt *option.Option) {
 	}
 
 	sectionMap := sections.GetSectionMap(opt)
-	sections.ReadSections(opt, sectionMap)
+	matching := sections.ReadSections(opt, sectionMap)
+
+	if !matching {
+		log.Println()
+		log.Println("Retry count exceeded. Please try again.")
+		if !sectionMap[0].Matched {
+			log.Println("Section 1 isn't matching. Please try with --train")
+		}
+		os.Exit(exit_codes.NO_MATCHING_READS)
+	}
 
 	sections.CombineSections(opt, sectionMap)
 

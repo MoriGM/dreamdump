@@ -10,7 +10,7 @@ func Calculate(numbers []uint8) uint16 {
 
 	for _, number := range numbers {
 		x := number ^ msb
-		x = x ^ (x >> 4)
+		x ^= (x >> 4)
 		msb = lsb ^ (x >> 3) ^ (x << 4)
 		lsb = x ^ (x << 5)
 	}
