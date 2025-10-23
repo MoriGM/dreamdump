@@ -54,13 +54,13 @@ func GenerateCue(opt *option.Option, qtoc *QToc, metas map[uint8]TrackMeta) {
 }
 
 func getTrackType(track *Track, meta *TrackMeta) string {
-	switch track.Type {
-	case TRACK_TYPE_AUDIO:
+	if track.Type == TRACK_TYPE_AUDIO {
 		return "AUDIO"
-	case TRACK_TYPE_DATA_MODE1:
+	} else if meta.DataType == TRACK_TYPE_DATA_MODE1 {
 		return "MODE1/2352"
-	case TRACK_TYPE_DATA_MODE2:
+	} else if meta.DataType == TRACK_TYPE_DATA_MODE2 {
 		return "MODE2/2352"
+	} else {
+		return "MODE0/2352"
 	}
-	return "MODE0/2352"
 }
