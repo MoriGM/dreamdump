@@ -29,7 +29,7 @@ func GenerateCue(opt *option.Option, qtoc *QToc, metas map[uint8]TrackMeta) {
 		if err != nil {
 			panic(err)
 		}
-		trackLine := fmt.Sprintf("  TRACK %02d %s\n", trackNumber, getTrackType(track, &meta))
+		trackLine := fmt.Sprintf("  TRACK %02d %s\n", trackNumber, track.GetTrackType(&meta))
 		log.Print(trackLine)
 		_, err = cueFile.WriteString(trackLine)
 		if err != nil {
@@ -50,17 +50,5 @@ func GenerateCue(opt *option.Option, qtoc *QToc, metas map[uint8]TrackMeta) {
 			}
 			lba = index.Lba
 		}
-	}
-}
-
-func getTrackType(track *Track, meta *TrackMeta) string {
-	if track.Type == TRACK_TYPE_AUDIO {
-		return "AUDIO"
-	} else if meta.DataType == TRACK_TYPE_DATA_MODE1 {
-		return "MODE1/2352"
-	} else if meta.DataType == TRACK_TYPE_DATA_MODE2 {
-		return "MODE2/2352"
-	} else {
-		return "MODE0/2352"
 	}
 }

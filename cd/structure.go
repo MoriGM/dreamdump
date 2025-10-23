@@ -50,6 +50,6 @@ type TrackMeta struct {
 	SHA1               [20]byte
 	Size               uint32
 	Sectors            uint32
-	DataType           uint8
+	DataMode           uint8
 	InvalidSyncSectors uint32
 }

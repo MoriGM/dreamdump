@@ -61,7 +61,7 @@ func (dense *Dense) splitData(trackFileName string, track *Track, offsetManager 
 		panic(err)
 	}
 
-	dataType := uint8(0)
+	dataMode := uint8(0)
 
 	crc32Sum := crc32.NewIEEE()
 	md5Sum := md5.New()
@@ -81,7 +81,7 @@ func (dense *Dense) splitData(trackFileName string, track *Track, offsetManager 
 		copy(cdSectorData[0:scsi.SECTOR_DATA_SIZE], (*dense)[lbaStartSize:lbaEndSize])
 		if cdSectorData.HasSyncHeader() {
 			cdSectorData.Descramble()
-			dataType |= cdSectorData.GetDataMode()
+			dataMode |= cdSectorData.GetDataMode()
 			descrambledData.Write(cdSectorData[:])
 		} else {
 			descrambledData.Write(make([]byte, scsi.SECTOR_DATA_SIZE))
@@ -113,7 +113,7 @@ func (dense *Dense) splitData(trackFileName string, track *Track, offsetManager 
 		CRC32:              crc32Sum.Sum32(),
 		MD5:                [16]byte(md5Sum.Sum(nil)),
 		SHA1:               [20]byte(sha1Sum.Sum(nil)),
-		DataType:           dataType,
+		DataMode:           dataMode,
 		InvalidSyncSectors: invalidSyncSectors,
 	}
 
@@ -140,7 +140,7 @@ func (dense *Dense) splitAudio(trackFileName string, track *Track, offsetManager
 		CRC32:       crc32.ChecksumIEEE((*dense)[trackStartSize:trackEndSize]),
 		MD5:         md5.Sum((*dense)[trackStartSize:trackEndSize]),
 		SHA1:        sha1.Sum((*dense)[trackStartSize:trackEndSize]),
-		DataType:    0,
+		DataMode:    0,
 	}
 
 	err = file.Close()
