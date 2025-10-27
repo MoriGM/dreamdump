@@ -1,10 +1,11 @@
 package cd
 
 import (
-	crc16_ccitt "dreamdump/crc/CRC16_CCITT"
 	"dreamdump/encoding/bcd"
 	"dreamdump/encoding/msf"
 	"dreamdump/scsi"
+
+	"github.com/pasztorpisti/go-crc"
 )
 
 const (
@@ -55,5 +56,5 @@ func (sub *QChannel) TrackType() uint8 {
 }
 
 func (sub *QChannel) CheckParity() bool {
-	return crc16_ccitt.Calculate(sub[0:10]) == ((uint16(sub[Q_CHANNEL_CHECKSUM_MSB]) << 8) | uint16(sub[Q_CHANNEL_CHECKSUM_LSB]))
+	return crc.CRC16GSM.Calc(sub[0:10]) == ((uint16(sub[Q_CHANNEL_CHECKSUM_MSB]) << 8) | uint16(sub[Q_CHANNEL_CHECKSUM_LSB]))
 }
