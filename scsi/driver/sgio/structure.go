@@ -5,9 +5,11 @@ const (
 	SG_IO                = 0x2285
 	SG_INFO_OK_MASK      = 0x1
 	SG_INFO_OK           = 0x0
+	SG_DXFER_NONE        = -1
 	SG_DXFER_TO_DEV      = -2
 	SG_DXFER_FROM_DEV    = -3
 	SG_DXFER_TO_FROM_DEV = -4
+	SG_DXFER_UNKOWN      = -5
 	INQ_CMD_CODE         = 0x12
 	INQ_REPLY_LEN        = 96
 	SENSE_BUF_LEN        = 32

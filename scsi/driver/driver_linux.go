@@ -5,6 +5,7 @@ package driver
 import (
 	"bytes"
 	"encoding/binary"
+	"log"
 	"os"
 
 	"dreamdump/scsi/driver/sgio"
@@ -32,7 +33,7 @@ func Read(fileHandle any, cmd interface{}, size uint32) Status {
 		CmdLen:         uint8(cmdBlk.Len()),
 		MxSbLen:        sgio.SENSE_BUF_LEN,
 		DxferLen:       size,
-		DxferDirection: sgio.SG_DXFER_FROM_DEV,
+		DxferDirection: sgio.SG_DXFER_NONE,
 		Cmdp:           &cmdBlk.Bytes()[0],
 		Sbp:            &senseBuf[0],
 		Timeout:        sgio.TIMEOUT_20_SECS,
@@ -40,10 +41,12 @@ func Read(fileHandle any, cmd interface{}, size uint32) Status {
 
 	if size > 0 {
 		sgIoHdr.Dxferp = &block[0]
+		sgIoHdr.DxferDirection = sgio.SG_DXFER_FROM_DEV
 	}
 
 	err = sgio.SgioSyscall(driveDeviceFile, &sgIoHdr)
 	if err != nil {
+		log.Printf("% x\n", cmdBlk)
 		panic(err)
 	}
 
