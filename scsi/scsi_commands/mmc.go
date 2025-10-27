@@ -47,7 +47,7 @@ func ReadCd(opt *option.Option, lba int32, readAtOnce uint8) driver.Status {
 
 func SetCDSpeed(opt *option.Option) driver.Status {
 	readCdCommand := cbd.Speed{
-		OperationCode: scsi.MMC_READ_CD,
+		OperationCode: scsi.MMC_SET_CD_SPEED,
 		ReadSpeed:     bigendian.Uint16(opt.Speed),
 	}
 
