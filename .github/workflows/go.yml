@@ -50,24 +50,9 @@ jobs:
       run: go install -v github.com/go-critic/go-critic/cmd/go-critic@latest 
     - name: Check
       run: make lint
-  
-  test:
-    needs: format
-    strategy:
-      matrix:
-        os: [ubuntu-24.04, windows-2022]
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: ${{env.latest_go_version}}
-    - name: Test
-      run: go test -v ./...
       
   build-linux:
-    needs: test
+    needs: lint
     strategy:
       matrix:
         os: [ubuntu-24.04]
@@ -79,6 +64,8 @@ jobs:
       uses: actions/setup-go@v4
       with:
         go-version: ${{env.latest_go_version}}
+    - name: Test
+      run: go test -v ./...
     - name: Build
       run: go build -v ./...
     - name: Build Artifact
@@ -90,7 +77,7 @@ jobs:
         path: ./dreamdump
   
   build-arch:
-    needs: test
+    needs: lint
     if: github.ref == 'refs/heads/main'
     strategy:
       matrix:
@@ -123,7 +110,7 @@ jobs:
         path: dreamdump/dreamdump*.pkg.tar.zst
 
   build-windows:
-    needs: test
+    needs: lint
     strategy:
       matrix:
         os: [windows-2022]
@@ -135,6 +122,8 @@ jobs:
       uses: actions/setup-go@v4
       with:
         go-version: ${{env.latest_go_version}}
+    - name: Test
+      run: go test -v ./...
     - name: Build
       run: go build -v ./...
     - name: Build Artifact
