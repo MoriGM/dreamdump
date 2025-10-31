@@ -21,8 +21,8 @@ var DriveList []*DriveOption
 func init() {
 	DriveList = []*DriveOption{
 		// Good
-		{"TSSTcorp", "DVD-ROM SH-D162C", "DC02", option.DATA_SUB_C2, +6, 1, false},
-		{"TSSTcorp", "DVD-ROM SH-D163A", "DC02", option.DATA_SUB_C2, +6, 1, false},
+		{"TSSTcorp", "DVD-ROM SH-D162C", "DC02", option.DATA_SUB_C2, +6, 12, false},
+		{"TSSTcorp", "DVD-ROM SH-D163A", "DC02", option.DATA_SUB_C2, +6, 12, false},
 		{"LITE-ON", "DVD D LH-16D1P", "ZZ00", option.DATA_SUB_C2, +6, 20, false},
 		// Meh
 		{"LITE-ON", "DVD D DH-16D3S", "ZZ00", option.DATA_C2_SUB, +6, 32, true},
