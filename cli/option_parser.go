@@ -9,6 +9,7 @@ import (
 	"dreamdump/exit_codes"
 	"dreamdump/log"
 	"dreamdump/option"
+	"dreamdump/scsi/driver"
 )
 
 const (
@@ -107,6 +108,10 @@ func parseDrivePart(opt *option.Option) {
 		readAtOnce, err := strconv.ParseInt(*readAtOnceString, 10, 8)
 		if err != nil {
 			panic(err)
+		}
+		if driver.MAX_READ_AT_ONCE < readAtOnce {
+			log.Printf("Read at once is bigger than max %d\n", driver.MAX_READ_AT_ONCE)
+			os.Exit(exit_codes.READ_AT_ONCE_TO_BIG)
 		}
 		opt.ReadAtOnce = uint8(readAtOnce)
 	}

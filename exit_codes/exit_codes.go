@@ -9,4 +9,5 @@ const (
 	ERROR_TRAINING_START         = 0x06
 	NO_MATCHING_READS            = 0x07
 	MEDIUM_NOT_PRESENT           = 0x08
+	READ_AT_ONCE_TO_BIG          = 0x09
 )

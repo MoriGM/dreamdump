@@ -11,6 +11,10 @@ import (
 	"dreamdump/scsi/driver/sgio"
 )
 
+const (
+	MAX_READ_AT_ONCE = 40
+)
+
 func OpenScsiDevice(fname string) (any, error) {
 	return sgio.OpenScsiDevice(fname)
 }

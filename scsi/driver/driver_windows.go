@@ -12,6 +12,10 @@ import (
 	"golang.org/x/sys/windows"
 )
 
+const (
+	MAX_READ_AT_ONCE = 20
+)
+
 func OpenScsiDevice(fname string) (any, error) {
 	return win32.OpenScsiDevice(fname)
 }
