@@ -22,7 +22,7 @@ func ioctl(fd, cmd, ptr uintptr) error {
 }
 
 func OpenScsiDevice(fname string) (*os.File, error) {
-	f, err := os.OpenFile(fname, os.O_RDONLY, 0)
+	f, err := os.OpenFile(fname, syscall.O_RDWR|syscall.O_NONBLOCK, 0)
 	if err != nil {
 		return nil, err
 	}
