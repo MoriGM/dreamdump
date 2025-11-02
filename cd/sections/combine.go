@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"dreamdump/option"
+	"dreamdump/scsi"
 )
 
 func CombineSections(opt *option.Option, sections []*Section) {
@@ -17,15 +18,21 @@ func CombineToScram(opt *option.Option, sections []*Section) {
 	if err != nil {
 		panic(err)
 	}
+	skip := opt.ReadOffset * scsi.SAMPLE_SIZE
+	if skip < 0 {
+		skip = scsi.SECTOR_DATA_SIZE - skip
+		scramFile.Write(make([]byte, scsi.SECTOR_DATA_SIZE))
+	}
 	defer scramFile.Close()
 	for sectionNumber := range len(sections) {
 		section := sections[sectionNumber]
 		for _, sector := range section.Sectors {
-			_, err := scramFile.Write(sector.Data[:])
+			_, err := scramFile.Write(sector.Data[skip:])
 			if err != nil {
 				panic(err)
 			}
 		}
+		skip = 0
 	}
 }
 

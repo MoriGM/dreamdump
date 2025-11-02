@@ -8,6 +8,7 @@ const (
 
 // CD Read Sizes
 const (
+	SAMPLE_SIZE             = 4
 	SECTOR_DATA_SIZE        = 2352
 	SECTOR_C2_SIZE          = 294
 	SECTOR_SUB_SIZE         = 96
