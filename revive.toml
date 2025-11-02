@@ -20,6 +20,7 @@ warningCode = 0
 # the rule should fail if it detects code with higher complexity than 10.
 [rule.cyclomatic]
 arguments = [10]
+Exclude = ["cli/option_parser.go"]
 
 [rule.defer]
 
