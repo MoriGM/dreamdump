@@ -21,7 +21,10 @@ func CombineToScram(opt *option.Option, sections []*Section) {
 	skip := opt.ReadOffset * scsi.SAMPLE_SIZE
 	if skip < 0 {
 		skip = scsi.SECTOR_DATA_SIZE - skip
-		scramFile.Write(make([]byte, scsi.SECTOR_DATA_SIZE))
+		_, err := scramFile.Write(make([]byte, scsi.SECTOR_DATA_SIZE))
+		if err != nil {
+			panic(err)
+		}
 	}
 	defer scramFile.Close()
 	for sectionNumber := range len(sections) {
