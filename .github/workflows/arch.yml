@@ -1,0 +1,49 @@
+# This workflow will build a golang project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+name: Go
+
+permissions:
+  contents: read
+
+on:
+  push:
+    tags: '*'
+
+env:
+  release_name: build_${{github.run_number}}
+  latest_go_version: '1.25'
+  branch: ${{github.ref_name}}
+
+jobs:
+  build-arch:
+    needs: lint
+    strategy:
+      matrix:
+        platform: [64]
+    runs-on: ubuntu-latest
+    container: archlinux
+    steps:
+    - name: Install software
+      run: | 
+        pacman -Syu --noconfirm
+        pacman -S base-devel go git --noconfirm
+    - name: Create user
+      run: |
+        useradd -m build
+    - name: Clone GuillaumeFalourd/poc-github-actions PUBLIC repository
+      uses: GuillaumeFalourd/clone-github-repo-action@v2.1
+      with:
+        owner: 'MoriGM'
+        repository: 'dreamdump'
+        depth: 1
+    - name: Build archlinux package
+      run: |
+        chown build:build -R ./
+        cd dreamdump
+        su build -c "makepkg --noconfirm"
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: dreamdump-${{env.release_name}}_arch_${{matrix.platform}}
+        path: dreamdump/dreamdump*.pkg.tar.zst
