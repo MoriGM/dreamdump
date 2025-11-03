@@ -1,10 +1,11 @@
 package sections
 
 import (
+	"os"
+
 	"dreamdump/cd"
 	"dreamdump/option"
 	"dreamdump/scsi"
-	"os"
 )
 
 func ExtractSections(opt *option.Option, sections []*Section) (*cd.Dense, *cd.QToc) {
