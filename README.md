@@ -1,4 +1,4 @@
-# dreamdump
+# dreamdump [![Go](https://github.com/MoriGM/dreamdump/actions/workflows/go.yml/badge.svg?branch=main&event=push)](https://github.com/MoriGM/dreamdump/actions/workflows/go.yml)
 A small go project to maybe dump dreamcast games on linux and windows
 
 Usage
