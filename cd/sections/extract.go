@@ -4,10 +4,11 @@ import (
 	"dreamdump/cd"
 	"dreamdump/option"
 	"dreamdump/scsi"
+	"os"
 )
 
 func ExtractSections(opt *option.Option, sections []*Section) (*cd.Dense, *cd.QToc) {
-	qtoc := ExtractSectionsToQtoc(sections)
+	qtoc := ExtractSectionsToQtoc(opt, sections)
 	dense := ExtractSectionsToDense(opt, sections)
 	return dense, qtoc
 }
@@ -35,12 +36,24 @@ func ExtractSectionsToDense(opt *option.Option, sections []*Section) *cd.Dense {
 	return &dense
 }
 
-func ExtractSectionsToQtoc(sections []*Section) *cd.QToc {
+func ExtractSectionsToQtoc(opt *option.Option, sections []*Section) *cd.QToc {
 	qtoc := cd.QTocNew()
-	for sectionNumber := range len(sections) {
-		for sectorNumber := range len(sections[sectionNumber].Sectors) {
-			qtoc.AddSector(&sections[sectionNumber].Sectors[sectorNumber].Sub.Qchannel)
+	subcodeFileName := opt.PathName + "/" + opt.ImageName + ".subq"
+	subcodeFile, err := os.OpenFile(subcodeFileName, os.O_RDONLY, 0o644)
+	if err != nil {
+		panic(err)
+	}
+
+	qchannel := make([]byte, 12)
+	for {
+		size, err := subcodeFile.Read(qchannel)
+		if size < scsi.CHANNEL_SIZE {
+			break
 		}
+		if err != nil {
+			panic(err)
+		}
+		qtoc.AddSector((*cd.QChannel)(qchannel))
 	}
 	qtoc.Sort()
 	return qtoc

@@ -53,12 +53,12 @@ func (sect *Section) ReadSection(opt *option.Option) {
 	sect.Sectors = make([]*cd.Sector, sect.EndSector-sect.StartSector)
 	for i := range sect.EndSector - sect.StartSector {
 		data := make([]byte, scsi.SECTOR_DATA_SIZE)
-		subq := make([]byte, scsi.SECTOR_SUBQ_SIZE)
+		subq := make([]byte, scsi.CHANNEL_SIZE)
 		_, err = scramFile.ReadAt(data, int64(i)*int64(scsi.SECTOR_DATA_SIZE))
 		if err != nil {
 			panic(err)
 		}
-		_, err = subFile.ReadAt(subq, int64(i)*int64(scsi.SECTOR_SUBQ_SIZE))
+		_, err = subFile.ReadAt(subq, int64(i)*int64(scsi.CHANNEL_SIZE))
 		if err != nil {
 			panic(err)
 		}
