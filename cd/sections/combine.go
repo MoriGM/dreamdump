@@ -40,16 +40,16 @@ func CombineToScram(opt *option.Option, sections []*Section) {
 }
 
 func CombineToSub(opt *option.Option, sections []*Section) {
-	scramFileName := opt.PathName + "/" + opt.ImageName + ".subq"
-	scramFile, err := os.OpenFile(scramFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o644)
+	subcodeFileName := opt.PathName + "/" + opt.ImageName + ".subq"
+	subcodeFile, err := os.OpenFile(subcodeFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o644)
 	if err != nil {
 		panic(err)
 	}
-	defer scramFile.Close()
+	defer subcodeFile.Close()
 	for sectionNumber := range len(sections) {
 		section := sections[sectionNumber]
 		for _, sector := range section.Sectors {
-			_, err := scramFile.Write(sector.Sub.Qchannel[:])
+			_, err := subcodeFile.Write(sector.Sub.Qchannel[:])
 			if err != nil {
 				panic(err)
 			}
