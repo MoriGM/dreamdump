@@ -56,5 +56,5 @@ func (sub *QChannel) TrackType() uint8 {
 }
 
 func (sub *QChannel) CheckParity() bool {
-	return crc.CRC16GSM.Calc(sub[0:10]) == ((uint16(sub[Q_CHANNEL_CHECKSUM_MSB]) << 8) | uint16(sub[Q_CHANNEL_CHECKSUM_LSB]))
+	return crc.CRC16GSM.Calc(sub[0:Q_CHANNEL_CHECKSUM_MSB]) == ((uint16(sub[Q_CHANNEL_CHECKSUM_MSB]) << 8) | uint16(sub[Q_CHANNEL_CHECKSUM_LSB]))
 }
