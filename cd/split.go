@@ -73,6 +73,7 @@ func (dense *Dense) splitData(trackFileName string, track *Track, offsetManager 
 	var cdSectorData CdSectorData
 	var descrambledData bytes.Buffer
 	var invalidSyncSectors uint32
+	var edc uint16
 	for lba := (track.GetStartLBA()) - option.DC_START; lba < min(track.LbaEnd, option.DC_LBA_END)-option.DC_START; lba++ {
 		descrambledData.Reset()
 
@@ -83,6 +84,9 @@ func (dense *Dense) splitData(trackFileName string, track *Track, offsetManager 
 			cdSectorData.Descramble()
 			dataMode |= cdSectorData.GetDataMode()
 			descrambledData.Write(cdSectorData[:])
+			if !cdSectorData.CheckEDC() {
+				edc++
+			}
 		} else {
 			descrambledData.Write(make([]byte, scsi.SECTOR_DATA_SIZE))
 			invalidSyncSectors++
@@ -115,6 +119,7 @@ func (dense *Dense) splitData(trackFileName string, track *Track, offsetManager 
 		SHA1:               [20]byte(sha1Sum.Sum(nil)),
 		DataMode:           dataMode,
 		InvalidSyncSectors: invalidSyncSectors,
+		EDC:                edc,
 	}
 
 	return trackMeta

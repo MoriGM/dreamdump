@@ -31,6 +31,9 @@ func PrintTrackMeta(toc []*Track, trackMetas map[uint8]TrackMeta) {
 		trackMeta := trackMetas[tocTrack.TrackNumber]
 		log.Printf("CD-ROM [%s]:\n", filepath.Base(trackMeta.FileName))
 		log.Printf("  sector count: %d\n", trackMeta.Sectors)
+		if trackMeta.EDC > 0 {
+			log.Printf("  EDC errors: %d\n", trackMeta.EDC)
+		}
 		if trackMeta.InvalidSyncSectors > 0 {
 			log.Printf("  invalid sync sectors: %d\n", trackMeta.InvalidSyncSectors)
 		}

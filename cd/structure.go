@@ -52,4 +52,5 @@ type TrackMeta struct {
 	Sectors            uint32
 	DataMode           uint8
 	InvalidSyncSectors uint32
+	EDC                uint16
 }
