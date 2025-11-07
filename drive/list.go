@@ -23,6 +23,7 @@ func init() {
 		// Good
 		{"TSSTcorp", "DVD-ROM SH-D162C", "DC02", option.DATA_SUB_C2, +6, 12, false},
 		{"TSSTcorp", "DVD-ROM SH-D163A", "DC02", option.DATA_SUB_C2, +6, 12, false},
+		{"PBDS", "DH-16D1S", "ZZ00", option.DATA_SUB_C2, +6, 20, false},
 		{"LITE-ON", "DVD D LH-16D1P", "ZZ00", option.DATA_SUB_C2, +6, 20, false},
 		{"TSSTcorp", "DVD-ROM SH-D163B", "ZZ01", option.DATA_C2_SUB, +6, 12, true},
 		{"TSSTcorp", "DVD-ROM SH-D163B", "ZZ02", option.DATA_C2_SUB, +6, 12, true},

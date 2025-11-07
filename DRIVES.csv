@@ -1,5 +1,6 @@
 Drive Name;Firmware;Quality;Drive Tester;Notes
 ASUS BW-16D1HT;'03.10;Broken;MoriGM;Doesnt read at all
+LiteON PBDS;ZZ00;Great;MoriGM;
 LiteON LH16D1P;ZZ00;Great;Maddog,MoriGM;
 LiteON DH16D2P;ZZ00;Okay;MoriGM;Works only with 32 read at once
 LiteON DH16D3S;ZZ00;Okay;MoriGM;Works only with 32 read at once and only on HW1.0
