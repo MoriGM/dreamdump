@@ -26,7 +26,11 @@ func split(opt *option.Option, dense *cd.Dense, qtoc *cd.QToc) (map[uint8]cd.Tra
 
 	log.Println()
 
-	log.Printf("Write Offset: %d\n", offsetManager.SampleOffset)
+	plus := ""
+	if offsetManager.SampleOffset > 0 {
+		plus = "+"
+	}
+	log.Printf("Write Offset: %s%d\n", plus, offsetManager.SampleOffset)
 	log.Println()
 
 	var trackMetas map[uint8]cd.TrackMeta
