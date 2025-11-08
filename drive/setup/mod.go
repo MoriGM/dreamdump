@@ -15,7 +15,7 @@ func InitializeDrive(opt *option.Option) {
 	driveDeviceFile, err := driver.OpenScsiDevice(opt.Device)
 	if err != nil {
 		log.Println("This drive is unknown or is missing it gd-rom")
-		os.Exit(exit_codes.UNKOWN_DRIVE)
+		os.Exit(exit_codes.UNKNOWN_DRIVE)
 	}
 
 	opt.Drive = driveDeviceFile

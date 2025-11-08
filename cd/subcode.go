@@ -29,10 +29,10 @@ func (sub *Subchannel) Parse(subcodes [scsi.SECTOR_SUB_SIZE]uint8) {
 }
 
 func (sub *QChannel) LBA() int32 {
-	return sub.AbsolutLBA() - (msf.MSF_SECOND * 2)
+	return sub.AbsoluteLBA() - (msf.MSF_SECOND * 2)
 }
 
-func (sub *QChannel) AbsolutLBA() int32 {
+func (sub *QChannel) AbsoluteLBA() int32 {
 	minute := (int32(bcd.ToUint8(sub[Q_CHANNEL_ABSOLUTE_MINUTE])) * msf.MSF_MINUTE)
 	second := (int32(bcd.ToUint8(sub[Q_CHANNEL_ABSOLUTE_SECOND])) * msf.MSF_SECOND)
 	frame := (int32(bcd.ToUint8(sub[Q_CHANNEL_ABSOLUTE_FRAME])))

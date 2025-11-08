@@ -46,13 +46,13 @@ func TestAddSector(t *testing.T) {
 		assert.Equal(t, track.GetStartLBA(), int32(469982))
 		assert.Equal(t, track.LbaEnd, int32(469985))
 
-		if index, ok := track.Indexs[0]; ok {
+		if index, ok := track.Indexes[0]; ok {
 			assert.Equal(t, index.Lba, int32(469982))
 		} else {
 			t.Error()
 		}
 
-		if index, ok := track.Indexs[1]; ok {
+		if index, ok := track.Indexes[1]; ok {
 			assert.Equal(t, index.Lba, int32(469983))
 		} else {
 			t.Error()
@@ -65,13 +65,13 @@ func TestAddSector(t *testing.T) {
 		assert.Equal(t, track.Lba, int32(469985))
 		assert.Equal(t, track.GetStartLBA(), int32(469985))
 
-		if index, ok := track.Indexs[0]; ok {
+		if index, ok := track.Indexes[0]; ok {
 			assert.Equal(t, index.Lba, int32(469985))
 		} else {
 			t.Error()
 		}
 
-		if index, ok := track.Indexs[1]; ok {
+		if index, ok := track.Indexes[1]; ok {
 			assert.Equal(t, index.Lba, int32(469986))
 		} else {
 			t.Error()

@@ -2,7 +2,7 @@
 pkgname=dreamdump
 pkgver=0.0.0
 pkgrel=1
-pkgdesc='A programm to dump the dreamcasts HD Area of a gd-rom'
+pkgdesc='A program to dump the dreamcasts HD Area of a gd-rom'
 arch=(x86_64)
 url='https://github.com/MoriGM/dreamdump/'
 source=("${pkgname}::git+file://${startdir}/")

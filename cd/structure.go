@@ -35,7 +35,7 @@ type Track struct {
 	LbaEnd       int32
 	TrackNumber  uint8
 	IndexNumbers []uint8
-	Indexs       map[uint8]*Index
+	Indexes      map[uint8]*Index
 }
 
 type Index struct {

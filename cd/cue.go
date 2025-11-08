@@ -37,7 +37,7 @@ func GenerateCue(opt *option.Option, qtoc *QToc, metas map[uint8]TrackMeta) {
 		}
 		lba := track.Lba
 		for _, indexNumber := range track.IndexNumbers {
-			index := track.Indexs[indexNumber]
+			index := track.Indexes[indexNumber]
 			indexOffset := index.Lba - lba
 			if indexOffset < 0 {
 				continue

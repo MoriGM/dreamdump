@@ -32,10 +32,10 @@ func (qtoc *QToc) AddSector(qchannel *QChannel) {
 		}
 	}
 	if track, ok := qtoc.Tracks[qchannel.TrackNumber()]; ok {
-		if index, ok := track.Indexs[qchannel.IndexNumber()]; ok {
+		if index, ok := track.Indexes[qchannel.IndexNumber()]; ok {
 			index.Lba = min(qchannel.LBA(), index.Lba)
 		} else {
-			track.Indexs[qchannel.IndexNumber()] = &Index{
+			track.Indexes[qchannel.IndexNumber()] = &Index{
 				Lba: qchannel.LBA(),
 			}
 		}
@@ -50,7 +50,7 @@ func (qtoc *QToc) AddSector(qchannel *QChannel) {
 		Lba:    lba,
 		LbaEnd: option.DC_END,
 		Type:   qchannel.TrackType(),
-		Indexs: map[uint8]*Index{qchannel.IndexNumber(): {
+		Indexes: map[uint8]*Index{qchannel.IndexNumber(): {
 			Lba: qchannel.LBA(),
 		}},
 		TrackNumber: qchannel.TrackNumber(),
@@ -68,7 +68,7 @@ func (qtoc *QToc) Sort() {
 		}
 		trackKeys = append(trackKeys, track.TrackNumber)
 		indexKeys := []uint8{}
-		for indexNumber := range track.Indexs {
+		for indexNumber := range track.Indexes {
 			indexKeys = append(indexKeys, indexNumber)
 		}
 		slices.Sort(indexKeys)
@@ -88,15 +88,15 @@ func (qtoc *QToc) Print() {
 		}
 		log.Printf("  track %d { %s }\n", track.TrackNumber, trackType)
 		indexKeys := []uint8{}
-		for key := range track.Indexs {
+		for key := range track.Indexes {
 			indexKeys = append(indexKeys, key)
 		}
 		slices.Sort(indexKeys)
 		for _, indexKey := range indexKeys {
-			index := track.Indexs[indexKey]
+			index := track.Indexes[indexKey]
 			startLBA := index.Lba
 			endLBA := track.LbaEnd - 1
-			if nextIndex, ok := track.Indexs[indexKey+1]; ok {
+			if nextIndex, ok := track.Indexes[indexKey+1]; ok {
 				endLBA = nextIndex.Lba - 1
 			}
 

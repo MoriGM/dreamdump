@@ -9,7 +9,7 @@ const (
 	SG_DXFER_TO_DEV      = -2
 	SG_DXFER_FROM_DEV    = -3
 	SG_DXFER_TO_FROM_DEV = -4
-	SG_DXFER_UNKOWN      = -5
+	SG_DXFER_UNKNOWN     = -5
 	INQ_CMD_CODE         = 0x12
 	INQ_REPLY_LEN        = 96
 	SENSE_BUF_LEN        = 32

@@ -9,7 +9,7 @@ Source0:        %{expand:%%(pwd)}
 
 
 %description
-Small programm to dump dreamcast gdrom discs
+Small program to dump dreamcast gdrom discs
 
 
 %prep
