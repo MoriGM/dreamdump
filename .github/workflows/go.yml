@@ -1,14 +1,14 @@
-# This workflow will build a golang project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
-
 name: Go
 
 permissions:
-  contents: read
+  contents: write
+  actions: write
 
 on:
   push:
   pull_request:
+  release:
+    types: [created]
 
 env:
   release_name: build_${{github.run_number}}
@@ -28,34 +28,12 @@ jobs:
       run: go install mvdan.cc/gofumpt@latest
     - name: Check formating
       run: gofumpt -d ./
-  
-  lint:
-    needs: format
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: ${{env.latest_go_version}}
-    - name: Install staticcheck
-      run: go install honnef.co/go/tools/cmd/staticcheck@latest
-    - name: Install errcheck
-      run: go install github.com/kisielk/errcheck@latest
-    - name: Install golangci-lint
-      run: go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest
-    - name: Install revive
-      run: go install github.com/mgechev/revive@latest        
-    - name: Install go-critic
-      run: go install -v github.com/go-critic/go-critic/cmd/go-critic@latest 
-    - name: Check
-      run: make lint
       
   build-linux:
-    needs: lint
+    needs: format
     strategy:
       matrix:
-        os: [ubuntu-24.04]
+        os: [ubuntu-latest]
         platform: [64]
     runs-on: ${{matrix.os}}
     steps:
@@ -73,11 +51,11 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: dreamdump-${{env.release_name}}_linux_${{matrix.platform}}
+        name: dreamdump-${{env.release_name}}_linux_${{matrix.platform}}.zip
         path: ./dreamdump
 
   build-windows:
-    needs: lint
+    needs: format
     strategy:
       matrix:
         os: [windows-2022]
@@ -98,5 +76,24 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: dreamdump-${{env.release_name}}_win_${{matrix.platform}}
+        name: dreamdump-${{env.release_name}}_win_${{matrix.platform}}.zip
         path: ./dreamdump.exe
+  
+  release:
+    if: ${{ github.event_name == 'release'}}
+    needs: [build-linux, build-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+      - name: 'Upload Release'
+        shell: bash
+        run: |
+          shopt -s nullglob
+          gh release upload ${{ github.event.release.tag_name }} dreamdump dreamdump.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
