@@ -1,9 +1,9 @@
 package cd
 
 const (
-	SECTOR_DATA_MODE                    = 0x0F
-	SECTOR_DATA_MODE2_SUBMODE           = 0x12
-	SECTOR_DATA_MODE2_SUBMODE_MASK_FORM = 0b00100000
+	SECTOR_DATA_MODE                          = 0x0F
+	SECTOR_DATA_MODE2_SUBMODE                 = 0x12
+	SECTOR_DATA_MODE2_SUBMODE_MASK_FORM uint8 = 0b00100000
 )
 
 func (data *CdSectorData) GetDataMode() uint8 {
