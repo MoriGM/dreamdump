@@ -70,11 +70,13 @@ jobs:
       run: go build -v ./...
     - name: Build Artifact
       run: go build -v .
+    - name: Create Zip
+      run: zip ./dreamdump-${{env.release_name}}_linux_${{matrix.platform}}.zip ./dreamdump
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: dreamdump-${{env.release_name}}_linux_${{matrix.platform}}
-        path: ./dreamdump
+        path: ./dreamdump-${{env.release_name}}_linux_${{matrix.platform}}.zip
 
   build-windows:
     needs: lint
@@ -95,11 +97,13 @@ jobs:
       run: go build -v ./...
     - name: Build Artifact
       run: go build -v .
+    - name: Create Zip
+      run: Compress-Archive -Path ./dreamdump.exe -DestinationPath dreamdump-${{env.release_name}}_win_${{matrix.platform}}.zip
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: dreamdump-${{env.release_name}}_win_${{matrix.platform}}
-        path: ./dreamdump.exe
+        path: ./dreamdump-${{env.release_name}}_win_${{matrix.platform}}.zip
   
   release:
     if: ${{ github.event_name == 'release'}}
@@ -116,6 +120,10 @@ jobs:
         shell: bash
         run: |
           shopt -s nullglob
-          gh release upload ${{ github.event.release.tag_name }} dreamdump dreamdump.exe
+          files=(dreamdump-*.zip)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No artifacts to release"; exit 1
+          fi
+          gh release upload ${{ github.event.release.tag_name }} "${files[@]}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
