@@ -1,6 +1,6 @@
 name: dreamdump
 base: core24
-version: '0.0.0-rc4'
+version: '0.0.0-rc5'
 summary: A small and easy to use programm to dump dreamcasts discs
 description: |
   This programm allows users to dump their dreamcasts GD-Rom discs via some special drives.
