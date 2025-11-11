@@ -17,19 +17,9 @@ jobs:
   build-snap:
     runs-on: ubuntu-latest
     steps:
-    - name: Install software
-      run: | 
-        sudo apt update
-        sudo apt upgrade -y
-        sudo apt install snap snapd -y
-        sudo snap install snapcraft --classic
-    - name: Clone GuillaumeFalourd/poc-github-actions PUBLIC repository
-      uses: GuillaumeFalourd/clone-github-repo-action@v2.1
-      with:
-        owner: 'MoriGM'
-        repository: 'dreamdump'
-    - name: Build snap package
-      run: |
-        cd dreamdump
-        git checkout ${{env.branch}}
-        sudo snapcraft pack --use-lxd
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+      - name: Install Snapcraft
+        uses: samuelmeuli/action-snapcraft@v3
+      - name: Use Snapcraft
+        run: snapcraft pack
