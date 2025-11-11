@@ -17,9 +17,10 @@ jobs:
   build-snap:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v3
-      - name: Install Snapcraft
-        uses: samuelmeuli/action-snapcraft@v3
-      - name: Use Snapcraft
-        run: sudo snapcraft pack
+      - uses: actions/checkout@v4
+      - uses: snapcore/action-build@v1
+        id: snapcraft
+      - uses: actions/upload-artifact@v3
+        with:
+          name: snap
+          path: ${{ steps.snapcraft.outputs.snap }}
