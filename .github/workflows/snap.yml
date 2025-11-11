@@ -22,4 +22,4 @@ jobs:
       - name: Install Snapcraft
         uses: samuelmeuli/action-snapcraft@v3
       - name: Use Snapcraft
-        run: snapcraft pack
+        run: sudo snapcraft pack
