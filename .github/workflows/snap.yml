@@ -15,16 +15,14 @@ env:
 
 jobs:
   build-snap:
-    strategy:
-      matrix:
-        platform: [64]
     runs-on: ubuntu-latest
     steps:
     - name: Install software
       run: | 
-        apt update
-        apt install snap snapd -y
-        snap install snapcraft
+        sudo apt update
+        sudo apt upgrade -y
+        sudo apt install snap snapd -y
+        sudo snap install snapcraft --classic
     - name: Clone GuillaumeFalourd/poc-github-actions PUBLIC repository
       uses: GuillaumeFalourd/clone-github-repo-action@v2.1
       with:
@@ -35,4 +33,4 @@ jobs:
       run: |
         cd dreamdump
         git checkout ${{env.branch}}
-        snapcraft pack --use-lxd
+        sudo snapcraft pack --use-lxd
