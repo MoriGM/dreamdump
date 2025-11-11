@@ -28,8 +28,7 @@ jobs:
       with:
         owner: 'MoriGM'
         repository: 'dreamdump'
-        depth: 1
-    - name: Build archlinux package
+    - name: Build snap package
       run: |
         cd dreamdump
         git checkout ${{env.branch}}
