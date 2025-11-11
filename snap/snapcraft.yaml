@@ -1,0 +1,24 @@
+name: dreamdump
+base: core24
+version: '0.0.0-rc5'
+summary: A small and easy to use programm to dump dreamcasts discs
+description: |
+  This programm allows users to dump their dreamcasts GD-Rom discs via some special drives.
+
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: strict
+
+platforms:
+  amd64:
+    build-on: [amd64]
+    build-for: [amd64]
+  arm64:
+    build-on: [arm64]
+    build-for: [arm64]
+
+parts:
+  go:
+    plugin: go
+    source: .
+    build-snaps:
+      - go/1.25/stable
