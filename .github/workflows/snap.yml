@@ -22,7 +22,8 @@ jobs:
     steps:
     - name: Install software
       run: | 
-        apt update; apt install snap snapd -y
+        apt update
+        apt install snap snapd -y
         snap install snapcraft
     - name: Clone GuillaumeFalourd/poc-github-actions PUBLIC repository
       uses: GuillaumeFalourd/clone-github-repo-action@v2.1
