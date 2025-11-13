@@ -31,7 +31,7 @@ jobs:
     - name: Install staticcheck
       run: |
         sudo apt update
-        apt install go-staticcheck
+        sudo apt install go-staticcheck
     - name: Install errcheck
       run: go install github.com/kisielk/errcheck@latest
     - name: golangci-lint
