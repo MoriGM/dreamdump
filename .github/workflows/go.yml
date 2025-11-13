@@ -16,7 +16,7 @@ env:
   branch: ${{github.ref_name}}
 
 jobs:
-  format:
+  lint:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -28,16 +28,6 @@ jobs:
       run: go install mvdan.cc/gofumpt@latest
     - name: Check formating
       run: gofumpt -d ./
-      
-  lint:
-    needs: format
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: stable
     - name: Install staticcheck
       run: |
         sudo apt update
