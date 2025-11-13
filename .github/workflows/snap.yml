@@ -4,10 +4,13 @@
 name: snap
 
 permissions:
-  contents: read
+  contents: write
+  actions: write
 
 on:
   push:
+  release:
+    types: [created]
 
 env:
   release_name: build_${{github.run_number}}
@@ -24,3 +27,26 @@ jobs:
         with:
           name: snap
           path: ${{ steps.snapcraft.outputs.snap }}
+
+  release:
+    if: ${{ github.event_name == 'release'}}
+    needs: [build-linux, build-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+      - name: 'Upload Release'
+        shell: bash
+        run: |
+          shopt -s nullglob
+          files=(dreamdump_*.snap)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No artifacts to release"; exit 1
+          fi
+          gh release upload ${{ github.event.release.tag_name }} "${files[@]}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
