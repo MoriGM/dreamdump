@@ -43,8 +43,8 @@ jobs:
     - name: Install errcheck
       run: go install github.com/kisielk/errcheck@latest
     - name: golangci-lint
-        uses: golangci/golangci-lint-action@v9
-        with:
+      uses: golangci/golangci-lint-action@v9
+      with:
           version: v2.6,1
     - name: Install revive
       run: go install github.com/mgechev/revive@latest        
