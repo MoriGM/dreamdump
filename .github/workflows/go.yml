@@ -31,7 +31,6 @@ jobs:
     - name: Install staticcheck
       run: |
         sudo apt update
-        sudo apt upgrade -y
         apt install go-staticcheck
     - name: Install errcheck
       run: go install github.com/kisielk/errcheck@latest
