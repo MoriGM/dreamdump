@@ -3,6 +3,7 @@ name: Go
 permissions:
   contents: write
   actions: write
+  pull-requests: read
 
 on:
   push:
@@ -12,7 +13,6 @@ on:
 
 env:
   release_name: build_${{github.run_number}}
-  latest_go_version: '1.25'
   branch: ${{github.ref_name}}
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: ${{env.latest_go_version}}
+        go-version: stable
     - name: Install gofumpt
       run: go install mvdan.cc/gofumpt@latest
     - name: Check formating
@@ -37,13 +37,15 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: ${{env.latest_go_version}}
+        go-version: stable
     - name: Install staticcheck
       run: go install honnef.co/go/tools/cmd/staticcheck@latest
     - name: Install errcheck
       run: go install github.com/kisielk/errcheck@latest
-    - name: Install golangci-lint
-      run: go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest
+    - name: golangci-lint
+        uses: golangci/golangci-lint-action@v9
+        with:
+          version: v2.6,1
     - name: Install revive
       run: go install github.com/mgechev/revive@latest        
     - name: Install go-critic
@@ -63,7 +65,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: ${{env.latest_go_version}}
+        go-version: stable
     - name: Test
       run: go test -v ./...
     - name: Build
@@ -90,7 +92,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: ${{env.latest_go_version}}
+        go-version: stable
     - name: Test
       run: go test -v ./...
     - name: Build
