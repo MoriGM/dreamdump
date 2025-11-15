@@ -1,15 +1,15 @@
 Drive Name;Firmware;Quality;Drive Tester;Notes
 ASUS BW-16D1HT;'03.10;Broken;MoriGM;Doesnt read at all
-LiteON PBDS;ZZ00;Great;MoriGM;
 LiteON LH16D1P;ZZ00;Great;Maddog,MoriGM;
 LiteON DH16D2P;ZZ00;Okay;MoriGM;Works only with 32 read at once
 LiteON DH16D3S;ZZ00;Okay;MoriGM;Works only with 32 read at once and only on HW1.0
 LiteON DH16D5S;ZZ00;Bad;MoriGM;Works only with 32 read at once and only on HW1.0
 LiteON SOHD-167T;Bad;ZZ00;MoriGM;Not all sections can be read okay
 LiteON iHas 124B;'0000;Broken;MoriGM;Doesnt read at all
+PBDS DH-16D1S;ZZ00;Great;MoriGM;
+Traxdata CDRW482448Plus Venus II;ZZ00;Very Bad;MoriGM;Doesnt read at all
 TSST SN-S083C;ZZ00;Meh;MoriGM;Reads pretty slow (1 sector per second)
 TSST TS-H352C;DC02;Great;MoriGM;
 TSST TS-H353A/SH-D163A;DC02;Good;MoriGM;
 TSST TS-H353B/SH-D163B;ZZ01;Good;kaos,Maddog,MoriGM;
 TSST TS-H353C/SH-D163C;ZZ00;Very Bad;MoriGM;Only reads somewhat
-Traxdata CDRW482448Plus Venus II;ZZ00;Very Bad;MoriGM;Doesnt read at all
