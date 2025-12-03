@@ -40,7 +40,7 @@ func SetupOptions() option.Option {
 		Speed:       0,
 		QTocSplit:   false,
 		Train:       false,
-		ReadAtOnce:  26,
+		ReadAtOnce:  driver.MAX_READ_AT_ONCE,
 		Retries:     20,
 	}
 

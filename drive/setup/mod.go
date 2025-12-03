@@ -26,8 +26,11 @@ func InitializeDrive(opt *option.Option) {
 		log.Println("Known Drive found.")
 		opt.SectorOrder = knownDrive.SectorOrder
 		opt.ReadOffset = knownDrive.ReadOffset
-		if opt.ReadAtOnce == 26 {
+		if opt.ReadAtOnce == driver.MAX_READ_AT_ONCE {
 			opt.ReadAtOnce = knownDrive.ReadAtOnce
+		}
+		if opt.ReadAtOnce > driver.MAX_READ_AT_ONCE {
+			opt.ReadAtOnce = driver.MAX_READ_AT_ONCE
 		}
 	}
 
