@@ -38,7 +38,7 @@ func (dense *Dense) TocSplit(opt *option.Option, tracks []*Track) map[uint8]Trac
 		if track.TrackNumber == 110 {
 			break
 		}
-		if len(tracks) > 9 {
+		if len(tracks) >= 8 {
 			trackFileName = fmt.Sprintf("%s/%s (Track %02d).bin", opt.PathName, opt.ImageName, track.TrackNumber)
 		} else {
 			trackFileName = fmt.Sprintf("%s/%s (Track %d).bin", opt.PathName, opt.ImageName, track.TrackNumber)
