@@ -19,7 +19,7 @@ func (dense *Dense) QTocSplit(opt *option.Option, qtoc *QToc) map[uint8]TrackMet
 	var trackFileName string
 	for _, trackNumber := range qtoc.TrackNumbers {
 		track := qtoc.Tracks[trackNumber]
-		if len(qtoc.TrackNumbers) > 9 {
+		if len(qtoc.TrackNumbers) >= 8 {
 			trackFileName = fmt.Sprintf("%s/%s (Track %02d).bin", opt.PathName, opt.ImageName, track.TrackNumber)
 		} else {
 			trackFileName = fmt.Sprintf("%s/%s (Track %d).bin", opt.PathName, opt.ImageName, track.TrackNumber)
