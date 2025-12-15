@@ -1,5 +1,5 @@
 Name:           dreamdump
-Version:        0.2.0
+Version:        0.3.0
 Release:        %autorelease
 Summary:        A command-line fuzzy finder written in Go
 
