@@ -3,6 +3,7 @@ package drive
 import (
 	"dreamdump/log"
 	"dreamdump/option"
+	"strings"
 )
 
 func (drive *Drive) PrintDriveInfo(opt *option.Option) {
@@ -17,5 +18,5 @@ func (drive *Drive) PrintDriveInfo(opt *option.Option) {
 	case option.DATA_SUB_C2:
 		sectorOrder = "DATA_SUB_C2"
 	}
-	log.Printf("Drive: %s - %s (revision level: %s, vendor specific: %s)  Read Offset: %d  Sector Order: %s  Read at once: %d\n\n", drive.VendorName, drive.ProductInquiryData, drive.RevisionNumber, drive.RevionDate, opt.ReadOffset, sectorOrder, opt.ReadAtOnce)
+	log.Printf("Drive: %s - %s (revision level: %s, vendor specific: %s)  Read Offset: %d  Sector Order: %s  Read at once: %d\n\n", drive.VendorName, drive.ProductInquiryData, drive.RevisionNumber, strings.Trim(string(drive.RevionDate[:]), "\u0000"), opt.ReadOffset, sectorOrder, opt.ReadAtOnce)
 }
