@@ -1,9 +1,10 @@
 package drive
 
 import (
+	"strings"
+
 	"dreamdump/log"
 	"dreamdump/option"
-	"strings"
 )
 
 func (drive *Drive) PrintDriveInfo(opt *option.Option) {
