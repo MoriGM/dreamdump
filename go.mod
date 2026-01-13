@@ -7,7 +7,7 @@ toolchain go1.25.3
 require (
 	github.com/cespare/xxhash/v2 v2.3.0
 	github.com/pasztorpisti/go-crc v1.1.0
-	golang.org/x/sys v0.39.0
+	golang.org/x/sys v0.40.0
 	gotest.tools/v3 v3.5.2
 )
 
