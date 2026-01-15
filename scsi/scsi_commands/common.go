@@ -14,12 +14,12 @@ import (
 
 func Inquiry(opt *option.Option) *drive.Drive {
 	size := uint16(0x60)
-	inquiryCommand := cbd.Inquiry{
+	command := cbd.Inquiry{
 		OperationCode:  scsi.COMMON_INQUIRY,
 		TransferLength: bigendian.Uint16(size),
 	}
 
-	status := driver.Read(opt.Drive, inquiryCommand, uint32(size))
+	status := driver.Read(opt.Drive, command, uint32(size))
 	err := driver.CheckSense(&status)
 	if err != nil {
 		panic(err)
@@ -27,7 +27,7 @@ func Inquiry(opt *option.Option) *drive.Drive {
 
 	drive := new(drive.Drive)
 	buf := bytes.NewReader(status.Block[8:46])
-	err = binary.Read(buf, binary.LittleEndian, drive)
+	err = binary.Read(buf, binary.BigEndian, drive)
 	if err != nil {
 		panic(err)
 	}
