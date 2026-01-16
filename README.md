@@ -35,6 +35,7 @@ Supported drives are in drive/list.go
  martin korth (nocash) for General CD-Rom Info https://problemkaputt.de/psxspx-contents.htm   
  superg for redumper (Explanation of Track Splitting and Unscrambling) https://github.com/superg/redumper   
  saramibreak for DiscImageCreator (Explanation of GD-Rom TOC) https://github.com/saramibreak/DiscImageCreator  
+ The poeple of the https://github.com/thongtech/go-legacy-win7 project
 
 
  # Gratitude

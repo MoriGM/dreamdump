@@ -2,7 +2,7 @@ module dreamdump
 
 go 1.25.0
 
-toolchain go1.25.3
+toolchain go1.25.5
 
 require (
 	github.com/cespare/xxhash/v2 v2.3.0
