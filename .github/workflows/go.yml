@@ -86,6 +86,7 @@ jobs:
         export GOROOT=/usr/local/go-legacy-win7
         export GOPATH=$HOME/go
         export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+        go env -w GOTOOLCHAIN=local
     - name: Test
       run: go test -v ./...
     - name: Build
