@@ -35,7 +35,7 @@ jobs:
     - name: golangci-lint
       uses: golangci/golangci-lint-action@v9
       with:
-          version: v2.6.1
+          version: v2.8
     - name: Install revive
       run: go install github.com/mgechev/revive@latest        
     - name: Install go-critic
@@ -69,6 +69,36 @@ jobs:
       with:
         name: dreamdump-${{env.release_name}}_linux_${{matrix.platform}}
         path: ./dreamdump-${{env.release_name}}_linux_${{matrix.platform}}.zip
+
+  build-windows7:
+    needs: lint
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        platform: [64]
+    runs-on: ${{matrix.os}}
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup Win7 Go
+      run: |
+        wget https://github.com/thongtech/go-legacy-win7/releases/download/v1.25.5-1/go-legacy-win7-1.25.5-1.linux_amd64.tar.gz
+        sudo tar -C /usr/local -xzf go-legacy-win7-1.25.5-1.linux_amd64.tar.gz
+        export GOROOT=/usr/local/go-legacy-win7
+        export GOPATH=$HOME/go
+        export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+    - name: Test
+      run: go test -v ./...
+    - name: Build
+      run: GOOS=windows go build -v ./...
+    - name: Build Artifact
+      run: GOOS=windows go build -v .
+    - name: Create Zip
+      run: zip ./dreamdump-${{env.release_name}}_win7_${{matrix.platform}}.zip ./dreamdump.exe
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: dreamdump-${{env.release_name}}_win7_${{matrix.platform}}
+        path: ./dreamdump-${{env.release_name}}_win7_${{matrix.platform}}.zip
 
   build-windows:
     needs: lint
