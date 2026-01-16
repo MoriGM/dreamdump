@@ -89,9 +89,9 @@ jobs:
     - name: Test
       run: go test -v ./...
     - name: Build
-      run: GOOS=windows /usr/local/go-legacy-win7/bin/go build -v ./...
+      run: GOOS=windows go build -v ./...
     - name: Build Artifact
-      run: GOOS=windows /usr/local/go-legacy-win7/bin/go build -v .
+      run: GOOS=windows go build -v .
     - name: Create Zip
       run: zip ./dreamdump-${{env.release_name}}_win7_${{matrix.platform}}.zip ./dreamdump.exe
     - name: Upload Artifact
