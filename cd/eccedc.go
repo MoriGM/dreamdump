@@ -2,7 +2,6 @@ package cd
 
 import (
 	"encoding/binary"
-	"fmt"
 
 	"github.com/pasztorpisti/go-crc"
 )
@@ -59,7 +58,5 @@ func (data *CdSectorData) CheckEDC() bool {
 		checksum = crc32CdRom.Calc(data[16:USER_DATA_MODE2_FORM2_END])
 	}
 
-	fmt.Println(checksum)
-	fmt.Println(binary.LittleEndian.Uint32(edc[:]))
 	return checksum == binary.LittleEndian.Uint32(edc[:])
 }
