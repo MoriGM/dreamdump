@@ -6,7 +6,7 @@ LiteON DH16D3S;ZZ00;Okay;MoriGM;Works only with 32 read at once and only on HW1.
 LiteON DH16D5S;ZZ00;Bad;MoriGM;Works only with 32 read at once and only on HW1.0
 LiteON SOHD-167T;Bad;ZZ00;MoriGM;Not all sections can be read okay
 LiteON iHas 124B;'0000;Broken;MoriGM;Doesnt read at all
-PBDS DH-16D1S;ZZ00;Good;MoriGM;
+PBDS DH-16D1S;ZZ00;Good;MoriGM,Maddog
 Traxdata CDRW482448Plus Venus II;ZZ00;Very Bad;MoriGM;Doesnt read at all
 TSST SN-S083C;ZZ00;Meh;MoriGM;Reads pretty slow (1 sector per second)
 TSST TS-H352C;DC02;Good;MoriGM;
