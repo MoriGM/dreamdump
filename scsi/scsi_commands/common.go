@@ -5,7 +5,6 @@ import (
 	"encoding/binary"
 
 	"dreamdump/drive"
-	bigendian "dreamdump/encoding/big_endian"
 	"dreamdump/option"
 	"dreamdump/scsi"
 	"dreamdump/scsi/cbd"
@@ -16,7 +15,7 @@ func Inquiry(opt *option.Option) *drive.Drive {
 	size := uint16(0x60)
 	command := cbd.Inquiry{
 		OperationCode:  scsi.COMMON_INQUIRY,
-		TransferLength: bigendian.Uint16(size),
+		TransferLength: size,
 	}
 
 	status := driver.Read(opt.Drive, command, uint32(size))

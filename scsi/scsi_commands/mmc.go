@@ -1,7 +1,6 @@
 package scsi_commands
 
 import (
-	bigendian "dreamdump/encoding/big_endian"
 	"dreamdump/option"
 	"dreamdump/scsi"
 	"dreamdump/scsi/cbd"
@@ -14,9 +13,9 @@ func ReadCd(opt *option.Option, lba int32, readAtOnce uint8) driver.Status {
 	command := cbd.ReadCD{
 		OperationCode:      scsi.MMC_READ_CD,
 		ExpectedSectorType: cbd.ReadCD_SECTOR_TYPE_CDDA,
-		LBA:                bigendian.Int32(lba),
+		LBA:                lba,
 		MSBTransferLength:  0,
-		TransferLength:     bigendian.Uint16(uint16(readAtOnce)),
+		TransferLength:     uint16(readAtOnce),
 		FlagBits:           cbd.ReadCD_ALL,
 		Subchannel:         cbd.ReadCD_SUBCODE_NO,
 	}
@@ -48,7 +47,7 @@ func ReadCd(opt *option.Option, lba int32, readAtOnce uint8) driver.Status {
 func SetCDSpeed(opt *option.Option) driver.Status {
 	command := cbd.Speed{
 		OperationCode: scsi.MMC_SET_CD_SPEED,
-		ReadSpeed:     bigendian.Uint16(opt.Speed),
+		ReadSpeed:     opt.Speed,
 	}
 
 	return driver.Read(opt.Drive, command, 0)

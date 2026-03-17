@@ -25,7 +25,7 @@ func Read(fileHandle any, cmd interface{}, size uint32) Status {
 		panic("Error while casting")
 	}
 	var cmdBlk bytes.Buffer
-	err := binary.Write(&cmdBlk, binary.LittleEndian, cmd)
+	err := binary.Write(&cmdBlk, binary.BigEndian, cmd)
 	if err != nil {
 		panic(err)
 	}
