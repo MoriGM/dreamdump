@@ -42,7 +42,7 @@ jobs:
         cd dreamdump
         su build -c "makepkg --noconfirm"
     - name: Upload Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: dreamdump-${{env.release_name}}_arch_${{matrix.platform}}
         path: dreamdump/dreamdump*.pkg.tar.zst

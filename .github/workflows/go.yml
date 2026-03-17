@@ -65,7 +65,7 @@ jobs:
     - name: Create Zip
       run: zip ./dreamdump-${{env.release_name}}_linux_${{matrix.platform}}.zip ./dreamdump
     - name: Upload Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: dreamdump-${{env.release_name}}_linux_${{matrix.platform}}
         path: ./dreamdump-${{env.release_name}}_linux_${{matrix.platform}}.zip
@@ -96,7 +96,7 @@ jobs:
     - name: Create Zip
       run: zip ./dreamdump-${{env.release_name}}_win7_${{matrix.platform}}.zip ./dreamdump.exe
     - name: Upload Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: dreamdump-${{env.release_name}}_win7_${{matrix.platform}}
         path: ./dreamdump-${{env.release_name}}_win7_${{matrix.platform}}.zip
@@ -123,7 +123,7 @@ jobs:
     - name: Create Zip
       run: Compress-Archive -Path ./dreamdump.exe -DestinationPath dreamdump-${{env.release_name}}_win_${{matrix.platform}}.zip
     - name: Upload Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: dreamdump-${{env.release_name}}_win_${{matrix.platform}}
         path: ./dreamdump-${{env.release_name}}_win_${{matrix.platform}}.zip
@@ -136,7 +136,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
       - name: Download Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           merge-multiple: true
       - name: 'Upload Release'
