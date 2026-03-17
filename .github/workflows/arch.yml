@@ -12,7 +12,7 @@ on:
 
 env:
   release_name: build_${{github.run_number}}
-  latest_go_version: '1.25'
+  latest_go_version: '1.26'
   branch: ${{github.ref_name}}
 
 jobs:
