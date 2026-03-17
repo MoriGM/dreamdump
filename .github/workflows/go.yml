@@ -35,7 +35,7 @@ jobs:
     - name: golangci-lint
       uses: golangci/golangci-lint-action@v9
       with:
-          version: v2.8
+          version: v2.11
     - name: Install revive
       run: go install github.com/mgechev/revive@latest        
     - name: Install go-critic
