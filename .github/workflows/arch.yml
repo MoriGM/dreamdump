@@ -31,7 +31,7 @@ jobs:
       run: |
         useradd -m build
     - name: Clone GuillaumeFalourd/poc-github-actions PUBLIC repository
-      uses: GuillaumeFalourd/clone-github-repo-action@v2.1
+      uses: GuillaumeFalourd/clone-github-repo-action@v19817562c346ff60f9935158dede6c5ece8fd0ac #v2.3.0
       with:
         owner: 'MoriGM'
         repository: 'dreamdump'
@@ -42,7 +42,7 @@ jobs:
         cd dreamdump
         su build -c "makepkg --noconfirm"
     - name: Upload Artifact
-      uses: actions/upload-artifact@v6
+      uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 #v6.3.0
       with:
         name: dreamdump-${{env.release_name}}_arch_${{matrix.platform}}
         path: dreamdump/dreamdump*.pkg.tar.zst
