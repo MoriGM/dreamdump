@@ -12,9 +12,13 @@ import (
 )
 
 func InitializeDrive(opt *option.Option) {
+	if !driver.CheckDriveName(opt.Device) {
+		log.Println("This drive naming is incorrectly set. Use only the letter for windows and the absolute path for linux.")
+		os.Exit(exit_codes.UNKNOWN_DRIVE)
+	}
 	driveDeviceFile, err := driver.OpenScsiDevice(opt.Device)
 	if err != nil {
-		log.Println("This drive is unknown or is missing a gd-rom")
+		log.Println("Drive couldn't be found or disc is incorrect")
 		os.Exit(exit_codes.UNKNOWN_DRIVE)
 	}
 

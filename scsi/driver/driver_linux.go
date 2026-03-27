@@ -5,6 +5,7 @@ package driver
 import (
 	"bytes"
 	"encoding/binary"
+	"errors"
 	"log"
 	"os"
 
@@ -63,4 +64,9 @@ func Read(fileHandle any, cmd interface{}, size uint32) Status {
 	}
 
 	return status
+}
+
+func CheckDriveName(driveName string) bool {
+	_, err := os.Stat(driveName)
+	return !errors.Is(err, os.ErrNotExist)
 }

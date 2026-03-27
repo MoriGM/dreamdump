@@ -78,3 +78,11 @@ func Read(fileHandle any, cmd any, size uint32) Status {
 	}
 	return status
 }
+
+func CheckDriveName(driveName string) bool {
+	if len(driveName) > 1 {
+		return false
+	}
+
+	return (driveName[0] >= 'a' && driveName[0] <= 'z') || (driveName[0] >= 'A' && driveName[0] <= 'Z')
+}
