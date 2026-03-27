@@ -19,27 +19,27 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
     - name: Set up Go
-      uses: actions/setup-go@v6
+      uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 #v6.3.0
       with:
         go-version: stable
     - name: Install gofumpt
-      run: go install mvdan.cc/gofumpt@latest
+      run: go install mvdan.cc/gofumpt@v0.9.2
     - name: Check formating
       run: gofumpt -d ./
     - name: Install staticcheck
-      run: go install honnef.co/go/tools/cmd/staticcheck@latest
+      run: go install honnef.co/go/tools/cmd/staticcheck@2026.1
     - name: Install errcheck
-      run: go install github.com/kisielk/errcheck@latest
+      run: go install github.com/kisielk/errcheck@v1.10.0
     - name: golangci-lint
-      uses: golangci/golangci-lint-action@v9
+      uses: golangci/golangci-lint-action@1e7e51e771db61008b38414a730f564565cf7c20 #v9.2.0
       with:
-          version: v2.11
+          version: v2.11.2
     - name: Install revive
-      run: go install github.com/mgechev/revive@latest        
+      run: go install github.com/mgechev/revive@v1.15.0     
     - name: Install go-critic
-      run: go install -v github.com/go-critic/go-critic/cmd/go-critic@latest 
+      run: go install -v github.com/go-critic/go-critic/cmd/go-critic@v0.14.3 
     - name: Check
       run: make lint
       
@@ -51,9 +51,9 @@ jobs:
         platform: [64]
     runs-on: ${{matrix.os}}
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
     - name: Set up Go
-      uses: actions/setup-go@v6
+      uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 #v6.3.0
       with:
         go-version: stable
     - name: Test
@@ -65,7 +65,7 @@ jobs:
     - name: Create Zip
       run: zip ./dreamdump-${{env.release_name}}_linux_${{matrix.platform}}.zip ./dreamdump
     - name: Upload Artifact
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f #v7.0.0
       with:
         name: dreamdump-${{env.release_name}}_linux_${{matrix.platform}}
         path: ./dreamdump-${{env.release_name}}_linux_${{matrix.platform}}.zip
@@ -78,7 +78,7 @@ jobs:
         platform: [64]
     runs-on: ${{matrix.os}}
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
     - name: Setup Win7 Go
       run: |
         wget https://github.com/thongtech/go-legacy-win7/releases/download/v1.26.1-1/go-legacy-win7-1.26.1-1.linux_amd64.tar.gz
@@ -96,7 +96,7 @@ jobs:
     - name: Create Zip
       run: zip ./dreamdump-${{env.release_name}}_win7_${{matrix.platform}}.zip ./dreamdump.exe
     - name: Upload Artifact
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f #v7.0.0
       with:
         name: dreamdump-${{env.release_name}}_win7_${{matrix.platform}}
         path: ./dreamdump-${{env.release_name}}_win7_${{matrix.platform}}.zip
@@ -109,9 +109,9 @@ jobs:
         platform: [64]
     runs-on: ${{matrix.os}}
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
     - name: Set up Go
-      uses: actions/setup-go@v6
+      uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 #v6.3.0
       with:
         go-version: stable
     - name: Test
@@ -123,7 +123,7 @@ jobs:
     - name: Create Zip
       run: Compress-Archive -Path ./dreamdump.exe -DestinationPath dreamdump-${{env.release_name}}_win_${{matrix.platform}}.zip
     - name: Upload Artifact
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f #v7.0.0
       with:
         name: dreamdump-${{env.release_name}}_win_${{matrix.platform}}
         path: ./dreamdump-${{env.release_name}}_win_${{matrix.platform}}.zip
@@ -134,7 +134,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
       - name: Download Artifact
         uses: actions/download-artifact@v6
         with:
