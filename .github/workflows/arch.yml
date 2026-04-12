@@ -31,7 +31,7 @@ jobs:
       run: |
         useradd -m build
     - name: Clone GuillaumeFalourd/poc-github-actions PUBLIC repository
-      uses: GuillaumeFalourd/clone-github-repo-action@v19817562c346ff60f9935158dede6c5ece8fd0ac #v2.3.0
+      uses: GuillaumeFalourd/clone-github-repo-action@19817562c346ff60f9935158dede6c5ece8fd0ac #v2.3.0
       with:
         owner: 'MoriGM'
         repository: 'dreamdump'
