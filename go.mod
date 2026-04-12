@@ -1,13 +1,13 @@
 module dreamdump
 
-go 1.25.0
+go 1.26.0
 
-toolchain go1.25.7
+toolchain go1.26.1
 
 require (
 	github.com/cespare/xxhash/v2 v2.3.0
 	github.com/pasztorpisti/go-crc v1.1.0
-	golang.org/x/sys v0.41.0
+	golang.org/x/sys v0.43.0
 	gotest.tools/v3 v3.5.2
 )
 
