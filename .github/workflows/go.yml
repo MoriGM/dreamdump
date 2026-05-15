@@ -1,8 +1,8 @@
 name: Go
 
 permissions:
-  contents: write
-  actions: write
+  contents: read
+  actions: read
   pull-requests: read
 
 on:
@@ -132,6 +132,9 @@ jobs:
     if: ${{ github.event_name == 'release'}}
     needs: [build-linux, build-windows]
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
