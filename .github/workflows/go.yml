@@ -81,8 +81,10 @@ jobs:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
     - name: Setup Win7 Go
       run: |
-        wget https://github.com/thongtech/go-legacy-win7/releases/download/v1.26.1-1/go-legacy-win7-1.26.1-1.linux_amd64.tar.gz
-        sudo tar -C /usr/local -xzf go-legacy-win7-1.26.1-1.linux_amd64.tar.gz
+        export FILE=go-legacy-win7-1.26.2-1.linux_amd64.tar.gz
+        wget https://github.com/thongtech/go-legacy-win7/releases/download/v1.26.2-1/go-legacy-win7-1.26.2-1.linux_amd64.tar.gz
+        echo "fe7bdbf18b884e43b9f3508745e2817f9711d8cbfa9726b8f3c7140b6ca25630 $FILE" | sha256sum -c
+        sudo tar -C /usr/local -xzf $FILE
         export GOROOT=/usr/local/go-legacy-win7
         export GOPATH=$HOME/go
         export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
