@@ -61,7 +61,7 @@ func (dense Dense) NewOffsetManager(lba int32) *OffsetManager {
 	byteOffset := ((uint64(lba) - dataFrameLBA) * scsi.SECTOR_DATA_SIZE)
 	byteOffset += uint64(syncByteOffset)
 
-	sampleOffset := byteOffset / scsi.CHANNEL_SIZE
+	sampleOffset := byteOffset / scsi.SAMPLE_SIZE
 
 	offsetManager := &OffsetManager{
 		SyncByteOffset: uint32(syncByteOffset),

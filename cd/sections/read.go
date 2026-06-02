@@ -71,7 +71,7 @@ func ReadSection(opt *option.Option, section *Section) error {
 	for lba := section.StartSector; lba < section.EndSector; lba += int32(opt.ReadAtOnce) {
 		readAmount := opt.ReadAtOnce
 		if (lba + int32(opt.ReadAtOnce)) > section.EndSector {
-			readAmount = opt.ReadAtOnce - uint8(lba+int32(opt.ReadAtOnce)-(section.EndSector))
+			readAmount = opt.ReadAtOnce - uint8(lba+int32(opt.ReadAtOnce)-section.EndSector)
 		}
 
 		sectors, err := cd.ReadSectors(opt, lba, readAmount)

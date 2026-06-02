@@ -33,7 +33,7 @@ func ParseToc(sector *CdSectorData) []*Track {
 		if gdToc[i+3] == 0xff {
 			break
 		}
-		lba := (int(gdToc[i])) | (int(gdToc[i+1]) << 8) | (int(gdToc[i+2]) << 16)
+		lba := int(gdToc[i]) | (int(gdToc[i+1]) << 8) | (int(gdToc[i+2]) << 16)
 		trackType := (gdToc[i+3] >> 4) & TRACK_TYPE_DATA
 		lba -= 300
 		if trackNumber == TOC_FIRST_TRACK {

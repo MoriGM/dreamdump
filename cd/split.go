@@ -74,7 +74,7 @@ func (dense *Dense) splitData(trackFileName string, track *Track, offsetManager 
 	var descrambledData bytes.Buffer
 	var invalidSyncSectors uint32
 	var edc uint16
-	for lba := (track.GetStartLBA()) - option.DC_START; lba < min(track.LbaEnd, option.DC_LBA_END)-option.DC_START; lba++ {
+	for lba := track.GetStartLBA() - option.DC_START; lba < min(track.LbaEnd, option.DC_LBA_END)-option.DC_START; lba++ {
 		descrambledData.Reset()
 
 		lbaStartSize := lba*scsi.SECTOR_DATA_SIZE + offsetManager.ByteOffset
