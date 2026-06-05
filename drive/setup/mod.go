@@ -28,7 +28,9 @@ func InitializeDrive(opt *option.Option) {
 	knownDrive := drive.IsKnownDrive(currentDrive)
 	if knownDrive != nil {
 		log.Println("Known Drive found.")
-		opt.SectorOrder = knownDrive.SectorOrder
+		if !opt.ForceSectorOrder {
+			opt.SectorOrder = knownDrive.SectorOrder
+		}
 		opt.ReadOffset = knownDrive.ReadOffset
 		if opt.ReadAtOnce == driver.MAX_READ_AT_ONCE {
 			opt.ReadAtOnce = knownDrive.ReadAtOnce

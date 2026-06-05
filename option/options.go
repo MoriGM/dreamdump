@@ -18,16 +18,17 @@ const (
 )
 
 type Option struct {
-	Device      string
-	Drive       any
-	SectorOrder int
-	CutOff      int32
-	ReadOffset  int16
-	Speed       uint16
-	ImageName   string
-	PathName    string
-	QTocSplit   bool
-	Train       bool
-	ReadAtOnce  uint8
-	Retries     uint8
+	Device           string
+	Drive            any
+	SectorOrder      int
+	CutOff           int32
+	ReadOffset       int16
+	Speed            uint16
+	ImageName        string
+	PathName         string
+	QTocSplit        bool
+	Train            bool
+	ForceSectorOrder bool
+	ReadAtOnce       uint8
+	Retries          uint8
 }

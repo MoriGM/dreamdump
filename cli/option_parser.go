@@ -31,17 +31,18 @@ func FindArgumentString(name string) *string {
 
 func SetupOptions() option.Option {
 	opt := option.Option{
-		SectorOrder: option.DATA_SUB_C2,
-		Device:      "/dev/sr0",
-		CutOff:      option.DC_DEFAULT_CUTOFF,
-		ImageName:   "Game",
-		PathName:    "./Game",
-		ReadOffset:  0,
-		Speed:       0,
-		QTocSplit:   false,
-		Train:       false,
-		ReadAtOnce:  driver.MAX_READ_AT_ONCE,
-		Retries:     20,
+		SectorOrder:      option.DATA_SUB_C2,
+		Device:           "/dev/sr0",
+		CutOff:           option.DC_DEFAULT_CUTOFF,
+		ImageName:        "Game",
+		PathName:         "./Game",
+		ReadOffset:       0,
+		Speed:            0,
+		QTocSplit:        false,
+		Train:            false,
+		ForceSectorOrder: false,
+		ReadAtOnce:       driver.MAX_READ_AT_ONCE,
+		Retries:          20,
 	}
 
 	parseSpecial(&opt)
@@ -69,6 +70,7 @@ func SetupOptions() option.Option {
 }
 
 func parseSpecial(opt *option.Option) {
+	opt.ForceSectorOrder = HasArgumentString("force-sector-order")
 	opt.QTocSplit = HasArgumentString("force-qtoc")
 	opt.Train = HasArgumentString("train")
 	retries := FindArgumentString("retries")
