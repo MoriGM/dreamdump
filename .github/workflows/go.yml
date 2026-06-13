@@ -41,7 +41,12 @@ jobs:
     - name: Install go-critic
       run: go install -v github.com/go-critic/go-critic/cmd/go-critic@v0.14.3 
     - name: Check
-      run: make lint
+      run: |
+        golangci-lint run ./...
+        staticcheck
+        errcheck
+        revive -config revive.toml -formatter friendly ./...
+        go-critic check -@ifElseChain.minThreshold=4 -enable='octalLiteral,yodaStyleExpr,zeroByteRepeat,badSorting,builtinShadow,commentFormatting' ./...
       
   build-linux:
     needs: lint
