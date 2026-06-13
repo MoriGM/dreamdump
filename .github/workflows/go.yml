@@ -24,6 +24,8 @@ jobs:
       uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 #v6.3.0
       with:
         go-version: stable
+    - name: Verify
+      run: go mod verify
     - name: Install gofumpt
       run: go install mvdan.cc/gofumpt@v0.9.2
     - name: Check formating
@@ -61,6 +63,8 @@ jobs:
       uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 #v6.3.0
       with:
         go-version: stable
+    - name: Verify
+      run: go mod verify
     - name: Test
       run: go test -v ./...
     - name: Build
@@ -121,6 +125,8 @@ jobs:
       uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 #v6.3.0
       with:
         go-version: stable
+    - name: Verify
+      run: go mod verify
     - name: Test
       run: go test -v ./...
     - name: Build
