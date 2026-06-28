@@ -44,7 +44,7 @@ func (data *CdSectorData) HasEDC() bool {
 func (data *CdSectorData) CheckEDC() bool {
 	edc := data.GetEDC()
 
-	if data.HasEDC() {
+	if !data.HasEDC() {
 		return true
 	}
 
