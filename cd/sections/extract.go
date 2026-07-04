@@ -40,7 +40,7 @@ func ExtractSectionsToDense(opt *option.Option, sections []*Section) *cd.Dense {
 func ExtractSectionsToQtoc(opt *option.Option, sections []*Section) *cd.QToc {
 	qtoc := cd.QTocNew()
 	subcodeFileName := opt.PathName + "/" + opt.ImageName + ".subq"
-	subcodeFile, err := os.OpenFile(subcodeFileName, os.O_RDONLY, 0o644)
+	subcodeFile, err := os.OpenFile(subcodeFileName, os.O_RDONLY, 0o640)
 	if err != nil {
 		panic(err)
 	}

@@ -14,7 +14,7 @@ func GenerateCue(opt *option.Option, qtoc *QToc, metas map[uint8]TrackMeta) {
 	cueFileName := opt.ImageName + ".cue"
 	cueFileNamePath := opt.PathName + "/" + cueFileName
 	log.Printf("CUE [%s]\n", cueFileName)
-	cueFile, err := os.OpenFile(cueFileNamePath, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o644)
+	cueFile, err := os.OpenFile(cueFileNamePath, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o640)
 	if err != nil {
 		panic(err)
 	}

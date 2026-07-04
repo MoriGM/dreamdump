@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"errors"
 	"os"
 	"slices"
 	"strconv"
@@ -91,6 +92,13 @@ func parsePaths(opt *option.Option) {
 
 	pathName := FindArgumentString("image-path")
 	if pathName != nil {
+		_, err := os.Stat(*pathName)
+		if errors.Is(err, os.ErrNotExist) {
+			err = os.Mkdir(*pathName, 0o770)
+			if err != nil {
+				panic(err)
+			}
+		}
 		opt.PathName = *pathName
 	}
 }

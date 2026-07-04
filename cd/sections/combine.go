@@ -14,7 +14,7 @@ func CombineSections(opt *option.Option, sections []*Section) {
 
 func CombineToScram(opt *option.Option, sections []*Section) {
 	scramFileName := opt.PathName + "/" + opt.ImageName + ".scram"
-	scramFile, err := os.OpenFile(scramFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o644)
+	scramFile, err := os.OpenFile(scramFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o640)
 	if err != nil {
 		panic(err)
 	}
@@ -41,7 +41,7 @@ func CombineToScram(opt *option.Option, sections []*Section) {
 
 func CombineToSub(opt *option.Option, sections []*Section) {
 	subcodeFileName := opt.PathName + "/" + opt.ImageName + ".subq"
-	subcodeFile, err := os.OpenFile(subcodeFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o644)
+	subcodeFile, err := os.OpenFile(subcodeFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o640)
 	if err != nil {
 		panic(err)
 	}

@@ -14,7 +14,7 @@ import (
 func GenerateGdi(opt *option.Option, qtoc *QToc, metas map[uint8]TrackMeta) {
 	cueFileName := opt.ImageName + ".gdi"
 	cueFileNamePath := opt.PathName + "/" + cueFileName
-	cueFile, err := os.OpenFile(cueFileNamePath, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o644)
+	cueFile, err := os.OpenFile(cueFileNamePath, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o640)
 	log.Printf("GDI [%s]\n", cueFileName)
 	if err != nil {
 		panic(err)

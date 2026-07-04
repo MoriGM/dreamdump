@@ -56,7 +56,7 @@ func (dense *Dense) SplitTrack(trackFileName string, track *Track, offsetManager
 }
 
 func (dense *Dense) splitData(trackFileName string, track *Track, offsetManager *OffsetManager) TrackMeta {
-	trackFile, err := os.OpenFile(trackFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o644)
+	trackFile, err := os.OpenFile(trackFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o640)
 	if err != nil {
 		panic(err)
 	}
@@ -126,7 +126,7 @@ func (dense *Dense) splitData(trackFileName string, track *Track, offsetManager 
 }
 
 func (dense *Dense) splitAudio(trackFileName string, track *Track, offsetManager *OffsetManager) TrackMeta {
-	file, err := os.OpenFile(trackFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o644)
+	file, err := os.OpenFile(trackFileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0o640)
 	if err != nil {
 		panic(err)
 	}

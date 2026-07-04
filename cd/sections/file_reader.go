@@ -16,7 +16,7 @@ func (sect *Section) ReadHash(opt *option.Option) {
 	if errors.Is(err, os.ErrNotExist) {
 		return
 	}
-	hashFile, err := os.OpenFile(hashFileName, os.O_RDONLY, 0o644)
+	hashFile, err := os.OpenFile(hashFileName, os.O_RDONLY, 0o640)
 	if err != nil {
 		panic(err)
 	}
@@ -33,7 +33,7 @@ func (sect *Section) ReadSection(opt *option.Option) {
 	if errors.Is(err, os.ErrNotExist) {
 		return
 	}
-	scramFile, err := os.OpenFile(scramFileName, os.O_RDONLY, 0o644)
+	scramFile, err := os.OpenFile(scramFileName, os.O_RDONLY, 0o640)
 	if err != nil {
 		panic(err)
 	}
@@ -44,7 +44,7 @@ func (sect *Section) ReadSection(opt *option.Option) {
 	if errors.Is(err, os.ErrNotExist) {
 		return
 	}
-	subFile, err := os.OpenFile(subFileName, os.O_RDONLY, 0o644)
+	subFile, err := os.OpenFile(subFileName, os.O_RDONLY, 0o640)
 	if err != nil {
 		panic(err)
 	}
