@@ -25,6 +25,9 @@ func (sect *Section) ReadHash(opt *option.Option) {
 	for hashFileScanner.Scan() {
 		sect.Hashes = append(sect.Hashes, hashFileScanner.Text())
 	}
+	if err := hashFileScanner.Err(); err != nil {
+		panic(err)
+	}
 }
 
 func (sect *Section) ReadSection(opt *option.Option) {
