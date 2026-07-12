@@ -20,6 +20,13 @@ func GenerateCue(opt *option.Option, qtoc *QToc, metas map[uint8]TrackMeta) {
 	}
 	defer cueFile.Close()
 
+	remText := "REM HIGH-DENSITY AREA\n"
+	log.Print(remText)
+	_, err = cueFile.WriteString(remText)
+	if err != nil {
+		panic(err)
+	}
+
 	for _, trackNumber := range qtoc.TrackNumbers {
 		meta := metas[trackNumber]
 		track := qtoc.Tracks[trackNumber]
