@@ -8,9 +8,6 @@ permissions:
   actions: read
 
 on:
-  push:
-  release:
-    types: [created]
 
 env:
   release_name: build_${{github.run_number}}
