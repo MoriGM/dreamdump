@@ -143,7 +143,7 @@ jobs:
   
   release:
     if: ${{ github.event_name == 'release'}}
-    needs: [build-linux, build-windows]
+    needs: [build-linux, build-windows, build-windows7]
     runs-on: ubuntu-latest
     permissions:
       actions: write
