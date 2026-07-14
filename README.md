@@ -23,6 +23,8 @@ Supported options:
 `--speed=<number>`   
 `--force-qtoc`   
 `--retries=<number[1-255]>`   
+`--train`  
+`--force-sector-order`
 
 
 # Supported Drives
