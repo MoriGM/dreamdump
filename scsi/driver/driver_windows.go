@@ -17,7 +17,7 @@ const (
 )
 
 func OpenScsiDevice(fname string) (any, error) {
-	return win32.OpenScsiDevice(fname)
+	return win32.OpenScsiDevice(string(fname[0]))
 }
 
 func Read(fileHandle any, cmd any, size uint32) Status {
