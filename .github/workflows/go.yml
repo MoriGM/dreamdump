@@ -1,5 +1,8 @@
 name: Go
 
+on: 
+  workflow_call:
+
 permissions:
   contents: read
   actions: read
