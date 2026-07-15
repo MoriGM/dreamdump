@@ -11,7 +11,7 @@ on:
 env:
   release_name: build_${{github.run_number}}
   branch: ${{github.ref_name}}
-  go-cache: false
+  go_cache: false
 
 jobs:
   build:

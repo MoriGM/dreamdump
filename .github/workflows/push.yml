@@ -13,7 +13,7 @@ on:
 env:
   release_name: build_${{github.run_number}}
   branch: ${{github.ref_name}}
-  go-cache: true
+  go_cache: true
 
 jobs:
   build:
