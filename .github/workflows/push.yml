@@ -1,4 +1,4 @@
-name: Go-Release
+name: Go-Push
 
 permissions:
   contents: read
