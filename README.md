@@ -22,7 +22,7 @@ Supported options:
 `--read-at-once=<number[1-20(Linux allows 40)]>`   
 `--speed=<number>`   
 `--force-qtoc`   
-`--retries=<number[1-255]>`   
+`--retries=<number[1-255]>`  
 `--train`  
 `--force-sector-order`
 
