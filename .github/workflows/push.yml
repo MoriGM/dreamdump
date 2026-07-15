@@ -17,4 +17,4 @@ env:
 
 jobs:
   build:
-    uses: .github/workflows/go.yml
+    uses: ./.github/workflows/go.yml

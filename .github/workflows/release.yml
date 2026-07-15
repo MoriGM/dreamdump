@@ -16,7 +16,7 @@ env:
 
 jobs:
   build:
-    uses: .github/workflows/go.yml
+    uses: ./.github/workflows/go.yml
   release:
     if: ${{ github.event_name == 'release'}}
     needs: [build]
