@@ -1,0 +1,20 @@
+name: Go-Release
+
+permissions:
+  contents: read
+  actions: read
+  pull-requests: read
+
+on:
+  push:
+    branches:
+      - 'main'
+
+env:
+  release_name: build_${{github.run_number}}
+  branch: ${{github.ref_name}}
+  go-cache: true
+
+jobs:
+  build:
+    uses: .github/workflows/go.yml

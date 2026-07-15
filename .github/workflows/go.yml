@@ -5,16 +5,6 @@ permissions:
   actions: read
   pull-requests: read
 
-on:
-  push:
-  pull_request:
-  release:
-    types: [created]
-
-env:
-  release_name: build_${{github.run_number}}
-  branch: ${{github.ref_name}}
-
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -24,6 +14,7 @@ jobs:
       uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 #v6.3.0
       with:
         go-version: stable
+        cache: ${env.go-cache}
     - name: Verify
       run: go mod verify
     - name: Install gofumpt
@@ -63,6 +54,7 @@ jobs:
       uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 #v6.3.0
       with:
         go-version: stable
+        cache: ${env.go-cache}
     - name: Verify
       run: go mod verify
     - name: Test
@@ -125,6 +117,7 @@ jobs:
       uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 #v6.3.0
       with:
         go-version: stable
+        cache: ${env.go-cache}
     - name: Verify
       run: go mod verify
     - name: Test
@@ -140,29 +133,3 @@ jobs:
       with:
         name: dreamdump-${{env.release_name}}_win_${{matrix.platform}}
         path: ./dreamdump-${{env.release_name}}_win_${{matrix.platform}}.zip
-  
-  release:
-    if: ${{ github.event_name == 'release'}}
-    needs: [build-linux, build-windows, build-windows7]
-    runs-on: ubuntu-latest
-    permissions:
-      actions: write
-      contents: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
-      - name: Download Artifact
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c #v8.0.1
-        with:
-          merge-multiple: true
-      - name: 'Upload Release'
-        shell: bash
-        run: |
-          shopt -s nullglob
-          files=(dreamdump-*.zip)
-          if [ ${#files[@]} -eq 0 ]; then
-            echo "No artifacts to release"; exit 1
-          fi
-          gh release upload ${{ github.event.release.tag_name }} "${files[@]}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
