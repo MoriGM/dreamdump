@@ -7,7 +7,11 @@ import (
 )
 
 func info(opt *option.Option, trackMetas map[uint8]cd.TrackMeta, toc []*cd.Track, qtoc *cd.QToc, headerSector *cd.CdSectorData) {
-	cd.GenerateCue(opt, qtoc, trackMetas)
+	if opt.QTocSplit {
+		cd.GenerateCueByQToc(opt, qtoc, trackMetas)
+	} else {
+		cd.GenerateCueByToc(opt, toc, trackMetas)
+	}
 	log.Println()
 	cd.GenerateGdi(opt, qtoc, trackMetas)
 	log.Println()
