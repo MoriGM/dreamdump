@@ -1,4 +1,8 @@
 # dreamdump [![Go-Push](https://github.com/MoriGM/dreamdump/actions/workflows/push.yml/badge.svg)](https://github.com/MoriGM/dreamdump/actions/workflows/push.yml)
+
+> [!NOTE]
+> The project moved to [Codeberg](https://codeberg.org/MoriGM/dreamdump) 
+
 A small go project to maybe dump dreamcast games on linux and windows
 
 Usage
